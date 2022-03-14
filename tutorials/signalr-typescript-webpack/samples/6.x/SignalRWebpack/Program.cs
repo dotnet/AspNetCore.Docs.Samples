@@ -2,9 +2,11 @@
 using SignalRWebpack.Hubs;
 // </snippet_HubsNamespace>
 
+// <snippet_AddSignalR>
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSignalR();
+// </snippet_AddSignalR>
 
 // <snippet_FilesMiddleware>
 var app = builder.Build();
