@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log(err);
       setTimeout(start, 5000);
     }
-  };
+  }
 
   connection.onclose(async () => {
     await start();

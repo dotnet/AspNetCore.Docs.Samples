@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <Content Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
   </ItemGroup>
 
   <ItemGroup>

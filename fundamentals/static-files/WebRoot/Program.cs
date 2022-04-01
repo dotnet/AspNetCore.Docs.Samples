@@ -2,7 +2,7 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
     Args = args,
     // Examine Hosting environment: logging value
-     EnvironmentName = Environments.Staging,
+    EnvironmentName = Environments.Staging,
     // Look for static files in "wwwroot-custom"
     WebRootPath = "wwwroot-custom"
 });
