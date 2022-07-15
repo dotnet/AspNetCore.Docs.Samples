@@ -15,7 +15,6 @@ public class ChatHub : Hub
     // <snippet_OnDisconnectedAsync>
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        await Groups.RemoveFromGroupAsync(Context.ConnectionId, "SignalR Users");
         await base.OnDisconnectedAsync(exception);
     }
     // </snippet_OnDisconnectedAsync>
