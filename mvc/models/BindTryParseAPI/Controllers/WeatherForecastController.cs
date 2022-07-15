@@ -45,7 +45,7 @@ namespace BindTryParseAPI.Controllers
         // </snippet2>
 
         // <snippet>
-        // GET /WeatherForecast/GetByRange?range=07/12/2022-07/14/2022
+        // GET /WeatherForecast/GetByRange?range=07/19/2022-07/14/2024
         [HttpGet]
         [Route("GetByRange")]
         public IActionResult Range([FromQuery] DateRange? range)
