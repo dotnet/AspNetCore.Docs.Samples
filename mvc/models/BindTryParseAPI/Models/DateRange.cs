@@ -17,8 +17,7 @@ namespace BindTryParseAPI.Models
             To = DateOnly.Parse(to);
         }
 
-        public static bool TryParse(string? value, IFormatProvider? provider,
-                                    out DateRange? result)
+        public static bool TryParse(string? value, out DateRange? result)
         {
             if (string.IsNullOrEmpty(value) || value.Split('-').Length != 2)
             {
