@@ -57,7 +57,8 @@ namespace BindTryParseAPI.Controllers
                     TemperatureC = Random.Shared.Next(-20, 55),
                     Summary = Summaries[Random.Shared.Next(Summaries.Length)]
                 })
-                .Where(wf => DateOnly.FromDateTime(wf.Date) >= (range?.From ?? DateOnly.MinValue) && DateOnly.FromDateTime(wf.Date) <= (range?.To ?? DateOnly.MaxValue))
+                .Where(wf => DateOnly.FromDateTime(wf.Date) >= (range?.From ?? DateOnly.MinValue)
+                          && DateOnly.FromDateTime(wf.Date) <= (range?.To ?? DateOnly.MaxValue))
                 .Select(wf => new WeatherForecastViewModel
                 {
                     Date = wf.Date.ToString(),
