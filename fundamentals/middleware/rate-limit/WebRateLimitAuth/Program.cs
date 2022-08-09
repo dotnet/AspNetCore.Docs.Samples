@@ -1,4 +1,4 @@
-#define FIRST // FIRST ADMIN
+#define ADMIN // FIRST ADMIN
 #if NEVER
 #elif FIRST
 // <snippet_1>
@@ -126,6 +126,7 @@ app.Run();
 // </snippet>
 // </snippet_1>
 #elif ADMIN
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
@@ -184,11 +185,13 @@ app.UseRateLimiter(new RateLimiterOptions()
     .AddNoLimiter(policyName: adminPolicyName)
     .AddPolicy(policyName: postPolicyName, partitioner: httpContext =>
     {
-        var myToken = httpContext.Request.Headers["my-token"].ToString();
-        if (!StringValues.IsNullOrEmpty(myToken))
+        var accessToken = httpContext?.Features?.Get<IAuthenticateResultFeature>()?
+        .AuthenticateResult?.Properties?.GetTokenValue("access_token")?.ToString()
+                                                                   ?? string.Empty;
+        if (!StringValues.IsNullOrEmpty(accessToken))
         {
-            return RateLimitPartition.CreateTokenBucketLimiter( myToken, key =>
-                new TokenBucketRateLimiterOptions(tokenLimit: 5,
+            return RateLimitPartition.CreateTokenBucketLimiter( accessToken, key =>
+                new TokenBucketRateLimiterOptions(tokenLimit: 50,
                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
                     queueLimit: 1,
                     replenishmentPeriod: TimeSpan.FromSeconds(5),
@@ -197,7 +200,13 @@ app.UseRateLimiter(new RateLimiterOptions()
         }
         else
         {
-            return RateLimitPartition.CreateNoLimiter<string>(string.Empty);
+            return RateLimitPartition.CreateTokenBucketLimiter("Anon", key =>
+                new TokenBucketRateLimiterOptions(tokenLimit: 5,
+                    queueProcessingOrder: QueueProcessingOrder.OldestFirst,
+                    queueLimit: 1,
+                    replenishmentPeriod: TimeSpan.FromSeconds(5),
+                    tokensPerPeriod: 1,
+                    autoReplenishment: true));
         }
     }));
 
