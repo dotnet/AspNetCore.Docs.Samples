@@ -65,7 +65,7 @@ var options = new RateLimiterOptions()
 }
     .AddPolicy<string>(userPolicyName, context =>
     {
-        if (!context.User?.Identity?.IsAuthenticated ?? true)
+        if (context.User?.Identity?.IsAuthenticated is not true)
         {
             var username = "anonymous user";
 
