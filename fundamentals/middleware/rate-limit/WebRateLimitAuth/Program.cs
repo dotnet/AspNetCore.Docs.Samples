@@ -1,13 +1,16 @@
-#define ADMIN // FIRST ADMIN
+#define FIRST // FIRST ADMIN
 #if NEVER
 #elif FIRST
 // <snippet_1>
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Identity.Client;
 using System.Globalization;
 using System.Net;
 using System.Threading.RateLimiting;
+using WebRateLimitAuth;
 using WebRateLimitAuth.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +49,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 var userPolicyName = "user";
+var completePolicyName = "complete";
 
 var options = new RateLimiterOptions()
 {
@@ -58,11 +62,13 @@ var options = new RateLimiterOptions()
         }
 
         context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-        app.Logger.LogWarning($"policy: {userPolicyName} {GetUserEndPoint(context.HttpContext)}");
+        app.Logger.LogWarning($" {GetUserEndPoint(context.HttpContext)}");
 
         return new ValueTask();
     }
 }
+    .AddPolicy<string>(completePolicyName, 
+               new SampleRateLimiterPolicy(NullLogger<SampleRateLimiterPolicy>.Instance))
     .AddPolicy<string>(userPolicyName, context =>
     {
         if (context.User?.Identity?.IsAuthenticated is not true)
@@ -92,11 +98,11 @@ options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, IPAddress>(co
     {
         return RateLimitPartition.CreateTokenBucketLimiter<IPAddress>
            (remoteIPaddress!, key =>
-                 new TokenBucketRateLimiterOptions(tokenLimit: 5,
+                 new TokenBucketRateLimiterOptions(tokenLimit: 25,
                      queueProcessingOrder: QueueProcessingOrder.OldestFirst,
                      queueLimit: 1,
                      replenishmentPeriod: TimeSpan.FromSeconds(15),
-                     tokensPerPeriod: 1,                    
+                     tokensPerPeriod: 1,
                      autoReplenishment: true));
     }
     else
@@ -113,14 +119,15 @@ app.MapDefaultControllerRoute();
 static string GetUserEndPoint(HttpContext context) =>
     $"User {context.User?.Identity?.Name ?? "Anonymous"}  endpoint: {context.Request.Path}" +
     $" {context.Connection.RemoteIpAddress}";
+static string GetTicks() => DateTime.Now.Ticks.ToString().Substring(14);
 
-app.MapGet("/a", (HttpContext context) => $"{GetUserEndPoint(context)}")
+app.MapGet("/a", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}")
     .RequireRateLimiting(userPolicyName);
 
-app.MapGet("/b", (HttpContext context) => $"{GetUserEndPoint(context)}")
-    .RequireRateLimiting(userPolicyName);
+app.MapGet("/b", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}")
+    .RequireRateLimiting(completePolicyName);
 
-app.MapGet("/c", (HttpContext context) => $"{GetUserEndPoint(context)}");
+app.MapGet("/c", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}");
 
 app.Run();
 // </snippet>
