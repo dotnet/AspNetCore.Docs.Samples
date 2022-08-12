@@ -50,6 +50,7 @@ app.UseAuthorization();
 
 var userPolicyName = "user";
 var completePolicyName = "complete";
+var helloPolicy = "hello";
 
 var options = new RateLimiterOptions()
 {
@@ -62,13 +63,14 @@ var options = new RateLimiterOptions()
         }
 
         context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-        app.Logger.LogWarning($" {GetUserEndPoint(context.HttpContext)}");
+        app.Logger.LogWarning($"OnRejected: {GetUserEndPoint(context.HttpContext)}");
 
         return new ValueTask();
     }
 }
     .AddPolicy<string>(completePolicyName, 
                new SampleRateLimiterPolicy(NullLogger<SampleRateLimiterPolicy>.Instance))
+    .AddPolicy<string, SampleRateLimiterPolicy>(helloPolicy)
     .AddPolicy<string>(userPolicyName, context =>
     {
         if (context.User?.Identity?.IsAuthenticated is not true)
@@ -127,7 +129,10 @@ app.MapGet("/a", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks
 app.MapGet("/b", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}")
     .RequireRateLimiting(completePolicyName);
 
-app.MapGet("/c", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}");
+app.MapGet("/c", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}")
+    .RequireRateLimiting(helloPolicy);
+
+app.MapGet("/d", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}");
 
 app.Run();
 // </snippet>
