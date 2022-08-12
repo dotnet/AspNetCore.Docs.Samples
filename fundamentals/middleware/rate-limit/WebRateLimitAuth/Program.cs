@@ -63,7 +63,7 @@ var options = new RateLimiterOptions()
         }
 
         context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-        app.Logger.LogWarning($"OnRejected: {GetUserEndPoint(context.HttpContext)}");
+        context.HttpContext.RequestServices.GetService<ILoggerFactory>().CreateLogger("Microsoft.AspNetCore.RateLimitingMiddleware").LogWarning($"OnRejected: {GetUserEndPoint(context.HttpContext)}");
 
         return new ValueTask();
     }
