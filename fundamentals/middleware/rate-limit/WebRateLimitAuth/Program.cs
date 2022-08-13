@@ -8,7 +8,7 @@ using System.Threading.RateLimiting;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-static string GetTicks() => DateTime.Now.Ticks.ToString().Substring(14);
+static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
 
 var fixedPolicy = "fixed";
 
@@ -32,7 +32,7 @@ using System.Threading.RateLimiting;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-static string GetTicks() => DateTime.Now.Ticks.ToString().Substring(14);
+static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000"););
 
 var slidingPolicy = "sliding";
 
@@ -58,7 +58,7 @@ using System.Threading.RateLimiting;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-static string GetTicks() => DateTime.Now.Ticks.ToString()[14..];
+static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
 
 var slidingPolicy = "sliding";
 
@@ -200,7 +200,7 @@ app.MapDefaultControllerRoute();
 static string GetUserEndPoint(HttpContext context) =>
     $"User {context.User?.Identity?.Name ?? "Anonymous"}  endpoint: {context.Request.Path}" +
     $" {context.Connection.RemoteIpAddress}";
-static string GetTicks() => DateTime.Now.Ticks.ToString().Substring(14);
+static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
 
 app.MapGet("/a", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}")
     .RequireRateLimiting(userPolicyName);
