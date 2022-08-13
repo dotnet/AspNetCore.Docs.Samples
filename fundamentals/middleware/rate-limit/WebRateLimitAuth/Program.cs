@@ -1,4 +1,4 @@
-#define CONCUR // FIRST ADMIN FIXED SLIDING CONCUR
+#define TOKEN // FIRST ADMIN FIXED SLIDING CONCUR TOKEN
 #if NEVER
 #elif FIXED
 // <snippet_fixed>
@@ -60,10 +60,10 @@ var app = builder.Build();
 
 static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
 
-var slidingPolicy = "sliding";
+var concurrencyPolicy = "Concurrency";
 
 app.UseRateLimiter(new RateLimiterOptions()
-    .AddConcurrencyLimiter(policyName: slidingPolicy,
+    .AddConcurrencyLimiter(policyName: concurrencyPolicy,
           new ConcurrencyLimiterOptions(permitLimit: 4,
           queueProcessingOrder: QueueProcessingOrder.OldestFirst,
           queueLimit: 2)));
@@ -73,10 +73,37 @@ app.MapGet("/", async () =>
     await Task.Delay(500);
     return Results.Ok($"Concurrency Limiter {GetTicks()}");
                               
-}).RequireRateLimiting(slidingPolicy);
+}).RequireRateLimiting(concurrencyPolicy);
 
 app.Run();
-// </snippet_concur>
+// </snippet_token>
+#elif TOKEN
+// Quicktest 10 users, 9 seconds -> 
+// <snippet_concur>
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
+
+var tokenPolicy = "token";
+
+app.UseRateLimiter(new RateLimiterOptions()
+    .AddTokenBucketLimiter(policyName: tokenPolicy,
+          new TokenBucketRateLimiterOptions(tokenLimit: 10,
+                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
+                     queueLimit: 2,
+                     replenishmentPeriod: TimeSpan.FromSeconds(2),
+                     tokensPerPeriod: 5,
+                     autoReplenishment: true)));
+
+app.MapGet("/", () => Results.Ok($"Token Limiter {GetTicks()}"))
+                           .RequireRateLimiting(tokenPolicy);
+
+app.Run();
+// </snippet_token>
 #elif FIRST
 // <snippet_1>
 using Microsoft.AspNetCore.Identity;
