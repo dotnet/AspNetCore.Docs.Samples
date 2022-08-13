@@ -1,6 +1,7 @@
-#define FIXED // FIRST ADMIN
+#define CONCUR // FIRST ADMIN FIXED SLIDING CONCUR
 #if NEVER
 #elif FIXED
+// <snippet_fixed>
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 
@@ -13,8 +14,8 @@ var fixedPolicy = "fixed";
 
 app.UseRateLimiter(new RateLimiterOptions()
     .AddFixedWindowLimiter(policyName: fixedPolicy,
-          new FixedWindowRateLimiterOptions(permitLimit: 2,
-          window: TimeSpan.FromSeconds(5),
+          new FixedWindowRateLimiterOptions(permitLimit: 4,
+          window: TimeSpan.FromSeconds(12),
           queueProcessingOrder: QueueProcessingOrder.OldestFirst,
           queueLimit: 2)));
 
@@ -22,6 +23,60 @@ app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
                            .RequireRateLimiting(fixedPolicy);
 
 app.Run();
+// </snippet_fixed>
+#elif SLIDING
+// <snippet_slide>
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+static string GetTicks() => DateTime.Now.Ticks.ToString().Substring(14);
+
+var slidingPolicy = "sliding";
+
+app.UseRateLimiter(new RateLimiterOptions()
+    .AddSlidingWindowLimiter(policyName: slidingPolicy,
+          new SlidingWindowRateLimiterOptions(permitLimit: 4,
+          window: TimeSpan.FromSeconds(12),
+          segmentsPerWindow: 3,
+          queueProcessingOrder: QueueProcessingOrder.OldestFirst,
+          queueLimit: 2)));
+
+app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
+                           .RequireRateLimiting(slidingPolicy);
+
+app.Run();
+// </snippet_slide>
+#elif CONCUR
+// Quicktest 10 users, 9 seconds -> 982 requests, 900 errors
+// <snippet_concur>
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+static string GetTicks() => DateTime.Now.Ticks.ToString()[14..];
+
+var slidingPolicy = "sliding";
+
+app.UseRateLimiter(new RateLimiterOptions()
+    .AddConcurrencyLimiter(policyName: slidingPolicy,
+          new ConcurrencyLimiterOptions(permitLimit: 4,
+          queueProcessingOrder: QueueProcessingOrder.OldestFirst,
+          queueLimit: 2)));
+
+app.MapGet("/", async () =>
+{
+    await Task.Delay(500);
+    return Results.Ok($"Concurrency Limiter {GetTicks()}");
+                              
+}).RequireRateLimiting(slidingPolicy);
+
+app.Run();
+// </snippet_concur>
 #elif FIRST
 // <snippet_1>
 using Microsoft.AspNetCore.Identity;
