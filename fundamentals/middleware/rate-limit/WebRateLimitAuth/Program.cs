@@ -1,5 +1,27 @@
-#define FIRST // FIRST ADMIN
+#define FIXED // FIRST ADMIN
 #if NEVER
+#elif FIXED
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
+
+var builder = WebApplication.CreateBuilder(args);
+var app = builder.Build();
+
+static string GetTicks() => DateTime.Now.Ticks.ToString().Substring(14);
+
+var fixedPolicy = "fixed";
+
+app.UseRateLimiter(new RateLimiterOptions()
+    .AddFixedWindowLimiter(policyName: fixedPolicy,
+          new FixedWindowRateLimiterOptions(permitLimit: 2,
+          window: TimeSpan.FromSeconds(5),
+          queueProcessingOrder: QueueProcessingOrder.OldestFirst,
+          queueLimit: 2)));
+
+app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
+                           .RequireRateLimiting(fixedPolicy);
+
+app.Run();
 #elif FIRST
 // <snippet_1>
 using Microsoft.AspNetCore.Identity;
@@ -63,7 +85,9 @@ var options = new RateLimiterOptions()
         }
 
         context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-        context.HttpContext.RequestServices.GetService<ILoggerFactory>().CreateLogger("Microsoft.AspNetCore.RateLimitingMiddleware").LogWarning($"OnRejected: {GetUserEndPoint(context.HttpContext)}");
+        context?.HttpContext?.RequestServices?.GetService<ILoggerFactory>()?
+                      .CreateLogger("Microsoft.AspNetCore.RateLimitingMiddleware")
+                      .LogWarning($"OnRejected: {GetUserEndPoint(context.HttpContext)}");
 
         return new ValueTask();
     }

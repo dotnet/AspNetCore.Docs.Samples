@@ -26,7 +26,7 @@ public class SampleRateLimiterPolicy : IRateLimiterPolicy<string>
             key => new SlidingWindowRateLimiterOptions(
                     permitLimit: 1,
                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                    queueLimit: 1,
+                    queueLimit: 2,
                     window: TimeSpan.FromSeconds(5),
                     segmentsPerWindow: 1));
     }
