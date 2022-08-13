@@ -78,7 +78,7 @@ app.MapGet("/", async () =>
 app.Run();
 // </snippet_token>
 #elif TOKEN
-// Quicktest 10 users, 9 seconds -> 
+// Quicktest 20 users, 20 seconds -> 8965 requests 2,250 errors
 // <snippet_concur>
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
