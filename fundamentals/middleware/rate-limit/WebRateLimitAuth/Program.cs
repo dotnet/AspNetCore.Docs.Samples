@@ -1,4 +1,4 @@
-#define JWT // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
+#define TOKEN // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
 #if NEVER
 #elif FIXED
 // <snippet_fixed>
@@ -8,7 +8,7 @@ using System.Threading.RateLimiting;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
+static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
 app.UseRateLimiter(new RateLimiterOptions()
     .AddFixedWindowLimiter(policyName: "fixed",
@@ -18,7 +18,7 @@ app.UseRateLimiter(new RateLimiterOptions()
           queueLimit: 2)));
 
 app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
-                           .RequireRateLimiting(fixedPolicy);
+                           .RequireRateLimiting("fixed");
 
 app.Run();
 // </snippet_fixed>
@@ -33,7 +33,7 @@ builder.Services.Configure<MyRateLimitOptions>(
     builder.Configuration.GetSection(MyRateLimitOptions.MyRateLimit));
 var app = builder.Build();
 
-static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
+static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
 var myOptions = new MyRateLimitOptions();
 app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
@@ -60,7 +60,7 @@ using WebRateLimitAuth.Models;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
+static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
 var myOptions = new MyRateLimitOptions();
 app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
@@ -89,7 +89,7 @@ using WebRateLimitAuth.Models;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
+static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
 var concurrencyPolicy = "Concurrency";
 var myOptions = new MyRateLimitOptions();
@@ -120,7 +120,7 @@ using WebRateLimitAuth.Models;
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
+static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
 var tokenPolicy = "token";
 var myOptions = new MyRateLimitOptions();
@@ -265,7 +265,7 @@ app.MapDefaultControllerRoute();
 static string GetUserEndPoint(HttpContext context) =>
     $"User {context.User?.Identity?.Name ?? "Anonymous"}  endpoint: {context.Request.Path}" +
     $" {context.Connection.RemoteIpAddress}";
-static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
+static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
 app.MapGet("/a", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}")
     .RequireRateLimiting(userPolicyName);
@@ -280,12 +280,12 @@ app.MapGet("/d", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks
 
 app.Run();
 #elif ADMIN
-using Microsoft.AspNetCore.Authentication;
+// <snippet_adm>
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
-using System.Threading.RateLimiting;
 using WebRateLimitAuth.Data;
 using WebRateLimitAuth.Models;
 
@@ -321,10 +321,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-// <snippet_adm>
 app.UseAuthentication();
 app.UseAuthorization();
 
+// <snippet_adm2>
 var getPolicyName = "get";
 var postPolicyName = "post";
 var myOptions = new MyRateLimitOptions();
@@ -360,6 +360,7 @@ app.UseRateLimiter(new RateLimiterOptions()
                     autoReplenishment: true));
         }
     }));
+// </snippet_adm2>
 
 static string GetUserEndPointMethod(HttpContext context) =>
     $"Hello {context.User?.Identity?.Name ?? "Anonymous"} " +
@@ -376,6 +377,7 @@ app.MapDefaultControllerRoute();
 app.Run();
 // </snippet_adm>
 #elif JWT
+// <snippet_jwt>
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.RateLimiting;
@@ -441,5 +443,5 @@ static string GetUserEndPointMethod(HttpContext context) =>
     $"Hello {context.User?.Identity?.Name ?? "Anonymous"} " +
     $"Endpoint:{context.Request.Path} Method: {context.Request.Method}";
 
-
+// </snippet_jwt>
 #endif
