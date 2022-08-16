@@ -1,4 +1,4 @@
-#define ADMIN // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2
+#define ADMIN // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
 #if NEVER
 #elif FIXED
 // <snippet_fixed>
@@ -279,8 +279,6 @@ app.MapGet("/c", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks
 app.MapGet("/d", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}");
 
 app.Run();
-// </snippet>
-// </snippet_1>
 #elif ADMIN
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -292,9 +290,6 @@ using WebRateLimitAuth.Data;
 using WebRateLimitAuth.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddAuthorization(o => o.AddPolicy("AdminsOnly",
-                                  b => b.RequireClaim("admin", "true")));
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
@@ -331,7 +326,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 var getPolicyName = "get";
-var adminPolicyName = "admin";
 var postPolicyName = "post";
 var myOptions = new MyRateLimitOptions();
 app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
@@ -339,9 +333,71 @@ app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
 app.UseRateLimiter(new RateLimiterOptions()
     .AddConcurrencyLimiter(policyName: getPolicyName,
           new ConcurrencyLimiterOptions(permitLimit: myOptions.permitLimit,
-          queueProcessingOrder: QueueProcessingOrder.OldestFirst,          
+          queueProcessingOrder: QueueProcessingOrder.OldestFirst,
           queueLimit: myOptions.queueLimit))
-    .AddNoLimiter(policyName: adminPolicyName)
+    .AddPolicy(policyName: postPolicyName, partitioner: httpContext =>
+    {
+        string userName = httpContext?.User?.Identity?.Name ?? string.Empty;
+
+        if (!StringValues.IsNullOrEmpty(userName))
+        {
+            return RateLimitPartition.CreateTokenBucketLimiter(userName, key =>
+                new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit2,
+                    queueProcessingOrder: QueueProcessingOrder.OldestFirst,
+                    queueLimit: myOptions.queueLimit,
+                    replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
+                    tokensPerPeriod: myOptions.tokensPerPeriod,
+                    autoReplenishment: myOptions.autoReplenishment));
+        }
+        else
+        {
+            return RateLimitPartition.CreateTokenBucketLimiter("Anon", key =>
+                new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit,
+                    queueProcessingOrder: QueueProcessingOrder.OldestFirst,
+                    queueLimit: myOptions.queueLimit,
+                    replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
+                    tokensPerPeriod: myOptions.tokensPerPeriod,
+                    autoReplenishment: true));
+        }
+    }));
+
+static string GetUserEndPointMethod(HttpContext context) =>
+    $"Hello {context.User?.Identity?.Name ?? "Anonymous"} " +
+    $"Endpoint:{context.Request.Path} Method: {context.Request.Method}";
+
+app.MapGet("/test", (HttpContext context) => $"{GetUserEndPointMethod(context)}")
+                                        .RequireRateLimiting(getPolicyName);
+
+app.MapRazorPages().RequireRateLimiting(getPolicyName)
+                   .RequireRateLimiting(postPolicyName);
+
+app.MapDefaultControllerRoute();
+
+app.Run();
+// </snippet_adm>
+#elif JWT
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Primitives;
+using WebRateLimitAuth.Models;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication("Bearer").AddJwtBearer();
+
+var app = builder.Build();
+
+app.UseAuthorization();
+
+var jwtPolicyName = "jwt";
+var postPolicyName = "post";
+var myOptions = new MyRateLimitOptions();
+app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
+
+app.UseRateLimiter(new RateLimiterOptions()
+    .AddNoLimiter(policyName: jwtPolicyName)
     .AddPolicy(policyName: postPolicyName, partitioner: httpContext =>
     {
         var accessToken = httpContext?.Features?.Get<IAuthenticateResultFeature>()?
@@ -369,26 +425,21 @@ app.UseRateLimiter(new RateLimiterOptions()
         }
     }));
 
+app.MapGet("/", () => "Hello, World!");
+
+app.MapGet("/jwt", (HttpContext context) => $"Hello {GetUserEndPointMethod(context)}")
+    .RequireRateLimiting(jwtPolicyName)
+    .RequireAuthorization();
+
+app.MapPost("/post", (HttpContext context) => $"Hello {GetUserEndPointMethod(context)}")
+       .RequireRateLimiting(postPolicyName)
+       .RequireAuthorization();
+
+app.Run();
+
 static string GetUserEndPointMethod(HttpContext context) =>
     $"Hello {context.User?.Identity?.Name ?? "Anonymous"} " +
     $"Endpoint:{context.Request.Path} Method: {context.Request.Method}";
 
 
-app.MapGet("/test", (HttpContext context) => $"{GetUserEndPointMethod(context)}")
-                                        .RequireRateLimiting(getPolicyName);
-
-app.MapGet("/admin", context => context.Response.WriteAsync("/admin"))
-                          .RequireRateLimiting(adminPolicyName)
-                          .RequireAuthorization("AdminsOnly");
-
-app.MapPost("/post", () => Results.Ok("/post"))
-                           .RequireRateLimiting(postPolicyName);
-
-app.MapRazorPages().RequireRateLimiting(getPolicyName)
-                   .RequireRateLimiting(postPolicyName);
-
-app.MapDefaultControllerRoute();
-
-app.Run();
-// </snippet_adm>
 #endif
