@@ -1,4 +1,4 @@
-#define TOKEN // FIRST ADMIN FIXED SLIDING CONCUR TOKEN
+#define ADMIN // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2
 #if NEVER
 #elif FIXED
 // <snippet_fixed>
@@ -10,10 +10,8 @@ var app = builder.Build();
 
 static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
 
-var fixedPolicy = "fixed";
-
 app.UseRateLimiter(new RateLimiterOptions()
-    .AddFixedWindowLimiter(policyName: fixedPolicy,
+    .AddFixedWindowLimiter(policyName: "fixed",
           new FixedWindowRateLimiterOptions(permitLimit: 4,
           window: TimeSpan.FromSeconds(12),
           queueProcessingOrder: QueueProcessingOrder.OldestFirst,
@@ -24,25 +22,57 @@ app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
 
 app.Run();
 // </snippet_fixed>
+#elif FIXED2
+// <snippet_fixed2>
+using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.RateLimiting;
+using WebRateLimitAuth.Models;
+
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<MyRateLimitOptions>(
+    builder.Configuration.GetSection(MyRateLimitOptions.MyRateLimit));
+var app = builder.Build();
+
+static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
+
+var myOptions = new MyRateLimitOptions();
+app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
+var fixedPolicy = "fixed";
+
+app.UseRateLimiter(new RateLimiterOptions()
+    .AddFixedWindowLimiter(policyName: fixedPolicy,
+          new FixedWindowRateLimiterOptions(permitLimit: myOptions.permitLimit,
+          window: TimeSpan.FromSeconds(myOptions.window),
+          queueProcessingOrder: QueueProcessingOrder.OldestFirst,
+          queueLimit: myOptions.queueLimit)));
+
+app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
+                           .RequireRateLimiting(fixedPolicy);
+
+app.Run();
+// </snippet_fixed2>
 #elif SLIDING
 // <snippet_slide>
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
+using WebRateLimitAuth.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000"););
+static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
 
+var myOptions = new MyRateLimitOptions();
+app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
 var slidingPolicy = "sliding";
 
 app.UseRateLimiter(new RateLimiterOptions()
     .AddSlidingWindowLimiter(policyName: slidingPolicy,
-          new SlidingWindowRateLimiterOptions(permitLimit: 4,
-          window: TimeSpan.FromSeconds(12),
-          segmentsPerWindow: 3,
+          new SlidingWindowRateLimiterOptions(permitLimit: myOptions.permitLimit,
+          window: TimeSpan.FromSeconds(myOptions.window),
+          segmentsPerWindow: myOptions.segmentsPerWindow,
           queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-          queueLimit: 2)));
+          queueLimit: myOptions.queueLimit)));
 
 app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
                            .RequireRateLimiting(slidingPolicy);
@@ -54,6 +84,7 @@ app.Run();
 // <snippet_concur>
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
+using WebRateLimitAuth.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -61,12 +92,14 @@ var app = builder.Build();
 static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
 
 var concurrencyPolicy = "Concurrency";
+var myOptions = new MyRateLimitOptions();
+app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
 
 app.UseRateLimiter(new RateLimiterOptions()
     .AddConcurrencyLimiter(policyName: concurrencyPolicy,
-          new ConcurrencyLimiterOptions(permitLimit: 4,
+          new ConcurrencyLimiterOptions(permitLimit: myOptions.permitLimit,
           queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-          queueLimit: 2)));
+          queueLimit: myOptions.queueLimit)));
 
 app.MapGet("/", async () =>
 {
@@ -82,6 +115,7 @@ app.Run();
 // <snippet_concur>
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
+using WebRateLimitAuth.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
@@ -89,15 +123,17 @@ var app = builder.Build();
 static string GetTicks() => (DateTime.Now.Ticks & 0x1111).ToString("0000");
 
 var tokenPolicy = "token";
+var myOptions = new MyRateLimitOptions();
+app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
 
 app.UseRateLimiter(new RateLimiterOptions()
     .AddTokenBucketLimiter(policyName: tokenPolicy,
-          new TokenBucketRateLimiterOptions(tokenLimit: 10,
+          new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit,
                      queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                     queueLimit: 2,
+                     queueLimit: myOptions.queueLimit,
                      replenishmentPeriod: TimeSpan.FromSeconds(2),
-                     tokensPerPeriod: 5,
-                     autoReplenishment: true)));
+                     tokensPerPeriod: myOptions.tokensPerPeriod,
+                     autoReplenishment: myOptions.autoReplenishment)));
 
 app.MapGet("/", () => Results.Ok($"Token Limiter {GetTicks()}"))
                            .RequireRateLimiting(tokenPolicy);
@@ -106,16 +142,16 @@ app.Run();
 // </snippet_token>
 #elif FIRST
 // <snippet_1>
+using System.Globalization;
+using System.Net;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Identity.Client;
-using System.Globalization;
-using System.Net;
-using System.Threading.RateLimiting;
 using WebRateLimitAuth;
 using WebRateLimitAuth.Data;
+using WebRateLimitAuth.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -155,6 +191,8 @@ app.UseAuthorization();
 var userPolicyName = "user";
 var completePolicyName = "complete";
 var helloPolicy = "hello";
+var myOptions = new MyRateLimitOptions();
+app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
 
 var options = new RateLimiterOptions()
 {
@@ -185,11 +223,11 @@ var options = new RateLimiterOptions()
 
             return RateLimitPartition.CreateSlidingWindowLimiter<string>(username,
                   key => new SlidingWindowRateLimiterOptions(
-                  permitLimit: 12,
+                  permitLimit: myOptions.permitLimit,
                   queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                  queueLimit: 0,
-                  window: TimeSpan.FromSeconds(5),
-                  segmentsPerWindow: 3
+                  queueLimit: myOptions.queueLimit,
+                  window: TimeSpan.FromSeconds(myOptions.window),
+                  segmentsPerWindow: myOptions.segmentsPerWindow
                 ));
         }
         else
@@ -206,12 +244,12 @@ options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, IPAddress>(co
     {
         return RateLimitPartition.CreateTokenBucketLimiter<IPAddress>
            (remoteIPaddress!, key =>
-                 new TokenBucketRateLimiterOptions(tokenLimit: 25,
+                 new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit2,
                      queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                     queueLimit: 1,
-                     replenishmentPeriod: TimeSpan.FromSeconds(15),
-                     tokensPerPeriod: 1,
-                     autoReplenishment: true));
+                     queueLimit: myOptions.queueLimit,
+                     replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
+                     tokensPerPeriod: myOptions.tokensPerPeriod,
+                     autoReplenishment: myOptions.autoReplenishment));
     }
     else
     {
@@ -251,6 +289,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Primitives;
 using System.Threading.RateLimiting;
 using WebRateLimitAuth.Data;
+using WebRateLimitAuth.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -294,12 +333,14 @@ app.UseAuthorization();
 var getPolicyName = "get";
 var adminPolicyName = "admin";
 var postPolicyName = "post";
+var myOptions = new MyRateLimitOptions();
+app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
 
 app.UseRateLimiter(new RateLimiterOptions()
     .AddConcurrencyLimiter(policyName: getPolicyName,
-          new ConcurrencyLimiterOptions(permitLimit: 2,
+          new ConcurrencyLimiterOptions(permitLimit: myOptions.permitLimit,
           queueProcessingOrder: QueueProcessingOrder.OldestFirst,          
-          queueLimit: 2))
+          queueLimit: myOptions.queueLimit))
     .AddNoLimiter(policyName: adminPolicyName)
     .AddPolicy(policyName: postPolicyName, partitioner: httpContext =>
     {
@@ -309,21 +350,21 @@ app.UseRateLimiter(new RateLimiterOptions()
         if (!StringValues.IsNullOrEmpty(accessToken))
         {
             return RateLimitPartition.CreateTokenBucketLimiter( accessToken, key =>
-                new TokenBucketRateLimiterOptions(tokenLimit: 50,
+                new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit2,
                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                    queueLimit: 1,
-                    replenishmentPeriod: TimeSpan.FromSeconds(5),
-                    tokensPerPeriod: 1,                    
-                    autoReplenishment: true));
+                    queueLimit: myOptions.queueLimit,
+                    replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
+                    tokensPerPeriod: myOptions.tokensPerPeriod,                    
+                    autoReplenishment: myOptions.autoReplenishment));
         }
         else
         {
             return RateLimitPartition.CreateTokenBucketLimiter("Anon", key =>
-                new TokenBucketRateLimiterOptions(tokenLimit: 5,
+                new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit,
                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                    queueLimit: 1,
-                    replenishmentPeriod: TimeSpan.FromSeconds(5),
-                    tokensPerPeriod: 1,
+                    queueLimit: myOptions.queueLimit,
+                    replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
+                    tokensPerPeriod: myOptions.tokensPerPeriod,
                     autoReplenishment: true));
         }
     }));
