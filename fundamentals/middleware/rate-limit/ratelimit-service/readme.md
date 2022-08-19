@@ -1,1 +1,0 @@
-Delete this after creating basic sample using [service](https://github.com/dotnet/aspnetcore/blob/4cf483ee7a1cb470b8b2290a174ad34f450a5eab/src/Middleware/RateLimiting/src/RateLimiterServiceCollectionExtensions.cs#L20) per [this comment](https://github.com/dotnet/AspNetCore.Docs.Samples/pull/13#discussion_r949657927)
