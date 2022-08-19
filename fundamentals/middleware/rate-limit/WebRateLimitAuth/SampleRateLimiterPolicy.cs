@@ -1,13 +1,17 @@
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Options;
+using WebRateLimitAuth.Models;
 
 namespace WebRateLimitAuth;
 
 public class SampleRateLimiterPolicy : IRateLimiterPolicy<string>
 {
     private Func<OnRejectedContext, CancellationToken, ValueTask>? _onRejected;
+    private readonly MyRateLimitOptions _options;
 
-    public SampleRateLimiterPolicy(ILogger<SampleRateLimiterPolicy> logger)
+    public SampleRateLimiterPolicy(ILogger<SampleRateLimiterPolicy> logger,
+                                   IOptions<MyRateLimitOptions> options)
     {
         _onRejected = (context, token) =>
         {
@@ -15,6 +19,7 @@ public class SampleRateLimiterPolicy : IRateLimiterPolicy<string>
             logger.LogWarning($"Request rejected by {nameof(SampleRateLimiterPolicy)}");
             return ValueTask.CompletedTask;
         };
+        _options = options.Value;
     }
 
     public Func<OnRejectedContext, CancellationToken, ValueTask>? 
@@ -24,10 +29,10 @@ public class SampleRateLimiterPolicy : IRateLimiterPolicy<string>
     {
         return RateLimitPartition.CreateSlidingWindowLimiter<string>(string.Empty, 
             key => new SlidingWindowRateLimiterOptions(
-                    permitLimit: 1,
+                    permitLimit: _options.permitLimit,
                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                    queueLimit: 2,
-                    window: TimeSpan.FromSeconds(5),
-                    segmentsPerWindow: 1));
+                    queueLimit: _options.queueLimit,
+                    window: TimeSpan.FromSeconds(_options.window),
+                    segmentsPerWindow: _options.segmentsPerWindow));
     }
 }

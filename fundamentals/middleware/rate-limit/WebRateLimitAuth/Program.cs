@@ -1,4 +1,4 @@
-#define TOKEN // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
+#define FIRST // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
 #if NEVER
 #elif FIXED
 // <snippet_fixed>
@@ -149,6 +149,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using WebRateLimitAuth;
 using WebRateLimitAuth.Data;
 using WebRateLimitAuth.Models;
@@ -163,6 +164,9 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.Configure<MyRateLimitOptions>(
+    builder.Configuration.GetSection(MyRateLimitOptions.MyRateLimit));
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
@@ -192,7 +196,9 @@ var userPolicyName = "user";
 var completePolicyName = "complete";
 var helloPolicy = "hello";
 var myOptions = new MyRateLimitOptions();
-app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
+var myConfigSection = app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit);
+myConfigSection.Bind(myOptions);
+
 
 var options = new RateLimiterOptions()
 {
@@ -212,8 +218,9 @@ var options = new RateLimiterOptions()
         return new ValueTask();
     }
 }
-    .AddPolicy<string>(completePolicyName, 
-               new SampleRateLimiterPolicy(NullLogger<SampleRateLimiterPolicy>.Instance))
+    //.AddPolicy<string>(completePolicyName, 
+    //           new SampleRateLimiterPolicy(NullLogger<SampleRateLimiterPolicy>.Instance,
+    //           (IOptions < MyRateLimitOptions >)myConfigSection))
     .AddPolicy<string, SampleRateLimiterPolicy>(helloPolicy)
     .AddPolicy<string>(userPolicyName, context =>
     {
@@ -279,6 +286,8 @@ app.MapGet("/c", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks
 app.MapGet("/d", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}");
 
 app.Run();
+// </snippet>
+// </snippet_1>
 #elif ADMIN
 // <snippet_adm>
 using System.Threading.RateLimiting;
@@ -394,13 +403,11 @@ var app = builder.Build();
 app.UseAuthorization();
 
 var jwtPolicyName = "jwt";
-var postPolicyName = "post";
 var myOptions = new MyRateLimitOptions();
 app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
 
 app.UseRateLimiter(new RateLimiterOptions()
-    .AddNoLimiter(policyName: jwtPolicyName)
-    .AddPolicy(policyName: postPolicyName, partitioner: httpContext =>
+    .AddPolicy(policyName: jwtPolicyName, partitioner: httpContext =>
     {
         var accessToken = httpContext?.Features?.Get<IAuthenticateResultFeature>()?
         .AuthenticateResult?.Properties?.GetTokenValue("access_token")?.ToString()
@@ -434,7 +441,7 @@ app.MapGet("/jwt", (HttpContext context) => $"Hello {GetUserEndPointMethod(conte
     .RequireAuthorization();
 
 app.MapPost("/post", (HttpContext context) => $"Hello {GetUserEndPointMethod(context)}")
-       .RequireRateLimiting(postPolicyName)
+       .RequireRateLimiting(jwtPolicyName)
        .RequireAuthorization();
 
 app.Run();
