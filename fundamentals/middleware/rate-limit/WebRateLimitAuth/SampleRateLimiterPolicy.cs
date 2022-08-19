@@ -34,5 +34,6 @@ public class SampleRateLimiterPolicy : IRateLimiterPolicy<string>
                     queueLimit: _options.queueLimit,
                     window: TimeSpan.FromSeconds(_options.window),
                     segmentsPerWindow: _options.segmentsPerWindow));
+    
     }
 }

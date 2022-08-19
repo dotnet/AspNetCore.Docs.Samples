@@ -193,7 +193,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 var userPolicyName = "user";
-var completePolicyName = "complete";
 var helloPolicy = "hello";
 var myOptions = new MyRateLimitOptions();
 var myConfigSection = app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit);
@@ -218,9 +217,6 @@ var options = new RateLimiterOptions()
         return new ValueTask();
     }
 }
-    //.AddPolicy<string>(completePolicyName, 
-    //           new SampleRateLimiterPolicy(NullLogger<SampleRateLimiterPolicy>.Instance,
-    //           (IOptions < MyRateLimitOptions >)myConfigSection))
     .AddPolicy<string, SampleRateLimiterPolicy>(helloPolicy)
     .AddPolicy<string>(userPolicyName, context =>
     {
@@ -278,12 +274,9 @@ app.MapGet("/a", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks
     .RequireRateLimiting(userPolicyName);
 
 app.MapGet("/b", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}")
-    .RequireRateLimiting(completePolicyName);
-
-app.MapGet("/c", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}")
     .RequireRateLimiting(helloPolicy);
 
-app.MapGet("/d", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}");
+app.MapGet("/c", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}");
 
 app.Run();
 // </snippet>
