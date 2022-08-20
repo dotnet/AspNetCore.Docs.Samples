@@ -1,4 +1,4 @@
-#define FIRST // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
+#define TOKEN // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
 #if NEVER
 #elif FIXED
 // <snippet_fixed>
@@ -109,10 +109,10 @@ app.MapGet("/", async () =>
 }).RequireRateLimiting(concurrencyPolicy);
 
 app.Run();
-// </snippet_token>
+// </snippet_concur>
 #elif TOKEN
 // Quicktest 20 users, 20 seconds -> 8965 requests 2,250 errors
-// <snippet_concur>
+// <snippet_token>
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using WebRateLimitAuth.Models;
@@ -131,7 +131,7 @@ app.UseRateLimiter(new RateLimiterOptions()
           new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit,
                      queueProcessingOrder: QueueProcessingOrder.OldestFirst,
                      queueLimit: myOptions.queueLimit,
-                     replenishmentPeriod: TimeSpan.FromSeconds(2),
+                     replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
                      tokensPerPeriod: myOptions.tokensPerPeriod,
                      autoReplenishment: myOptions.autoReplenishment)));
 
