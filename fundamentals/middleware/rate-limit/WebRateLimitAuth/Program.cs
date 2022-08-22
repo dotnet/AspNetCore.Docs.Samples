@@ -129,11 +129,11 @@ app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
 app.UseRateLimiter(new RateLimiterOptions()
     .AddTokenBucketLimiter(policyName: tokenPolicy,
           new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit,
-                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                     queueLimit: myOptions.queueLimit,
-                     replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
-                     tokensPerPeriod: myOptions.tokensPerPeriod,
-                     autoReplenishment: myOptions.autoReplenishment)));
+                queueProcessingOrder: QueueProcessingOrder.OldestFirst,
+                queueLimit: myOptions.queueLimit,
+                replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
+                tokensPerPeriod: myOptions.tokensPerPeriod,
+                autoReplenishment: myOptions.autoReplenishment)));
 
 app.MapGet("/", () => Results.Ok($"Token Limiter {GetTicks()}"))
                            .RequireRateLimiting(tokenPolicy);
