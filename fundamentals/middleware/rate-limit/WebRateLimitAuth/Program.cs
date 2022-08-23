@@ -1,4 +1,4 @@
-#define TOKEN // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
+#define FIRST // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
 #if NEVER
 #elif FIXED
 // <snippet_fixed>
@@ -189,6 +189,8 @@ app.UseStaticFiles();
 app.UseRouting();
 
 // <snippet>
+// Preceding code removed for brevity.
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -197,7 +199,6 @@ var helloPolicy = "hello";
 var myOptions = new MyRateLimitOptions();
 var myConfigSection = app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit);
 myConfigSection.Bind(myOptions);
-
 
 var options = new RateLimiterOptions()
 {
@@ -220,23 +221,21 @@ var options = new RateLimiterOptions()
     .AddPolicy<string, SampleRateLimiterPolicy>(helloPolicy)
     .AddPolicy<string>(userPolicyName, context =>
     {
-        if (context.User?.Identity?.IsAuthenticated is not true)
+        var username = "anonymous user";
+        if (context.User?.Identity?.IsAuthenticated is true)
         {
-            var username = "anonymous user";
+            username = context.User?.ToString()!;
+        }
 
-            return RateLimitPartition.CreateSlidingWindowLimiter<string>(username,
-                  key => new SlidingWindowRateLimiterOptions(
-                  permitLimit: myOptions.permitLimit,
-                  queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                  queueLimit: myOptions.queueLimit,
-                  window: TimeSpan.FromSeconds(myOptions.window),
-                  segmentsPerWindow: myOptions.segmentsPerWindow
-                ));
-        }
-        else
-        {
-            return RateLimitPartition.CreateNoLimiter<string>(string.Empty);
-        }
+        return RateLimitPartition.CreateSlidingWindowLimiter<string>(username,
+              key => new SlidingWindowRateLimiterOptions(
+              permitLimit: myOptions.permitLimit,
+              queueProcessingOrder: QueueProcessingOrder.OldestFirst,
+              queueLimit: myOptions.queueLimit,
+              window: TimeSpan.FromSeconds(myOptions.window),
+              segmentsPerWindow: myOptions.segmentsPerWindow
+            ));
+
     });
 
 options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, IPAddress>(context =>
