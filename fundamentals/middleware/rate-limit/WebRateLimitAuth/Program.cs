@@ -200,7 +200,6 @@ var myOptions = new MyRateLimitOptions();
 var myConfigSection = app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit);
 myConfigSection.Bind(myOptions);
 
-
 var options = new RateLimiterOptions()
 {
     OnRejected = (context, cancellationToken) =>
