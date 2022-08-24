@@ -1,4 +1,4 @@
-#define FIRST // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
+#define JWT // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
 #if NEVER
 #elif FIXED
 // <snippet_fixed>
@@ -396,33 +396,38 @@ var jwtPolicyName = "jwt";
 var myOptions = new MyRateLimitOptions();
 app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
 
-app.UseRateLimiter(new RateLimiterOptions()
-    .AddPolicy(policyName: jwtPolicyName, partitioner: httpContext =>
-    {
-        var accessToken = httpContext?.Features?.Get<IAuthenticateResultFeature>()?
-        .AuthenticateResult?.Properties?.GetTokenValue("access_token")?.ToString()
-                                                                   ?? string.Empty;
-        if (!StringValues.IsNullOrEmpty(accessToken))
-        {
-            return RateLimitPartition.CreateTokenBucketLimiter( accessToken, key =>
-                new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit2,
-                    queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                    queueLimit: myOptions.queueLimit,
-                    replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
-                    tokensPerPeriod: myOptions.tokensPerPeriod,                    
-                    autoReplenishment: myOptions.autoReplenishment));
-        }
-        else
-        {
-            return RateLimitPartition.CreateTokenBucketLimiter("Anon", key =>
-                new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit,
-                    queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                    queueLimit: myOptions.queueLimit,
-                    replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
-                    tokensPerPeriod: myOptions.tokensPerPeriod,
-                    autoReplenishment: true));
-        }
-    }));
+var options = new RateLimiterOptions()
+{
+    RejectionStatusCode = StatusCodes.Status429TooManyRequests
+}
+     .AddPolicy(policyName: jwtPolicyName, partitioner: httpContext =>
+     {
+         var accessToken = httpContext?.Features?.Get<IAuthenticateResultFeature>()?
+         .AuthenticateResult?.Properties?.GetTokenValue("access_token")?.ToString()
+                                                                    ?? string.Empty;
+         if (!StringValues.IsNullOrEmpty(accessToken))
+         {
+             return RateLimitPartition.CreateTokenBucketLimiter(accessToken, key =>
+                 new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit2,
+                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
+                     queueLimit: myOptions.queueLimit,
+                     replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
+                     tokensPerPeriod: myOptions.tokensPerPeriod,
+                     autoReplenishment: myOptions.autoReplenishment));
+         }
+         else
+         {
+             return RateLimitPartition.CreateTokenBucketLimiter("Anon", key =>
+                 new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit,
+                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
+                     queueLimit: myOptions.queueLimit,
+                     replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
+                     tokensPerPeriod: myOptions.tokensPerPeriod,
+                     autoReplenishment: true));
+         }
+     });
+
+app.UseRateLimiter(options);
 
 app.MapGet("/", () => "Hello, World!");
 
