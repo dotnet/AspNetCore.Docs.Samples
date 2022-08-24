@@ -345,7 +345,8 @@ app.UseRateLimiter(new RateLimiterOptions()
                 new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit2,
                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
                     queueLimit: myOptions.queueLimit,
-                    replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
+                    replenishmentPeriod:
+                                TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
                     tokensPerPeriod: myOptions.tokensPerPeriod,
                     autoReplenishment: myOptions.autoReplenishment));
         }
@@ -355,7 +356,8 @@ app.UseRateLimiter(new RateLimiterOptions()
                 new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit,
                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
                     queueLimit: myOptions.queueLimit,
-                    replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
+                    replenishmentPeriod:
+                               TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
                     tokensPerPeriod: myOptions.tokensPerPeriod,
                     autoReplenishment: true));
         }
