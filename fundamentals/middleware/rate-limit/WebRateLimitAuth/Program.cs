@@ -247,7 +247,8 @@ options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, IPAddress>(co
                  new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit2,
                      queueProcessingOrder: QueueProcessingOrder.OldestFirst,
                      queueLimit: myOptions.queueLimit,
-                     replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
+                     replenishmentPeriod: 
+                                 TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
                      tokensPerPeriod: myOptions.tokensPerPeriod,
                      autoReplenishment: myOptions.autoReplenishment));
     }
@@ -263,8 +264,8 @@ app.MapRazorPages().RequireRateLimiting(userPolicyName);
 app.MapDefaultControllerRoute();
 
 static string GetUserEndPoint(HttpContext context) =>
-    $"User {context.User?.Identity?.Name ?? "Anonymous"}  endpoint: {context.Request.Path}" +
-    $" {context.Connection.RemoteIpAddress}";
+   $"User {context.User?.Identity?.Name ?? "Anonymous"} endpoint:{context.Request.Path}"
+   + $" {context.Connection.RemoteIpAddress}";
 static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
 app.MapGet("/a", (HttpContext context) => $"{GetUserEndPoint(context)} {GetTicks()}")
@@ -411,7 +412,8 @@ var options = new RateLimiterOptions()
                  new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit2,
                      queueProcessingOrder: QueueProcessingOrder.OldestFirst,
                      queueLimit: myOptions.queueLimit,
-                     replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
+                     replenishmentPeriod:
+                                 TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
                      tokensPerPeriod: myOptions.tokensPerPeriod,
                      autoReplenishment: myOptions.autoReplenishment));
          }
@@ -421,7 +423,8 @@ var options = new RateLimiterOptions()
                  new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit,
                      queueProcessingOrder: QueueProcessingOrder.OldestFirst,
                      queueLimit: myOptions.queueLimit,
-                     replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
+                     replenishmentPeriod:
+                                  TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
                      tokensPerPeriod: myOptions.tokensPerPeriod,
                      autoReplenishment: true));
          }

@@ -15,9 +15,9 @@ public class SampleRateLimiterPolicy : IRateLimiterPolicy<string>
     public SampleRateLimiterPolicy(ILogger<SampleRateLimiterPolicy> logger,
                                    IOptions<MyRateLimitOptions> options)
     {
-        _onRejected = (context, token) =>
+        _onRejected = (ctx, token) =>
         {
-            context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+            ctx.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
             logger.LogWarning($"Request rejected by {nameof(SampleRateLimiterPolicy)}");
             return ValueTask.CompletedTask;
         };
@@ -25,7 +25,7 @@ public class SampleRateLimiterPolicy : IRateLimiterPolicy<string>
     }
 
     public Func<OnRejectedContext, CancellationToken, ValueTask>? 
-                                                         OnRejected { get => _onRejected; }
+                                                     OnRejected { get => _onRejected; }
     // </snippet>
 
     public RateLimitPartition<string> GetPartition(HttpContext httpContext)
