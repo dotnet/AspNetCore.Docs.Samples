@@ -1,3 +1,4 @@
+// <snippet_1>
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Options;
@@ -5,6 +6,7 @@ using WebRateLimitAuth.Models;
 
 namespace WebRateLimitAuth;
 
+// <snippet>
 public class SampleRateLimiterPolicy : IRateLimiterPolicy<string>
 {
     private Func<OnRejectedContext, CancellationToken, ValueTask>? _onRejected;
@@ -15,7 +17,7 @@ public class SampleRateLimiterPolicy : IRateLimiterPolicy<string>
     {
         _onRejected = (context, token) =>
         {
-            context.HttpContext.Response.StatusCode = 429;
+            context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
             logger.LogWarning($"Request rejected by {nameof(SampleRateLimiterPolicy)}");
             return ValueTask.CompletedTask;
         };
@@ -24,6 +26,7 @@ public class SampleRateLimiterPolicy : IRateLimiterPolicy<string>
 
     public Func<OnRejectedContext, CancellationToken, ValueTask>? 
                                                          OnRejected { get => _onRejected; }
+    // </snippet>
 
     public RateLimitPartition<string> GetPartition(HttpContext httpContext)
     {
@@ -37,3 +40,4 @@ public class SampleRateLimiterPolicy : IRateLimiterPolicy<string>
     
     }
 }
+// </snippet_1>

@@ -148,8 +148,6 @@ using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.Extensions.Options;
 using WebRateLimitAuth;
 using WebRateLimitAuth.Data;
 using WebRateLimitAuth.Models;
