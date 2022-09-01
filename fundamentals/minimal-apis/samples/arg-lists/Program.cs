@@ -21,16 +21,16 @@ app.MapGet("/todoitems/{id}", async (int Id, TodoDb Db) =>
 // </snippet_top>
 
 // <snippet_post>
-app.MapPost("/todoitems", async ([AsParameters] CreateTodoItemRequest request) =>
+app.MapPost("/todoitems", async (TodoItemDTO Dto, TodoDb Db) =>
 {
     var todoItem = new Todo
     {
-        IsComplete = request.Dto.IsComplete,
-        Name = request.Dto.Name
+        IsComplete = Dto.IsComplete,
+        Name = Dto.Name
     };
 
-    request.Db.Todos.Add(todoItem);
-    await request.Db.SaveChangesAsync();
+    Db.Todos.Add(todoItem);
+    await Db.SaveChangesAsync();
 
     return Results.Created($"/todoitems/{todoItem.Id}", new TodoItemDTO(todoItem));
 });
