@@ -51,7 +51,7 @@ app.Use(async (context, next) =>
 app.UseStatusCodePages();
 
 // endpoint for dividing numbers
-app.MapGet("/divide", async (HttpContext context, double numerator, double denominator) =>
+app.MapGet("/divide", (HttpContext context, double numerator, double denominator) =>
 {
     if (denominator == 0)
     {
