@@ -72,7 +72,7 @@ app.MapGet("/squareroot", (HttpContext context, int radicand) =>
         return Results.BadRequest();
     }
 
-    var calculation = await Task.FromResult(Math.Sqrt(radicand));
+    var calculation = Math.Sqrt(radicand);
     return Results.Ok(calculation);
 });
 
