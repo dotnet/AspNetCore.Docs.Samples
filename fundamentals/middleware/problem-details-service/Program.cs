@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.OpenApi;
+using  Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,7 +55,7 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
 {
     if (denominator == 0)
     {
-        context.Features.Get<MathErrorFeature>()!.MathError = MathErrorType.DivisionByZeroError;
+        context.Features.GetRequiredFeature<MathErrorFeature>().MathError = MathErrorType.DivisionByZeroError;
         return Results.BadRequest();
     }
 
@@ -68,7 +68,7 @@ app.MapGet("/squareroot", (HttpContext context, int radicand) =>
 {
     if (radicand < 0)
     {
-        context.Features.Get<MathErrorFeature>()!.MathError = MathErrorType.NegativeRadicandError;
+        context.Features.GetRequiredFeature<MathErrorFeature>().MathError = MathErrorType.NegativeRadicandError;
         return Results.BadRequest();
     }
 
