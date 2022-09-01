@@ -46,29 +46,9 @@ app.Use(async (context, next) =>
 
     await next(context);
 
-    if (context.Response.StatusCode > 399)
-    {
-        if (context.RequestServices.GetService<IProblemDetailsService>() is { } problemDetailsService)
-        {
-            (string Detail, string Type) details = mathErrorFeature.MathError switch
-            {
-                MathErrorType.DivisionByZeroError => ("The number you inputed is zero", "https://en.wikipedia.org/wiki/Division_by_zero"),
-                _ => ("Negative or complex numbers are not handled", "https://en.wikipedia.org/wiki/Square_root")
-            };
+   });
 
-            await problemDetailsService.WriteAsync(new ProblemDetailsContext
-            {
-                HttpContext = context,
-                ProblemDetails =
-                {
-                    Title = "Wrong Input",
-                    Detail = details.Detail,
-                    Type = details.Type
-                }
-            });
-        }
-    }
-});
+app.UseStatusCodePages();
 
 // endpoint for dividing numbers
 app.MapGet("/divide", async (HttpContext context, double numerator, double denominator) =>
