@@ -59,7 +59,7 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
         return Results.BadRequest();
     }
 
-    var calculation = await Task.FromResult(numerator / denominator);
+    var calculation = numerator / denominator;
     return Results.Ok(calculation);
 });
 
