@@ -6,7 +6,25 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddProblemDetails();
+builder.Services.AddProblemDetails(options => 
+    options.CustomizeProblemDetails = (context) => 
+    {
+        var mathErrorFeature = context.HttpContext.Features.Get<MathErrorFeature>();
+
+        if (mathErrorFeature != null)
+        {
+            (string Detail, string Type) details = mathErrorFeature.MathError switch
+            {
+                MathErrorType.DivisionByZeroError => ("The number you inputed is zero", "https://en.wikipedia.org/wiki/Division_by_zero"),
+                _ => ("Negative or complex numbers are not handled", "https://en.wikipedia.org/wiki/Square_root")
+            };
+
+            context.ProblemDetails.Type = details.Type;
+            context.ProblemDetails.Title = "Wrong Input";
+            context.ProblemDetails.Detail = details.Detail;
+        }
+    }
+);
 
 var app = builder.Build();
 
@@ -23,36 +41,29 @@ app.UseHttpsRedirection();
 app.Use(async (context, next) =>
 {
     // added the MathErrorFeature to the request pipeline
-    context.Features.Set(new MathErrorFeature());
+    var mathErrorFeature = new MathErrorFeature();
+    context.Features.Set(mathErrorFeature);
 
     await next(context);
 
-    if (context.RequestServices.GetService<IProblemDetailsService>() is { } problemDetailsService)
+    if (context.Response.StatusCode > 399)
     {
-        MathErrorType matherror = context.Features.Get<MathErrorFeature>()!.MathError;
-        if (matherror == MathErrorType.DivisionByZeroError)
+        if (context.RequestServices.GetService<IProblemDetailsService>() is { } problemDetailsService)
         {
+            (string Detail, string Type) details = mathErrorFeature.MathError switch
+            {
+                MathErrorType.DivisionByZeroError => ("The number you inputed is zero", "https://en.wikipedia.org/wiki/Division_by_zero"),
+                _ => ("Negative or complex numbers are not handled", "https://en.wikipedia.org/wiki/Square_root")
+            };
+
             await problemDetailsService.WriteAsync(new ProblemDetailsContext
             {
                 HttpContext = context,
-                ProblemDetails = new()
+                ProblemDetails =
                 {
                     Title = "Wrong Input",
-                    Detail = "The number you inputed is zero",
-                    Type = "https://en.wikipedia.org/wiki/Division_by_zero"
-                }
-            });
-        }
-        if (matherror == MathErrorType.NegativeRadicandError)
-        {
-            await problemDetailsService.WriteAsync(new ProblemDetailsContext
-            {
-                HttpContext = context,
-                ProblemDetails = new()
-                {
-                    Title = "Wrong Input",
-                    Detail = "Negative or complex numbers are not handled",
-                    Type = "https://en.wikipedia.org/wiki/Square_root"
+                    Detail = details.Detail,
+                    Type = details.Type
                 }
             });
         }
