@@ -6,7 +6,25 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddProblemDetails();
+builder.Services.AddProblemDetails(options => 
+    options.CustomizeProblemDetails = (context) => 
+    {
+        var mathErrorFeature = context.HttpContext.Features.Get<MathErrorFeature>();
+
+        if (mathErrorFeature != null)
+        {
+            (string Detail, string Type) details = mathErrorFeature.MathError switch
+            {
+                MathErrorType.DivisionByZeroError => ("The number you inputed is zero", "https://en.wikipedia.org/wiki/Division_by_zero"),
+                _ => ("Negative or complex numbers are not handled", "https://en.wikipedia.org/wiki/Square_root")
+            };
+
+            context.ProblemDetails.Type = details.Type;
+            context.ProblemDetails.Title = "Wrong Input";
+            context.ProblemDetails.Detail = details.Detail;
+        }
+    }
+);
 
 var app = builder.Build();
 
