@@ -23,7 +23,8 @@ app.UseHttpsRedirection();
 app.Use(async (context, next) =>
 {
     // added the MathErrorFeature to the request pipeline
-    context.Features.Set(new MathErrorFeature());
+    var mathErrorFeature = new MathErrorFeature();
+    context.Features.Set(mathErrorFeature);
 
     await next(context);
 
