@@ -28,32 +28,24 @@ app.Use(async (context, next) =>
 
     await next(context);
 
-    if (context.RequestServices.GetService<IProblemDetailsService>() is { } problemDetailsService)
+    if (context.Response.StatusCode > 399)
     {
-        MathErrorType matherror = context.Features.Get<MathErrorFeature>()!.MathError;
-        if (matherror == MathErrorType.DivisionByZeroError)
+        if (context.RequestServices.GetService<IProblemDetailsService>() is { } problemDetailsService)
         {
+            (string Detail, string Type) details = mathErrorFeature.MathError switch
+            {
+                MathErrorType.DivisionByZeroError => ("The number you inputed is zero", "https://en.wikipedia.org/wiki/Division_by_zero"),
+                _ => ("Negative or complex numbers are not handled", "https://en.wikipedia.org/wiki/Square_root")
+            };
+
             await problemDetailsService.WriteAsync(new ProblemDetailsContext
             {
                 HttpContext = context,
-                ProblemDetails = new()
+                ProblemDetails =
                 {
                     Title = "Wrong Input",
-                    Detail = "The number you inputed is zero",
-                    Type = "https://en.wikipedia.org/wiki/Division_by_zero"
-                }
-            });
-        }
-        if (matherror == MathErrorType.NegativeRadicandError)
-        {
-            await problemDetailsService.WriteAsync(new ProblemDetailsContext
-            {
-                HttpContext = context,
-                ProblemDetails = new()
-                {
-                    Title = "Wrong Input",
-                    Detail = "Negative or complex numbers are not handled",
-                    Type = "https://en.wikipedia.org/wiki/Square_root"
+                    Detail = details.Detail,
+                    Type = details.Type
                 }
             });
         }
