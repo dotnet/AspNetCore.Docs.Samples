@@ -9,22 +9,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails(options =>
     options.CustomizeProblemDetails = (context) =>
     {
-        var mathErrorFeature = context.HttpContext.Features.Get<MathErrorFeature>();
-
-        if (mathErrorFeature != null)
+        var mathErrorFeature = context.HttpContext.Features.GetRequiredFeature<MathErrorFeature>();
+        (string Detail, string Type) details = mathErrorFeature.MathError switch
         {
-            (string Detail, string Type) details = mathErrorFeature.MathError switch
-            {
-                MathErrorType.DivisionByZeroError => ("The number you inputed is zero", "https://en.wikipedia.org/wiki/Division_by_zero"),
-                _ => ("Negative or complex numbers are not handled", "https://en.wikipedia.org/wiki/Square_root")
-            };
+            MathErrorType.DivisionByZeroError => ("The number you inputed is zero", "https://en.wikipedia.org/wiki/Division_by_zero"),
+            _ => ("Negative or complex numbers are not handled", "https://en.wikipedia.org/wiki/Square_root")
+        };
 
-            context.ProblemDetails.Type = details.Type;
-            context.ProblemDetails.Title = "Wrong Input";
-            context.ProblemDetails.Detail = details.Detail;
-        }
-    }
-);
+        context.ProblemDetails.Type = details.Type;
+        context.ProblemDetails.Title = "Wrong Input";
+        context.ProblemDetails.Detail = details.Detail;
+    });
 
 var app = builder.Build();
 
