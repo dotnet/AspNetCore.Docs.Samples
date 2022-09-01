@@ -1,4 +1,4 @@
-using  Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,8 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddProblemDetails(options => 
-    options.CustomizeProblemDetails = (context) => 
+builder.Services.AddProblemDetails(options =>
+    options.CustomizeProblemDetails = (context) =>
     {
         var mathErrorFeature = context.HttpContext.Features.Get<MathErrorFeature>();
 
@@ -43,10 +43,8 @@ app.Use(async (context, next) =>
     // added the MathErrorFeature to the request pipeline
     var mathErrorFeature = new MathErrorFeature();
     context.Features.Set(mathErrorFeature);
-
     await next(context);
-
-   });
+});
 
 app.UseStatusCodePages();
 
