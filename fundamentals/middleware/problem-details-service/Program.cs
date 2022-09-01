@@ -64,7 +64,7 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
 });
 
 // endpoint for obtaining the squareroot of a number
-app.MapGet("/squareroot", async (HttpContext context, int radicand) =>
+app.MapGet("/squareroot", (HttpContext context, int radicand) =>
 {
     if (radicand < 0)
     {
