@@ -11,7 +11,8 @@ app.MapGet("/todoitems", async (TodoDb db) =>
     await db.Todos.Select(x => new TodoItemDTO(x)).ToListAsync());
 
 // <snippet_id>
-app.MapGet("/todoitems/{id}", async (int Id, TodoDb Db) =>
+app.MapGet("/todoitems/{id}",
+                             async (int Id, TodoDb Db) =>
     await Db.Todos.FindAsync(Id)
         is Todo todo
             ? Results.Ok(new TodoItemDTO(todo))
@@ -68,7 +69,8 @@ app.MapDelete("/todoitems/{id}", async (int Id, TodoDb Db) =>
 
 // --- [AsParameters] go here ----------------------
 // <snippet_ap_id>
-app.MapGet("/ap/todoitems/{id}", async ([AsParameters] TodoItemRequest request) =>
+app.MapGet("/ap/todoitems/{id}",
+                                async ([AsParameters] TodoItemRequest request) =>
     await request.Db.Todos.FindAsync(request.Id)
         is Todo todo
             ? Results.Ok(new TodoItemDTO(todo))
