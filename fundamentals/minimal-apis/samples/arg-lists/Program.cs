@@ -21,7 +21,7 @@ app.MapGet("/todoitems/{id}",
 // Remaining code removed for brevity.
 // </snippet_top>
 
-// <snippet_post>
+// <snippet_post_put_delete>
 app.MapPost("/todoitems", async (TodoItemDTO Dto, TodoDb Db) =>
 {
     var todoItem = new Todo
@@ -35,9 +35,7 @@ app.MapPost("/todoitems", async (TodoItemDTO Dto, TodoDb Db) =>
 
     return Results.Created($"/todoitems/{todoItem.Id}", new TodoItemDTO(todoItem));
 });
-// </snippet_post>
 
-// <snippet_put>
 app.MapPut("/todoitems/{id}", async (int Id, TodoItemDTO Dto, TodoDb Db) =>
 {
     var todo = await Db.Todos.FindAsync(Id);
@@ -51,9 +49,7 @@ app.MapPut("/todoitems/{id}", async (int Id, TodoItemDTO Dto, TodoDb Db) =>
 
     return Results.NoContent();
 });
-// </snippet_put>
 
-// <snippet_delete>
 app.MapDelete("/todoitems/{id}", async (int Id, TodoDb Db) =>
 {
     if (await Db.Todos.FindAsync(Id) is Todo todo)
@@ -65,7 +61,7 @@ app.MapDelete("/todoitems/{id}", async (int Id, TodoDb Db) =>
 
     return Results.NotFound();
 });
-// </snippet_delete>
+// </snippet_post_put_delete>
 
 // --- [AsParameters] go here ----------------------
 // <snippet_ap_id>
@@ -77,7 +73,7 @@ app.MapGet("/ap/todoitems/{id}",
             : Results.NotFound());
 // </snippet_ap_id>
 
-// <snippet_ap_post>
+// <snippet_ap_post_put_delete>
 app.MapPost("/ap/todoitems", async ([AsParameters] CreateTodoItemRequest request) =>
 {
     var todoItem = new Todo
@@ -91,9 +87,7 @@ app.MapPost("/ap/todoitems", async ([AsParameters] CreateTodoItemRequest request
 
     return Results.Created($"/todoitems/{todoItem.Id}", new TodoItemDTO(todoItem));
 });
-// </snippet_ap_post>
 
-// <snippet_ap_put>
 app.MapPut("/ap/todoitems/{id}", async ([AsParameters] EditTodoItemRequest request) =>
 {
     var todo = await request.Db.Todos.FindAsync(request.Id);
@@ -107,9 +101,7 @@ app.MapPut("/ap/todoitems/{id}", async ([AsParameters] EditTodoItemRequest reque
 
     return Results.NoContent();
 });
-// </snippet_ap_put>
 
-// <snippet_ap_delete>
 app.MapDelete("/ap/todoitems/{id}", async ([AsParameters] TodoItemRequest request) =>
 {
     if (await request.Db.Todos.FindAsync(request.Id) is Todo todo)
@@ -121,6 +113,6 @@ app.MapDelete("/ap/todoitems/{id}", async ([AsParameters] TodoItemRequest reques
 
     return Results.NotFound();
 });
-// </snippet_ap_delete>
+// </snippet_ap_post_put_delete>
 
 app.Run();
