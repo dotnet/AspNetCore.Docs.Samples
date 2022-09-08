@@ -1,19 +1,26 @@
+#define FIRST // FIRST MIDDLEWARE
+#if NEVER
+#elif FIRST
+// <snippet_1>
 using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails(options =>
     options.CustomizeProblemDetails = (context) =>
     {
-        var mathErrorFeature = context.HttpContext.Features.GetRequiredFeature<MathErrorFeature>();
+        var mathErrorFeature = context.HttpContext.Features
+                                                   .GetRequiredFeature<MathErrorFeature>();
+      
         (string Detail, string Type) details = mathErrorFeature.MathError switch
         {
-            MathErrorType.DivisionByZeroError => ("The number you inputed is zero", "https://en.wikipedia.org/wiki/Division_by_zero"),
-            _ => ("Negative or complex numbers are not handled", "https://en.wikipedia.org/wiki/Square_root")
+            MathErrorType.DivisionByZeroError => 
+            ("Divison by zero is not defined.",
+                                       "https://wikipedia.org/wiki/Division_by_zero"),
+            _ => ("Negative or complex numbers are not valid input.",
+                                         "https://wikipedia.org/wiki/Square_root")
         };
 
         context.ProblemDetails.Type = details.Type;
@@ -23,7 +30,6 @@ builder.Services.AddProblemDetails(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -32,10 +38,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// middleware to handle writing problem details to the response
+// Middleware to handle writing problem details to the response
 app.Use(async (context, next) =>
 {
-    // added the MathErrorFeature to the request pipeline
     var mathErrorFeature = new MathErrorFeature();
     context.Features.Set(mathErrorFeature);
     await next(context);
@@ -43,12 +48,13 @@ app.Use(async (context, next) =>
 
 app.UseStatusCodePages();
 
-// endpoint for dividing numbers
+// /divide?numerator=2&denominator=4
 app.MapGet("/divide", (HttpContext context, double numerator, double denominator) =>
 {
     if (denominator == 0)
     {
-        context.Features.GetRequiredFeature<MathErrorFeature>().MathError = MathErrorType.DivisionByZeroError;
+        context.Features.GetRequiredFeature<MathErrorFeature>().MathError = 
+                                                     MathErrorType.DivisionByZeroError;
         return Results.BadRequest();
     }
 
@@ -56,12 +62,13 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
     return Results.Ok(calculation);
 });
 
-// endpoint for obtaining the squareroot of a number
+// /squareroot?radicand=16
 app.MapGet("/squareroot", (HttpContext context, int radicand) =>
 {
     if (radicand < 0)
     {
-        context.Features.GetRequiredFeature<MathErrorFeature>().MathError = MathErrorType.NegativeRadicandError;
+        context.Features.GetRequiredFeature<MathErrorFeature>().MathError =
+                                                       MathErrorType.NegativeRadicandError;
         return Results.BadRequest();
     }
 
@@ -70,16 +77,81 @@ app.MapGet("/squareroot", (HttpContext context, int radicand) =>
 });
 
 app.Run();
+// </snippet_1>
+#elif MIDDLEWARE
+using Microsoft.AspNetCore.Http.Features;
 
-// Custom math errors
-enum MathErrorType
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddProblemDetails(options =>
+    options.CustomizeProblemDetails = (context) =>
+    {
+        var mathErrorFeature = context.HttpContext.Features
+                                                   .GetRequiredFeature<MathErrorFeature>();
+      
+        (string Detail, string Type) details = mathErrorFeature.MathError switch
+        {
+            MathErrorType.DivisionByZeroError => 
+            ("Divison by zero is not defined.",
+                                       "https://wikipedia.org/wiki/Division_by_zero"),
+            _ => ("Negative or complex numbers are not valid input.",
+                                         "https://wikipedia.org/wiki/Square_root")
+        };
+
+        context.ProblemDetails.Type = details.Type;
+        context.ProblemDetails.Title = "Wrong Input";
+        context.ProblemDetails.Detail = details.Detail;
+    });
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
 {
-    DivisionByZeroError,
-    NegativeRadicandError
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-// Custom Http Request Feature
-class MathErrorFeature
+app.UseHttpsRedirection();
+
+// Middleware to handle writing problem details to the response
+app.Use(async (context, next) =>
 {
-    public MathErrorType MathError { get; set; }
-}
+    var mathErrorFeature = new MathErrorFeature();
+    context.Features.Set(mathErrorFeature);
+    await next(context);
+});
+
+app.UseStatusCodePages();
+
+// /divide?numerator=2&denominator=4
+app.MapGet("/divide", (HttpContext context, double numerator, double denominator) =>
+{
+    if (denominator == 0)
+    {
+        context.Features.GetRequiredFeature<MathErrorFeature>().MathError = 
+                                                     MathErrorType.DivisionByZeroError;
+        return Results.BadRequest();
+    }
+
+    var calculation = numerator / denominator;
+    return Results.Ok(calculation);
+});
+
+// /squareroot?radicand=16
+app.MapGet("/squareroot", (HttpContext context, int radicand) =>
+{
+    if (radicand < 0)
+    {
+        context.Features.GetRequiredFeature<MathErrorFeature>().MathError =
+                                                       MathErrorType.NegativeRadicandError;
+        return Results.BadRequest();
+    }
+
+    var calculation = Math.Sqrt(radicand);
+    return Results.Ok(calculation);
+});
+
+app.Run();
+#endif
