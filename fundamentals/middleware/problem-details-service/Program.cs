@@ -126,14 +126,12 @@ app.Use(async (context, next) =>
     }
 });
 
-//app.UseStatusCodePages();
-
 // /divide?numerator=2&denominator=4
 app.MapGet("/divide", (HttpContext context, double numerator, double denominator) =>
 {
     if (denominator == 0)
     {
-        context.Features.GetRequiredFeature<MathErrorFeature>().MathError = 
+        context.Features.GetRequiredFeature<MathErrorFeature>().MathError =
                                                      MathErrorType.DivisionByZeroError;
         return Results.BadRequest();
     }
