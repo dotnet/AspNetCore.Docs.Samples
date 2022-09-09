@@ -11,22 +11,27 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails(options =>
     options.CustomizeProblemDetails = (context) =>
     {
-        var mathErrorFeature = context.HttpContext.Features
-                                                 .GetRequiredFeature<MathErrorFeature>();
-      
-        (string Detail, string Type) details = mathErrorFeature.MathError switch
-        {
-            MathErrorType.DivisionByZeroError => 
-            ("Divison by zero is not defined.",
-                                       "https://wikipedia.org/wiki/Division_by_zero"),
-            _ => ("Negative or complex numbers are not valid input.",
-                                         "https://wikipedia.org/wiki/Square_root")
-        };
 
-        context.ProblemDetails.Type = details.Type;
-        context.ProblemDetails.Title = "Wrong Input";
-        context.ProblemDetails.Detail = details.Detail;
-    });
+        var mathErrorFeature = context.HttpContext.Features
+                                                   .GetRequiredFeature<MathErrorFeature>();
+        if (HasPath(context.HttpContext))
+        {
+            (string Detail, string Type) details = mathErrorFeature.MathError switch
+            {
+                MathErrorType.DivisionByZeroError =>
+                ("Divison by zero is not defined.",
+                                           "https://wikipedia.org/wiki/Division_by_zero"),
+                _ => ("Negative or complex numbers are not valid input.",
+                                             "https://wikipedia.org/wiki/Square_root")
+            };
+
+            context.ProblemDetails.Type = details.Type;
+            context.ProblemDetails.Title = "Wrong Input";
+            context.ProblemDetails.Detail = details.Detail;
+        }
+    }
+    );
+
 
 var app = builder.Build();
 
@@ -52,7 +57,7 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
 {
     if (denominator == 0)
     {
-        context.Features.GetRequiredFeature<MathErrorFeature>().MathError = 
+        context.Features.GetRequiredFeature<MathErrorFeature>().MathError =
                                                      MathErrorType.DivisionByZeroError;
         return Results.BadRequest();
     }
@@ -75,6 +80,17 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 });
 
 app.Run();
+
+// check if error message is defined for selected paths
+static bool HasPath(HttpContext context)
+{
+    return context.Request.Path.Value switch
+    {
+        "/divide" => true,
+        "/squareroot" => true,
+        _ => false
+    };
+}
 // </snippet_1>
 #elif MIDDLEWARE
 using Microsoft.AspNetCore.Http.Features;
@@ -94,13 +110,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseStatusCodePages();
+
 // Middleware to handle writing problem details to the response
 app.Use(async (context, next) =>
 {
     var mathErrorFeature = new MathErrorFeature();
     context.Features.Set(mathErrorFeature);
     await next(context);
-    if (context.Response.StatusCode > 399)
+    if (context.Response.StatusCode > 399 && HasPath(context))
     {
         if (context.RequestServices.GetService<IProblemDetailsService>() is
                                                            { } problemDetailsService)
@@ -109,7 +127,7 @@ app.Use(async (context, next) =>
             {
                 MathErrorType.DivisionByZeroError => ("The number you inputed is zero",
                 "https://en.wikipedia.org/wiki/Division_by_zero"),
-                _ => ("Negative or complex numbers are not handled",
+                _ => ("Negative or complex numbers are not handled", 
                 "https://en.wikipedia.org/wiki/Square_root")
             };
 
@@ -208,5 +226,16 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// check if error message is defined for selected paths
+static bool HasPath(HttpContext context)
+{
+    return context.Request.Path.Value switch
+    {
+        "/divide" => true,
+        "/squareroot" => true,
+        _ => false
+    };
+}
 
 #endif
