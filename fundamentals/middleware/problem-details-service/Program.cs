@@ -1,4 +1,4 @@
-#define FIRST // FIRST MIDDLEWARE
+#define API_CONTROLLER // FIRST MIDDLEWARE API_CONTROLLER
 #if NEVER
 #elif FIRST
 // <snippet_1>
@@ -154,4 +154,59 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 });
 
 app.Run();
+#elif API_CONTROLLER
+using Microsoft.AspNetCore.Http.Features;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddProblemDetails(options =>
+    options.CustomizeProblemDetails = (context) =>
+    {
+        var mathErrorFeature = context.HttpContext.Features
+                                                   .GetRequiredFeature<MathErrorFeature>();
+
+        (string Detail, string Type) details = mathErrorFeature.MathError switch
+        {
+            MathErrorType.DivisionByZeroError =>
+            ("Divison by zero is not defined.",
+                                       "https://wikipedia.org/wiki/Division_by_zero"),
+            _ => ("Negative or complex numbers are not valid input.",
+                                         "https://wikipedia.org/wiki/Square_root")
+        };
+
+        context.ProblemDetails.Type = details.Type;
+        context.ProblemDetails.Title = "Wrong Input";
+        context.ProblemDetails.Detail = details.Detail;
+    });
+
+
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+// Middleware to handle writing problem details to the response
+app.Use(async (context, next) =>
+{
+    context.Features.Set(new MathErrorFeature());
+    await next(context);
+});
+
+app.UseStatusCodePages();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+
 #endif
