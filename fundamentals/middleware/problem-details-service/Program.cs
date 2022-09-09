@@ -1,4 +1,4 @@
-#define FIRST // FIRST MIDDLEWARE
+#define MIDDLEWARE // FIRST MIDDLEWARE
 #if NEVER
 #elif FIRST
 // <snippet_1>
@@ -85,26 +85,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddProblemDetails(options =>
-    options.CustomizeProblemDetails = (context) =>
-    {
-        var mathErrorFeature = context.HttpContext.Features
-                                                   .GetRequiredFeature<MathErrorFeature>();
-      
-        (string Detail, string Type) details = mathErrorFeature.MathError switch
-        {
-            MathErrorType.DivisionByZeroError => 
-            ("Divison by zero is not defined.",
-                                       "https://wikipedia.org/wiki/Division_by_zero"),
-            _ => ("Negative or complex numbers are not valid input.",
-                                         "https://wikipedia.org/wiki/Square_root")
-        };
-
-        context.ProblemDetails.Type = details.Type;
-        context.ProblemDetails.Title = "Wrong Input";
-        context.ProblemDetails.Detail = details.Detail;
-    });
-
+builder.Services.AddProblemDetails();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -121,9 +102,31 @@ app.Use(async (context, next) =>
     var mathErrorFeature = new MathErrorFeature();
     context.Features.Set(mathErrorFeature);
     await next(context);
+    if (context.Response.StatusCode > 399)
+    {
+        if (context.RequestServices.GetService<IProblemDetailsService>() is { } problemDetailsService)
+        {
+            (string Detail, string Type) details = mathErrorFeature.MathError switch
+            {
+                MathErrorType.DivisionByZeroError => ("The number you inputed is zero", "https://en.wikipedia.org/wiki/Division_by_zero"),
+                _ => ("Negative or complex numbers are not handled", "https://en.wikipedia.org/wiki/Square_root")
+            };
+
+            await problemDetailsService.WriteAsync(new ProblemDetailsContext
+            {
+                HttpContext = context,
+                ProblemDetails =
+                {
+                    Title = "Wrong Input",
+                    Detail = details.Detail,
+                    Type = details.Type
+                }
+            });
+        }
+    }
 });
 
-app.UseStatusCodePages();
+//app.UseStatusCodePages();
 
 // /divide?numerator=2&denominator=4
 app.MapGet("/divide", (HttpContext context, double numerator, double denominator) =>
