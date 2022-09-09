@@ -7,7 +7,7 @@ namespace ProblemDetailsWebApi.Controllers;
 [ApiController]
 public class ValuesController : ControllerBase
 {
-    // /api/values/1/2
+    // /api/values/Divide/1/2
     [HttpGet("{Numerator}/{Denominator}")]
     public IActionResult Divide(double Numerator, double Denominator)
     {
@@ -22,6 +22,7 @@ public class ValuesController : ControllerBase
         return Ok(calculation);
     }
 
+    // /api/values/Squareroot/4
     [HttpGet("{radicand}")]
     public IActionResult Squareroot(double radicand)
     {
