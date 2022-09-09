@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ProblemDetailsWebApi.Controllers;
@@ -7,22 +7,23 @@ namespace ProblemDetailsWebApi.Controllers;
 [ApiController]
 public class ValuesController : ControllerBase
 {
-    [HttpGet("{numerator}/{denominator}")]
-    public IActionResult divide(double numerator, double denominator)
+    // /api/values/1/2
+    [HttpGet("{Numerator}/{Denominator}")]
+    public IActionResult Divide(double Numerator, double Denominator)
     {
-        if (denominator == 0)
+        if (Denominator == 0)
         {
             HttpContext.Features.GetRequiredFeature<MathErrorFeature>().MathError =
                                                          MathErrorType.DivisionByZeroError;
             return BadRequest();
         }
 
-        var calculation = numerator / denominator;
+        var calculation = Numerator / Denominator;
         return Ok(calculation);
     }
 
     [HttpGet("{radicand}")]
-    public IActionResult squareroot(double radicand)
+    public IActionResult Squareroot(double radicand)
     {
         if (radicand < 0)
         {

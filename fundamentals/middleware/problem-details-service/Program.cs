@@ -81,7 +81,7 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 
 app.Run();
 
-// check if error message is defined for selected paths
+// Check if error message is defined for selected paths.
 static bool HasPath(HttpContext context)
 {
     return context.Request.Path.Value switch
@@ -172,6 +172,18 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 });
 
 app.Run();
+
+// Check if error message is defined for selected paths.
+static bool HasPath(HttpContext context)
+{
+    return context.Request.Path.Value switch
+    {
+        "/divide" => true,
+        "/squareroot" => true,
+        _ => false
+    };
+}
+
 #elif API_CONTROLLER
 using Microsoft.AspNetCore.Http.Features;
 
@@ -184,22 +196,26 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails(options =>
     options.CustomizeProblemDetails = (context) =>
     {
+
         var mathErrorFeature = context.HttpContext.Features
                                                    .GetRequiredFeature<MathErrorFeature>();
-
-        (string Detail, string Type) details = mathErrorFeature.MathError switch
+        if (HasPath(context.HttpContext))
         {
-            MathErrorType.DivisionByZeroError =>
-            ("Divison by zero is not defined.",
-                                       "https://wikipedia.org/wiki/Division_by_zero"),
-            _ => ("Negative or complex numbers are not valid input.",
-                                         "https://wikipedia.org/wiki/Square_root")
-        };
+            (string Detail, string Type) details = mathErrorFeature.MathError switch
+            {
+                MathErrorType.DivisionByZeroError =>
+                ("Divison by zero is not defined.",
+                                           "https://wikipedia.org/wiki/Division_by_zero"),
+                _ => ("Negative or complex numbers are not valid input.",
+                                             "https://wikipedia.org/wiki/Square_root")
+            };
 
-        context.ProblemDetails.Type = details.Type;
-        context.ProblemDetails.Title = "Wrong Input";
-        context.ProblemDetails.Detail = details.Detail;
-    });
+            context.ProblemDetails.Type = details.Type;
+            context.ProblemDetails.Title = "Wrong Input";
+            context.ProblemDetails.Detail = details.Detail;
+        }
+    }
+    );
 
 
 var app = builder.Build();
@@ -227,15 +243,10 @@ app.MapControllers();
 
 app.Run();
 
-// check if error message is defined for selected paths
+// Check if error message is defined for selected paths.
 static bool HasPath(HttpContext context)
 {
-    return context.Request.Path.Value switch
-    {
-        "/divide" => true,
-        "/squareroot" => true,
-        _ => false
-    };
+    return true;
 }
 
 #endif
