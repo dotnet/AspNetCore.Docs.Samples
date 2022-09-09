@@ -47,7 +47,7 @@ app.UseHttpsRedirection();
 app.Use(async (context, next) =>
 {
     var mathErrorFeature = new MathErrorFeature();
-    context.Features.Set(mathErrorFeature);
+    context.Features.Set(new MathErrorFeature());
     await next(context);
 });
 
