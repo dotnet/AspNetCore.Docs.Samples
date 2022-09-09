@@ -1,4 +1,4 @@
-#define MIDDLEWARE // FIRST MIDDLEWARE
+#define FIRST // FIRST MIDDLEWARE
 #if NEVER
 #elif FIRST
 // <snippet_1>
@@ -12,7 +12,7 @@ builder.Services.AddProblemDetails(options =>
     options.CustomizeProblemDetails = (context) =>
     {
         var mathErrorFeature = context.HttpContext.Features
-                                                   .GetRequiredFeature<MathErrorFeature>();
+                                                 .GetRequiredFeature<MathErrorFeature>();
       
         (string Detail, string Type) details = mathErrorFeature.MathError switch
         {
@@ -41,7 +41,6 @@ app.UseHttpsRedirection();
 // Middleware to handle writing problem details to the response
 app.Use(async (context, next) =>
 {
-    var mathErrorFeature = new MathErrorFeature();
     context.Features.Set(new MathErrorFeature());
     await next(context);
 });
@@ -63,7 +62,7 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
 });
 
 // /squareroot?radicand=16
-app.MapGet("/squareroot", (HttpContext context, int radicand) =>
+app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 {
     if (radicand < 0)
     {
@@ -72,8 +71,7 @@ app.MapGet("/squareroot", (HttpContext context, int radicand) =>
         return Results.BadRequest();
     }
 
-    var calculation = Math.Sqrt(radicand);
-    return Results.Ok(calculation);
+    return Results.Ok(Math.Sqrt(radicand));
 });
 
 app.Run();
@@ -104,12 +102,15 @@ app.Use(async (context, next) =>
     await next(context);
     if (context.Response.StatusCode > 399)
     {
-        if (context.RequestServices.GetService<IProblemDetailsService>() is { } problemDetailsService)
+        if (context.RequestServices.GetService<IProblemDetailsService>() is
+                                                           { } problemDetailsService)
         {
             (string Detail, string Type) details = mathErrorFeature.MathError switch
             {
-                MathErrorType.DivisionByZeroError => ("The number you inputed is zero", "https://en.wikipedia.org/wiki/Division_by_zero"),
-                _ => ("Negative or complex numbers are not handled", "https://en.wikipedia.org/wiki/Square_root")
+                MathErrorType.DivisionByZeroError => ("The number you inputed is zero",
+                "https://en.wikipedia.org/wiki/Division_by_zero"),
+                _ => ("Negative or complex numbers are not handled",
+                "https://en.wikipedia.org/wiki/Square_root")
             };
 
             await problemDetailsService.WriteAsync(new ProblemDetailsContext
@@ -136,12 +137,11 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
         return Results.BadRequest();
     }
 
-    var calculation = numerator / denominator;
-    return Results.Ok(calculation);
+    return Results.Ok(numerator / denominator);
 });
 
 // /squareroot?radicand=16
-app.MapGet("/squareroot", (HttpContext context, int radicand) =>
+app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 {
     if (radicand < 0)
     {
@@ -150,8 +150,7 @@ app.MapGet("/squareroot", (HttpContext context, int radicand) =>
         return Results.BadRequest();
     }
 
-    var calculation = Math.Sqrt(radicand);
-    return Results.Ok(calculation);
+    return Results.Ok(Math.Sqrt(radicand));
 });
 
 app.Run();
