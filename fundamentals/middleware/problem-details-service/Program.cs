@@ -246,7 +246,10 @@ app.Run();
 // Check if error message is defined for selected paths.
 static bool HasPath(HttpContext context)
 {
-    return true;
+    return context.Request.Path.Value.Contains("/api/values/Divide", 
+                                StringComparison.OrdinalIgnoreCase) ||
+        context.Request.Path.Value.Contains("/api/values/Squareroot",
+                                StringComparison.OrdinalIgnoreCase);
 }
 
 #endif
