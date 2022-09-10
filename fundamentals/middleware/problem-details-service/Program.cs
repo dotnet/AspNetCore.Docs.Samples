@@ -50,8 +50,9 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
 {
     if (denominator == 0)
     {
-        context.Features.GetRequiredFeature<MathErrorFeature>().MathError =
-                                                     MathErrorType.DivisionByZeroError;
+        var errorType = new MathErrorFeature { MathError = MathErrorType.DivisionByZeroError };
+        context.Features.Set(errorType);
+                                                  
         return Results.BadRequest();
     }
 
