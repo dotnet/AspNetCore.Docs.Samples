@@ -73,16 +73,7 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 
 app.Run();
 
-// Check if error message is defined for selected paths.
-static bool HasPath(HttpContext context)
-{
-    return context.Request.Path.Value switch
-    {
-        "/divide" => true,
-        "/squareroot" => true,
-        _ => false
-    };
-}
+
 // </snippet_1>
 #elif MIDDLEWARE
 using Microsoft.AspNetCore.Http.Features;
