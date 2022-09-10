@@ -1,8 +1,7 @@
-#define API_CONTROLLER // FIRST MIDDLEWARE API_CONTROLLER
+#define FIRST // FIRST MIDDLEWARE API_CONTROLLER
 #if NEVER
 #elif FIRST
 // <snippet_1>
-using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +12,8 @@ builder.Services.AddProblemDetails(options =>
     {
 
         var mathErrorFeature = context.HttpContext.Features
-                                                   .GetRequiredFeature<MathErrorFeature>();
-        if (HasPath(context.HttpContext))
+                                                   .Get<MathErrorFeature>();
+        if (mathErrorFeature is not null)
         {
             (string Detail, string Type) details = mathErrorFeature.MathError switch
             {
@@ -52,7 +51,6 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
     {
         var errorType = new MathErrorFeature { MathError = MathErrorType.DivisionByZeroError };
         context.Features.Set(errorType);
-                                                  
         return Results.BadRequest();
     }
 
@@ -65,8 +63,8 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 {
     if (radicand < 0)
     {
-        context.Features.GetRequiredFeature<MathErrorFeature>().MathError =
-                                                       MathErrorType.NegativeRadicandError;
+        var errorType = new MathErrorFeature { MathError = MathErrorType.NegativeRadicandError };
+        context.Features.Set(errorType);
         return Results.BadRequest();
     }
 
