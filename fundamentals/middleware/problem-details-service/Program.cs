@@ -165,26 +165,26 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddProblemDetails(options =>
-    options.CustomizeProblemDetails = (context) =>
-    {
-
-        var mathErrorFeature = context.HttpContext.Features
-                                                   .GetRequiredFeature<MathErrorFeature>();
-        if (HasPath(context.HttpContext))
+        options.CustomizeProblemDetails = (context) =>
         {
-            (string Detail, string Type) details = mathErrorFeature.MathError switch
-            {
-                MathErrorType.DivisionByZeroError =>
-                ("Divison by zero is not defined.",
-                                           "https://wikipedia.org/wiki/Division_by_zero"),
-                _ => ("Negative or complex numbers are not valid input.",
-                                             "https://wikipedia.org/wiki/Square_root")
-            };
 
-            context.ProblemDetails.Type = details.Type;
-            context.ProblemDetails.Title = "Wrong Input";
-            context.ProblemDetails.Detail = details.Detail;
-        }
+            var mathErrorFeature = context.HttpContext.Features
+                                                       .Get<MathErrorFeature>();
+            if (mathErrorFeature is not null)
+            {
+                (string Detail, string Type) details = mathErrorFeature.MathError switch
+                {
+                    MathErrorType.DivisionByZeroError =>
+                    ("Divison by zero is not defined.",
+                                               "https://wikipedia.org/wiki/Division_by_zero"),
+                    _ => ("Negative or complex numbers are not valid input.",
+                                                 "https://wikipedia.org/wiki/Square_root")
+                };
+
+                context.ProblemDetails.Type = details.Type;
+                context.ProblemDetails.Title = "Wrong Input";
+                context.ProblemDetails.Detail = details.Detail;
+            }
     }
     );
 
@@ -213,14 +213,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-// Check if error message is defined for selected paths.
-static bool HasPath(HttpContext context)
-{
-    return context.Request.Path.Value.Contains("/api/values/Divide", 
-                                StringComparison.OrdinalIgnoreCase) ||
-        context.Request.Path.Value.Contains("/api/values/Squareroot",
-                                StringComparison.OrdinalIgnoreCase);
-}
 
 #endif
