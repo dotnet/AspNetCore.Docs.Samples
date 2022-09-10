@@ -1,4 +1,4 @@
-#define FIRST // FIRST MIDDLEWARE API_CONTROLLER
+#define API_CONTROLLER // FIRST MIDDLEWARE API_CONTROLLER
 #if NEVER
 #elif FIRST
 // <snippet_1>
@@ -76,7 +76,6 @@ app.Run();
 
 // </snippet_1>
 #elif MIDDLEWARE
-using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -98,10 +97,9 @@ app.UseStatusCodePages();
 // Middleware to handle writing problem details to the response
 app.Use(async (context, next) =>
 {
-    var mathErrorFeature = new MathErrorFeature();
-    context.Features.Set(mathErrorFeature);
     await next(context);
-    if (context.Response.StatusCode > 399 && HasPath(context))
+    var mathErrorFeature = context.Features.Get<MathErrorFeature>();
+    if (mathErrorFeature is not null)
     {
         if (context.RequestServices.GetService<IProblemDetailsService>() is
                                                            { } problemDetailsService)
@@ -133,8 +131,8 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
 {
     if (denominator == 0)
     {
-        context.Features.GetRequiredFeature<MathErrorFeature>().MathError =
-                                                     MathErrorType.DivisionByZeroError;
+        var errorType = new MathErrorFeature { MathError = MathErrorType.DivisionByZeroError };
+        context.Features.Set(errorType);
         return Results.BadRequest();
     }
 
@@ -146,8 +144,8 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 {
     if (radicand < 0)
     {
-        context.Features.GetRequiredFeature<MathErrorFeature>().MathError =
-                                                       MathErrorType.NegativeRadicandError;
+        var errorType = new MathErrorFeature { MathError = MathErrorType.NegativeRadicandError };
+        context.Features.Set(errorType);
         return Results.BadRequest();
     }
 
@@ -156,16 +154,6 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 
 app.Run();
 
-// Check if error message is defined for selected paths.
-static bool HasPath(HttpContext context)
-{
-    return context.Request.Path.Value switch
-    {
-        "/divide" => true,
-        "/squareroot" => true,
-        _ => false
-    };
-}
 
 #elif API_CONTROLLER
 using Microsoft.AspNetCore.Http.Features;
