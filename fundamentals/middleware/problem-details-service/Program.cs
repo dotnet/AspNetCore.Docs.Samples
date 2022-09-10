@@ -185,7 +185,7 @@ builder.Services.AddProblemDetails(options =>
                 context.ProblemDetails.Title = "Wrong Input";
                 context.ProblemDetails.Detail = details.Detail;
             }
-    }
+        }
     );
 
 
