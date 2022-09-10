@@ -43,13 +43,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Middleware to handle writing problem details to the response
-app.Use(async (context, next) =>
-{
-    context.Features.Set(new MathErrorFeature());
-    await next(context);
-});
-
 app.UseStatusCodePages();
 
 // /divide?numerator=2&denominator=4
