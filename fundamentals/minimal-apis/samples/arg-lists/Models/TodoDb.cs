@@ -12,8 +12,16 @@ class TodoDb : DbContext
 
 // <snippet_1>
 // <snippet>
-record TodoItemRequest(int Id, TodoDb Db);
+struct TodoItemRequest
+{
+    public int Id { get; set; }
+    public TodoDb Db { get; set; }
+}
 // </snippet>
-record CreateTodoItemRequest(TodoItemDTO Dto, TodoDb Db);
+class CreateTodoItemRequest
+{
+    public TodoItemDTO Dto { get; set; } = default!;
+    public TodoDb Db { get; set; } = default!;
+}
 record EditTodoItemRequest(int Id, TodoItemDTO Dto, TodoDb Db);
 // </snippet_1>
