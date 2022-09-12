@@ -10,7 +10,6 @@ class TodoDb : DbContext
     public DbSet<Todo> Todos => Set<Todo>();
 }
 
-// <snippet_1>
 // <snippet>
 struct TodoItemRequest
 {
@@ -18,10 +17,18 @@ struct TodoItemRequest
     public TodoDb Db { get; set; }
 }
 // </snippet>
+
+// <snippet_1>
 class CreateTodoItemRequest
 {
     public TodoItemDTO Dto { get; set; } = default!;
     public TodoDb Db { get; set; } = default!;
 }
-record EditTodoItemRequest(int Id, TodoItemDTO Dto, TodoDb Db);
+
+class EditTodoItemRequest
+{
+    public int Id { get; set; }
+    public TodoItemDTO Dto { get; set; } = default!;
+    public TodoDb Db { get; set; } = default!;
+}
 // </snippet_1>
