@@ -2,7 +2,6 @@
 #if NEVER
 #elif FIRST
 // <snippet_1>
-using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,8 +12,8 @@ builder.Services.AddProblemDetails(options =>
     {
 
         var mathErrorFeature = context.HttpContext.Features
-                                                   .GetRequiredFeature<MathErrorFeature>();
-        if (HasPath(context.HttpContext))
+                                                   .Get<MathErrorFeature>();
+        if (mathErrorFeature is not null)
         {
             (string Detail, string Type) details = mathErrorFeature.MathError switch
             {
@@ -43,13 +42,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Middleware to handle writing problem details to the response
-app.Use(async (context, next) =>
-{
-    context.Features.Set(new MathErrorFeature());
-    await next(context);
-});
-
 app.UseStatusCodePages();
 
 // /divide?numerator=2&denominator=4
@@ -57,8 +49,8 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
 {
     if (denominator == 0)
     {
-        context.Features.GetRequiredFeature<MathErrorFeature>().MathError =
-                                                     MathErrorType.DivisionByZeroError;
+        var errorType = new MathErrorFeature { MathError = MathErrorType.DivisionByZeroError };
+        context.Features.Set(errorType);
         return Results.BadRequest();
     }
 
@@ -71,8 +63,8 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 {
     if (radicand < 0)
     {
-        context.Features.GetRequiredFeature<MathErrorFeature>().MathError =
-                                                       MathErrorType.NegativeRadicandError;
+        var errorType = new MathErrorFeature { MathError = MathErrorType.NegativeRadicandError };
+        context.Features.Set(errorType);
         return Results.BadRequest();
     }
 
@@ -81,19 +73,9 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 
 app.Run();
 
-// Check if error message is defined for selected paths.
-static bool HasPath(HttpContext context)
-{
-    return context.Request.Path.Value switch
-    {
-        "/divide" => true,
-        "/squareroot" => true,
-        _ => false
-    };
-}
+
 // </snippet_1>
 #elif MIDDLEWARE
-using Microsoft.AspNetCore.Http.Features;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -115,10 +97,9 @@ app.UseStatusCodePages();
 // Middleware to handle writing problem details to the response
 app.Use(async (context, next) =>
 {
-    var mathErrorFeature = new MathErrorFeature();
-    context.Features.Set(mathErrorFeature);
     await next(context);
-    if (context.Response.StatusCode > 399 && HasPath(context))
+    var mathErrorFeature = context.Features.Get<MathErrorFeature>();
+    if (mathErrorFeature is not null)
     {
         if (context.RequestServices.GetService<IProblemDetailsService>() is
                                                            { } problemDetailsService)
@@ -150,8 +131,8 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
 {
     if (denominator == 0)
     {
-        context.Features.GetRequiredFeature<MathErrorFeature>().MathError =
-                                                     MathErrorType.DivisionByZeroError;
+        var errorType = new MathErrorFeature { MathError = MathErrorType.DivisionByZeroError };
+        context.Features.Set(errorType);
         return Results.BadRequest();
     }
 
@@ -163,8 +144,8 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 {
     if (radicand < 0)
     {
-        context.Features.GetRequiredFeature<MathErrorFeature>().MathError =
-                                                       MathErrorType.NegativeRadicandError;
+        var errorType = new MathErrorFeature { MathError = MathErrorType.NegativeRadicandError };
+        context.Features.Set(errorType);
         return Results.BadRequest();
     }
 
@@ -173,16 +154,6 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 
 app.Run();
 
-// Check if error message is defined for selected paths.
-static bool HasPath(HttpContext context)
-{
-    return context.Request.Path.Value switch
-    {
-        "/divide" => true,
-        "/squareroot" => true,
-        _ => false
-    };
-}
 
 #elif API_CONTROLLER
 using Microsoft.AspNetCore.Http.Features;
@@ -194,27 +165,27 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddProblemDetails(options =>
-    options.CustomizeProblemDetails = (context) =>
-    {
-
-        var mathErrorFeature = context.HttpContext.Features
-                                                   .GetRequiredFeature<MathErrorFeature>();
-        if (HasPath(context.HttpContext))
+        options.CustomizeProblemDetails = (context) =>
         {
-            (string Detail, string Type) details = mathErrorFeature.MathError switch
-            {
-                MathErrorType.DivisionByZeroError =>
-                ("Divison by zero is not defined.",
-                                           "https://wikipedia.org/wiki/Division_by_zero"),
-                _ => ("Negative or complex numbers are not valid input.",
-                                             "https://wikipedia.org/wiki/Square_root")
-            };
 
-            context.ProblemDetails.Type = details.Type;
-            context.ProblemDetails.Title = "Wrong Input";
-            context.ProblemDetails.Detail = details.Detail;
+            var mathErrorFeature = context.HttpContext.Features
+                                                       .Get<MathErrorFeature>();
+            if (mathErrorFeature is not null)
+            {
+                (string Detail, string Type) details = mathErrorFeature.MathError switch
+                {
+                    MathErrorType.DivisionByZeroError =>
+                    ("Divison by zero is not defined.",
+                                               "https://wikipedia.org/wiki/Division_by_zero"),
+                    _ => ("Negative or complex numbers are not valid input.",
+                                                 "https://wikipedia.org/wiki/Square_root")
+                };
+
+                context.ProblemDetails.Type = details.Type;
+                context.ProblemDetails.Title = "Wrong Input";
+                context.ProblemDetails.Detail = details.Detail;
+            }
         }
-    }
     );
 
 
@@ -228,13 +199,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Middleware to handle writing problem details to the response
-app.Use(async (context, next) =>
-{
-    context.Features.Set(new MathErrorFeature());
-    await next(context);
-});
-
 app.UseStatusCodePages();
 
 app.UseAuthorization();
@@ -242,14 +206,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-
-// Check if error message is defined for selected paths.
-static bool HasPath(HttpContext context)
-{
-    return context.Request.Path.Value.Contains("/api/values/Divide", 
-                                StringComparison.OrdinalIgnoreCase) ||
-        context.Request.Path.Value.Contains("/api/values/Squareroot",
-                                StringComparison.OrdinalIgnoreCase);
-}
 
 #endif
