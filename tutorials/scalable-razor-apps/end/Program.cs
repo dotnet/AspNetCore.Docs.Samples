@@ -18,7 +18,6 @@ builder.Services.AddDataProtection()
                                                 new DefaultAzureCredential())
                 .ProtectKeysWithAzureKeyVault(new Uri(KeyVaultURI),
                                                 new DefaultAzureCredential());
-
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
