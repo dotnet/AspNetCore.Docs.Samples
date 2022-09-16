@@ -1,3 +1,4 @@
+// <snippet_ProgramConfigurations>
 using Azure.Identity;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Azure;
@@ -36,3 +37,4 @@ app.UseAuthorization();
 app.MapRazorPages();
 
 app.Run();
+// </snippet_ProgramConfigurations>
