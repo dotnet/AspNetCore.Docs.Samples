@@ -1,4 +1,4 @@
-#define API_CONT_SHORT // FIRST MIDDLEWARE API_CONTROLLER API_CONT_SHORT
+#define FIRST // FIRST MIDDLEWARE API_CONTROLLER API_CONT_SHORT
 #if NEVER
 #elif FIRST
 // <snippet_1>
@@ -18,9 +18,9 @@ builder.Services.AddProblemDetails(options =>
             {
                 MathErrorType.DivisionByZeroError =>
                 ("Divison by zero is not defined.",
-                                           "https://wikipedia.org/wiki/Division_by_zero"),
+                                         "https://wikipedia.org/wiki/Division_by_zero"),
                 _ => ("Negative or complex numbers are not valid input.",
-                                             "https://wikipedia.org/wiki/Square_root")
+                                            "https://wikipedia.org/wiki/Square_root")
             };
 
             context.ProblemDetails.Type = details.Type;
@@ -47,7 +47,8 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
 {
     if (denominator == 0)
     {
-        var errorType = new MathErrorFeature { MathError = MathErrorType.DivisionByZeroError };
+        var errorType = new MathErrorFeature { MathError =
+                                               MathErrorType.DivisionByZeroError };
         context.Features.Set(errorType);
         return Results.BadRequest();
     }
@@ -61,7 +62,8 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 {
     if (radicand < 0)
     {
-        var errorType = new MathErrorFeature { MathError = MathErrorType.NegativeRadicandError };
+        var errorType = new MathErrorFeature { MathError =
+                                              MathErrorType.NegativeRadicandError };
         context.Features.Set(errorType);
         return Results.BadRequest();
     }
@@ -127,7 +129,8 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
 {
     if (denominator == 0)
     {
-        var errorType = new MathErrorFeature { MathError = MathErrorType.DivisionByZeroError };
+        var errorType = new MathErrorFeature { MathError =
+                                               MathErrorType.DivisionByZeroError };
         context.Features.Set(errorType);
         return Results.BadRequest();
     }
@@ -140,7 +143,8 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 {
     if (radicand < 0)
     {
-        var errorType = new MathErrorFeature { MathError = MathErrorType.NegativeRadicandError };
+        var errorType = new MathErrorFeature { MathError =
+                                               MathErrorType.NegativeRadicandError };
         context.Features.Set(errorType);
         return Results.BadRequest();
     }
