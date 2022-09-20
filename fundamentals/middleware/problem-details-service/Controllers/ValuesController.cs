@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ProblemDetailsWebApi.Controllers;

@@ -2,7 +2,6 @@
 #if NEVER
 #elif FIRST
 // <snippet_1>
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -30,7 +29,6 @@ builder.Services.AddProblemDetails(options =>
         }
     }
     );
-
 
 var app = builder.Build();
 
@@ -73,10 +71,8 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 
 app.Run();
 
-
 // </snippet_1>
 #elif MIDDLEWARE
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -94,7 +90,7 @@ app.UseHttpsRedirection();
 
 app.UseStatusCodePages();
 
-// Middleware to handle writing problem details to the response
+// Middleware to handle writing problem details to the response.
 app.Use(async (context, next) =>
 {
     await next(context);
@@ -154,10 +150,7 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 
 app.Run();
 
-
 #elif API_CONTROLLER
-using Microsoft.AspNetCore.Http.Features;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -187,7 +180,6 @@ builder.Services.AddProblemDetails(options =>
             }
         }
     );
-
 
 var app = builder.Build();
 
