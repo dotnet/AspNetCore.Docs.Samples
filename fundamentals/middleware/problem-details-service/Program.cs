@@ -1,4 +1,4 @@
-#define FIRST // FIRST MIDDLEWARE API_CONTROLLER API_CONT_SHORT
+#define API_CONTROLLER // FIRST MIDDLEWARE API_CONTROLLER API_CONT_SHORT
 #if NEVER
 #elif FIRST
 // <snippet_1>
@@ -155,6 +155,7 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 app.Run();
 
 #elif API_CONTROLLER
+// <snippet_api_controller>
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -173,9 +174,9 @@ builder.Services.AddProblemDetails(options =>
                 {
                     MathErrorType.DivisionByZeroError =>
                     ("Divison by zero is not defined.",
-                                               "https://wikipedia.org/wiki/Division_by_zero"),
+                                          "https://wikipedia.org/wiki/Division_by_zero"),
                     _ => ("Negative or complex numbers are not valid input.",
-                                                 "https://wikipedia.org/wiki/Square_root")
+                                          "https://wikipedia.org/wiki/Square_root")
                 };
 
                 context.ProblemDetails.Type = details.Type;
@@ -202,6 +203,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+// </snippet_api_controller>
 #elif API_CONT_SHORT
 // <snippet_apishort>
 var builder = WebApplication.CreateBuilder(args);
