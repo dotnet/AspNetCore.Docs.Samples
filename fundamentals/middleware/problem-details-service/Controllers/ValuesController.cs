@@ -12,7 +12,8 @@ public class ValuesController : ControllerBase
     {
         if (Denominator == 0)
         {
-            var errorType = new MathErrorFeature { MathError = MathErrorType.DivisionByZeroError };
+            var errorType = new MathErrorFeature { MathError =
+                                                   MathErrorType.DivisionByZeroError };
             HttpContext.Features.Set(errorType);
             return BadRequest();
         }
@@ -27,7 +28,8 @@ public class ValuesController : ControllerBase
     {
         if (radicand < 0)
         {
-            var errorType = new MathErrorFeature { MathError = MathErrorType.NegativeRadicandError };
+            var errorType = new MathErrorFeature { MathError =
+                                                   MathErrorType.NegativeRadicandError };
             HttpContext.Features.Set(errorType);
             return BadRequest();
         }
