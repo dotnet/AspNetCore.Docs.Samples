@@ -78,6 +78,7 @@ app.Run();
 // <snippet_middleware>
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails();
@@ -152,6 +153,8 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 
     return Results.Ok(Math.Sqrt(radicand));
 });
+
+app.MapControllers();
 
 app.Run();
 // </snippet_middleware>
