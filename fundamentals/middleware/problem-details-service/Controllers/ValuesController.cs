@@ -22,7 +22,7 @@ public class ValuesController : ControllerBase
         return Ok(calculation);
     }
 
-    // /api/values/Squareroot
+    // /api/values/Squareroot/4
     [HttpGet("{radicand}")]
     public IActionResult Squareroot(double radicand)
     {
