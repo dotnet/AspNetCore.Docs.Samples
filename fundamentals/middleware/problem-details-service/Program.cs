@@ -1,4 +1,4 @@
-#define API_CONTROLLER // FIRST MIDDLEWARE API_CONTROLLER
+#define API_CONT_SHORT // FIRST MIDDLEWARE API_CONTROLLER API_CONT_SHORT
 #if NEVER
 #elif FIRST
 // <snippet_1>
@@ -198,5 +198,24 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+#elif API_CONT_SHORT
+// <snippet_apishort>
+var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
+
+var app = builder.Build();
+
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
+app.MapControllers();
+app.Run();
+// </snippet_apishort>
 #endif
