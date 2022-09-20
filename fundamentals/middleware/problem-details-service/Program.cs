@@ -1,4 +1,4 @@
-#define API_CONTROLLER // FIRST MIDDLEWARE API_CONTROLLER API_CONT_SHORT
+#define MIDDLEWARE // FIRST MIDDLEWARE API_CONTROLLER API_CONT_SHORT
 #if NEVER
 #elif FIRST
 // <snippet_1>
@@ -75,6 +75,7 @@ app.Run();
 
 // </snippet_1>
 #elif MIDDLEWARE
+// <snippet_middleware>
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -153,7 +154,7 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 });
 
 app.Run();
-
+// </snippet_middleware>
 #elif API_CONTROLLER
 // <snippet_api_controller>
 var builder = WebApplication.CreateBuilder(args);
