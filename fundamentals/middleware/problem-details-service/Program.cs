@@ -2,10 +2,6 @@
 #if NEVER
 #elif FIRST
 // <snippet_1>
-<<<<<<< HEAD
-
-=======
->>>>>>> main
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -51,12 +47,8 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
 {
     if (denominator == 0)
     {
-<<<<<<< HEAD
-        var errorType = new MathErrorFeature { MathError = MathErrorType.DivisionByZeroError };
-=======
         var errorType = new MathErrorFeature { MathError =
                                                MathErrorType.DivisionByZeroError };
->>>>>>> main
         context.Features.Set(errorType);
         return Results.BadRequest();
     }
@@ -70,12 +62,8 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 {
     if (radicand < 0)
     {
-<<<<<<< HEAD
-        var errorType = new MathErrorFeature { MathError = MathErrorType.NegativeRadicandError };
-=======
         var errorType = new MathErrorFeature { MathError =
                                               MathErrorType.NegativeRadicandError };
->>>>>>> main
         context.Features.Set(errorType);
         return Results.BadRequest();
     }
@@ -90,10 +78,10 @@ app.Run();
 // <snippet_middleware>
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails();
+builder.Services.AddControllers();
+//builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -103,8 +91,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseStatusCodePages();
+app.UseExceptionHandler();
 
 // Middleware to handle writing problem details to the response.
 app.Use(async (context, next) =>
@@ -137,36 +125,9 @@ app.Use(async (context, next) =>
         }
     }
 });
-
-// /divide?numerator=2&denominator=4
-app.MapGet("/divide", (HttpContext context, double numerator, double denominator) =>
-{
-    if (denominator == 0)
-    {
-        var errorType = new MathErrorFeature { MathError =
-                                               MathErrorType.DivisionByZeroError };
-        context.Features.Set(errorType);
-        return Results.BadRequest();
-    }
-
-    return Results.Ok(numerator / denominator);
-});
-
-// /squareroot?radicand=16
-app.MapGet("/squareroot", (HttpContext context, double radicand) =>
-{
-    if (radicand < 0)
-    {
-        var errorType = new MathErrorFeature { MathError =
-                                               MathErrorType.NegativeRadicandError };
-        context.Features.Set(errorType);
-        return Results.BadRequest();
-    }
-
-    return Results.Ok(Math.Sqrt(radicand));
-});
-
 app.MapControllers();
+
+
 
 app.Run();
 // </snippet_middleware>
