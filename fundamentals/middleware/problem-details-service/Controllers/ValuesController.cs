@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ProblemDetailsWebApi.Controllers;
@@ -13,7 +12,8 @@ public class ValuesController : ControllerBase
     {
         if (Denominator == 0)
         {
-            var errorType = new MathErrorFeature { MathError = MathErrorType.DivisionByZeroError };
+            var errorType = new MathErrorFeature { MathError =
+                                                   MathErrorType.DivisionByZeroError };
             HttpContext.Features.Set(errorType);
             return BadRequest();
         }
@@ -22,13 +22,14 @@ public class ValuesController : ControllerBase
         return Ok(calculation);
     }
 
-    // /api/values/Squareroot
+    // /api/values/Squareroot/4
     [HttpGet("{radicand}")]
     public IActionResult Squareroot(double radicand)
     {
         if (radicand < 0)
         {
-            var errorType = new MathErrorFeature { MathError = MathErrorType.NegativeRadicandError };
+            var errorType = new MathErrorFeature { MathError =
+                                                   MathErrorType.NegativeRadicandError };
             HttpContext.Features.Set(errorType);
             return BadRequest();
         }

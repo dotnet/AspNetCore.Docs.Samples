@@ -1,8 +1,11 @@
-#define API_CONTROLLER // FIRST MIDDLEWARE API_CONTROLLER
+#define MIDDLEWARE // FIRST MIDDLEWARE API_CONTROLLER API_CONT_SHORT
 #if NEVER
 #elif FIRST
 // <snippet_1>
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -19,9 +22,9 @@ builder.Services.AddProblemDetails(options =>
             {
                 MathErrorType.DivisionByZeroError =>
                 ("Divison by zero is not defined.",
-                                           "https://wikipedia.org/wiki/Division_by_zero"),
+                                         "https://wikipedia.org/wiki/Division_by_zero"),
                 _ => ("Negative or complex numbers are not valid input.",
-                                             "https://wikipedia.org/wiki/Square_root")
+                                            "https://wikipedia.org/wiki/Square_root")
             };
 
             context.ProblemDetails.Type = details.Type;
@@ -30,7 +33,6 @@ builder.Services.AddProblemDetails(options =>
         }
     }
     );
-
 
 var app = builder.Build();
 
@@ -49,7 +51,12 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
 {
     if (denominator == 0)
     {
+<<<<<<< HEAD
         var errorType = new MathErrorFeature { MathError = MathErrorType.DivisionByZeroError };
+=======
+        var errorType = new MathErrorFeature { MathError =
+                                               MathErrorType.DivisionByZeroError };
+>>>>>>> main
         context.Features.Set(errorType);
         return Results.BadRequest();
     }
@@ -63,7 +70,12 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 {
     if (radicand < 0)
     {
+<<<<<<< HEAD
         var errorType = new MathErrorFeature { MathError = MathErrorType.NegativeRadicandError };
+=======
+        var errorType = new MathErrorFeature { MathError =
+                                              MathErrorType.NegativeRadicandError };
+>>>>>>> main
         context.Features.Set(errorType);
         return Results.BadRequest();
     }
@@ -73,12 +85,12 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 
 app.Run();
 
-
 // </snippet_1>
 #elif MIDDLEWARE
-
+// <snippet_middleware>
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails();
@@ -94,7 +106,7 @@ app.UseHttpsRedirection();
 
 app.UseStatusCodePages();
 
-// Middleware to handle writing problem details to the response
+// Middleware to handle writing problem details to the response.
 app.Use(async (context, next) =>
 {
     await next(context);
@@ -131,7 +143,8 @@ app.MapGet("/divide", (HttpContext context, double numerator, double denominator
 {
     if (denominator == 0)
     {
-        var errorType = new MathErrorFeature { MathError = MathErrorType.DivisionByZeroError };
+        var errorType = new MathErrorFeature { MathError =
+                                               MathErrorType.DivisionByZeroError };
         context.Features.Set(errorType);
         return Results.BadRequest();
     }
@@ -144,7 +157,8 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 {
     if (radicand < 0)
     {
-        var errorType = new MathErrorFeature { MathError = MathErrorType.NegativeRadicandError };
+        var errorType = new MathErrorFeature { MathError =
+                                               MathErrorType.NegativeRadicandError };
         context.Features.Set(errorType);
         return Results.BadRequest();
     }
@@ -152,12 +166,12 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
     return Results.Ok(Math.Sqrt(radicand));
 });
 
+app.MapControllers();
+
 app.Run();
-
-
+// </snippet_middleware>
 #elif API_CONTROLLER
-using Microsoft.AspNetCore.Http.Features;
-
+// <snippet_api_controller>
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
@@ -176,9 +190,9 @@ builder.Services.AddProblemDetails(options =>
                 {
                     MathErrorType.DivisionByZeroError =>
                     ("Divison by zero is not defined.",
-                                               "https://wikipedia.org/wiki/Division_by_zero"),
+                                          "https://wikipedia.org/wiki/Division_by_zero"),
                     _ => ("Negative or complex numbers are not valid input.",
-                                                 "https://wikipedia.org/wiki/Square_root")
+                                          "https://wikipedia.org/wiki/Square_root")
                 };
 
                 context.ProblemDetails.Type = details.Type;
@@ -187,7 +201,6 @@ builder.Services.AddProblemDetails(options =>
             }
         }
     );
-
 
 var app = builder.Build();
 
@@ -206,5 +219,25 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+// </snippet_api_controller>
+#elif API_CONT_SHORT
+// <snippet_apishort>
+var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
+
+var app = builder.Build();
+
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
+app.MapControllers();
+app.Run();
+// </snippet_apishort>
 #endif
