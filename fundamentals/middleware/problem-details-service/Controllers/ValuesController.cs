@@ -46,8 +46,7 @@ public class ValuesController : ControllerBase
         {
             var errorType = new MathErrorFeature
             {
-                MathError =
-                                                   MathErrorType.DivisionByZeroError
+                MathError = MathErrorType.DivisionByZeroError
             };
             HttpContext.Features.Set(errorType);
             return BadRequest();
@@ -65,8 +64,7 @@ public class ValuesController : ControllerBase
         {
             var errorType = new MathErrorFeature
             {
-                MathError =
-                                                   MathErrorType.NegativeRadicandError
+                MathError = MathErrorType.NegativeRadicandError
             };
             HttpContext.Features.Set(errorType);
             return BadRequest();
@@ -79,12 +77,12 @@ public class ValuesController : ControllerBase
 }
 // </snippet>
 
-// <snippet>
+// <snippet3>
 [Route("api/[controller]/[action]")]
 [ApiController]
 public class Values3Controller : ControllerBase
 {
-    // /api/values/divide/1/2
+    // /api/values3/divide/1/2
     [HttpGet("{Numerator}/{Denominator}")]
     public IActionResult Divide(double Numerator, double Denominator)
     {
@@ -92,12 +90,11 @@ public class Values3Controller : ControllerBase
         {
             var errorType = new MathErrorFeature
             {
-                MathError =
-                                                   MathErrorType.DivisionByZeroError
+                MathError = MathErrorType.DivisionByZeroError
             };
             HttpContext.Features.Set(errorType);
             return Problem(
-                title: "Wrong Input",
+                title: "Bad Input",
                 detail: "The number you inputed is zero",
                 type: "https://en.wikipedia.org/wiki/Division_by_zero",
                 statusCode: StatusCodes.Status400BadRequest
@@ -108,7 +105,7 @@ public class Values3Controller : ControllerBase
         return Ok(calculation);
     }
 
-    // /api/values/squareroot/4
+    // /api/values3/squareroot/4
     [HttpGet("{radicand}")]
     public IActionResult Squareroot(double radicand)
     {
@@ -116,12 +113,11 @@ public class Values3Controller : ControllerBase
         {
             var errorType = new MathErrorFeature
             {
-                MathError =
-                                                   MathErrorType.NegativeRadicandError
+                MathError = MathErrorType.NegativeRadicandError
             };
             HttpContext.Features.Set(errorType);
             return Problem(
-                title: "Wrong Input",
+                title: "Bad Input",
                 detail: "Negative or complex numbers are not handled",
                 type: "https://en.wikipedia.org/wiki/Square_root",
                 statusCode: StatusCodes.Status400BadRequest
@@ -133,4 +129,4 @@ public class Values3Controller : ControllerBase
     }
 
 }
-// </snippet>
+// </snippet3>
