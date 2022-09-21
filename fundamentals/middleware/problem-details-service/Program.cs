@@ -91,7 +91,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseStatusCodePages();
 
 // Middleware to handle writing problem details to the response.
