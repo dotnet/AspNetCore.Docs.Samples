@@ -31,9 +31,9 @@ app.Use(async (context, next) =>
         {
             (string Detail, string Type) details = mathErrorFeature.MathError switch
             {
-                MathErrorType.DivisionByZeroError => ("The number you inputed is zero",
+                MathErrorType.DivisionByZeroError => ("The inputed  number you zero.",
                 "https://en.wikipedia.org/wiki/Division_by_zero"),
-                _ => ("Negative or complex numbers are not handled", 
+                _ => ("Negative or complex numbers are not allowed.", 
                 "https://en.wikipedia.org/wiki/Square_root")
             };
 
