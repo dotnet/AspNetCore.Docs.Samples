@@ -95,7 +95,7 @@ public class Values3Controller : ControllerBase
             HttpContext.Features.Set(errorType);
             return Problem(
                 title: "Bad Input",
-                detail: "The number you inputed is zero",
+                detail: "Divison by zero is not defined.",
                 type: "https://en.wikipedia.org/wiki/Division_by_zero",
                 statusCode: StatusCodes.Status400BadRequest
                 );
@@ -118,7 +118,7 @@ public class Values3Controller : ControllerBase
             HttpContext.Features.Set(errorType);
             return Problem(
                 title: "Bad Input",
-                detail: "Negative or complex numbers are not handled",
+                detail: "Negative or complex numbers are not valid input.",
                 type: "https://en.wikipedia.org/wiki/Square_root",
                 statusCode: StatusCodes.Status400BadRequest
                 );
