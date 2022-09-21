@@ -1,6 +1,3 @@
-#define FIRST // FIRST IMPROVED
-#if NEVER
-#elif FIRST
 // <snippet_1>
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,12 +32,8 @@ public class Values2Controller : ControllerBase
     }
 }
 // </snippet_1>
-#elif IMPROVED
+
 // <snippet>
-using Microsoft.AspNetCore.Mvc;
-
-namespace ProblemDetailsWebApi.Controllers;
-
 [Route("api/[controller]/[action]")]
 [ApiController]
 public class ValuesController : ControllerBase
@@ -85,4 +78,3 @@ public class ValuesController : ControllerBase
 
 }
 // </snippet>
-#endif
