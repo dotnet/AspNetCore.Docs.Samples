@@ -1,4 +1,4 @@
-#define API_CONTROLLER //  MIDDLEWARE API_CONTROLLER API_CONT_SHORT
+#define MIDDLEWARE //  MIDDLEWARE API_CONTROLLER API_CONT_SHORT
 #if NEVER
 #elif MIDDLEWARE
 // <snippet_middleware>
@@ -42,7 +42,7 @@ app.Use(async (context, next) =>
                 HttpContext = context,
                 ProblemDetails =
                 {
-                    Title = "Wrong Input",
+                    Title = "Bad Input",
                     Detail = details.Detail,
                     Type = details.Type
                 }
@@ -109,7 +109,7 @@ builder.Services.AddProblemDetails(options =>
                 };
 
                 context.ProblemDetails.Type = details.Type;
-                context.ProblemDetails.Title = "Wrong Input";
+                context.ProblemDetails.Title = "Bad Input";
                 context.ProblemDetails.Detail = details.Detail;
             }
         }
