@@ -1,20 +1,14 @@
-#define DISABLE //  MIDDLEWARE API_CONTROLLER API_CONT_SHORT DEFAULT DISABLE
+#define API_CONTROLLER //  MIDDLEWARE API_CONTROLLER API_CONT_SHORT DEFAULT DISABLE
 #if NEVER
 #elif MIDDLEWARE
 // <snippet_middleware>
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddProblemDetails();
-var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+builder.Services.AddProblemDetails();
+
+var app = builder.Build();
 
 app.UseHttpsRedirection();
 app.UseStatusCodePages();
@@ -88,8 +82,6 @@ app.Run();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 builder.Services.AddProblemDetails(options =>
         options.CustomizeProblemDetails = (context) =>
@@ -116,12 +108,6 @@ builder.Services.AddProblemDetails(options =>
     );
 
 var app = builder.Build();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 app.UseHttpsRedirection();
 
