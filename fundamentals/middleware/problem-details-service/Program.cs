@@ -1,4 +1,4 @@
-#define MIDDLEWARE //  MIDDLEWARE API_CONTROLLER API_CONT_SHORT
+#define API_CONTROLLER //  MIDDLEWARE API_CONTROLLER API_CONT_SHORT DEFAULT
 #if NEVER
 #elif MIDDLEWARE
 // <snippet_middleware>
@@ -131,6 +131,85 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.Run();
+// </snippet_api_controller>
+#elif API_CONT_SHORT
+// <snippet_apishort>
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
+
+var app = builder.Build();
+
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+
+app.MapControllers();
+app.Run();
+// </snippet_apishort>
+#elif DEFAULT
+// <snippet_default>
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+// </snippet_default>
+
+#elif MIN_API
+// <snippet_min_api>
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+
+builder.Services.AddProblemDetails(options =>
+        options.CustomizeProblemDetails = (context) =>
+        {
+
+            var mathErrorFeature = context.HttpContext.Features
+                                                       .Get<MathErrorFeature>();
+            if (mathErrorFeature is not null)
+            {
+                (string Detail, string Type) details = mathErrorFeature.MathError switch
+                {
+                    MathErrorType.DivisionByZeroError =>
+                    ("Divison by zero is not defined.",
+                                          "https://wikipedia.org/wiki/Division_by_zero"),
+                    _ => ("Negative or complex numbers are not valid input.",
+                                          "https://wikipedia.org/wiki/Square_root")
+                };
+
+                context.ProblemDetails.Type = details.Type;
+                context.ProblemDetails.Title = "Bad Input";
+                context.ProblemDetails.Detail = details.Detail;
+            }
+        }
+    );
+
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+
+app.UseStatusCodePages();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
 // /divide?numerator=2&denominator=4
 app.MapGet("/divide", (HttpContext context, double numerator, double denominator) =>
 {
@@ -165,26 +244,5 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 });
 
 app.Run();
-// </snippet_api_controller>
-
-#elif API_CONT_SHORT
-// <snippet_apishort>
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddControllers();
-builder.Services.AddProblemDetails();
-
-var app = builder.Build();
-
-app.UseExceptionHandler();
-app.UseStatusCodePages();
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-}
-
-app.MapControllers();
-app.Run();
-// </snippet_apishort>
+// </snippet_min_api>
 #endif

@@ -1,8 +1,7 @@
-// <snippet_1>
 using Microsoft.AspNetCore.Mvc;
 
 namespace ProblemDetailsWebApi.Controllers;
-
+// <snippet_1>
 [Route("api/[controller]/[action]")]
 [ApiController]
 public class Values2Controller : ControllerBase
