@@ -1,4 +1,4 @@
-#define API_CONTROLLER //  MIDDLEWARE API_CONTROLLER API_CONT_SHORT DEFAULT
+#define DISABLE //  MIDDLEWARE API_CONTROLLER API_CONT_SHORT DEFAULT DISABLE
 #if NEVER
 #elif MIDDLEWARE
 // <snippet_middleware>
@@ -169,7 +169,6 @@ app.MapControllers();
 
 app.Run();
 // </snippet_default>
-
 #elif MIN_API
 // <snippet_min_api>
 var builder = WebApplication.CreateBuilder(args);
@@ -245,4 +244,24 @@ app.MapGet("/squareroot", (HttpContext context, double radicand) =>
 
 app.Run();
 // </snippet_min_api>
+#elif DISABLE
+// <snippet_disable>
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.SuppressMapClientErrors = true;
+    });
+
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
+// </snippet_disable>
 #endif
