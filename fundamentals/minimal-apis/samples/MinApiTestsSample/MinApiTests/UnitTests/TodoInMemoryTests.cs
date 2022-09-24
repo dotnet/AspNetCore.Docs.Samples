@@ -14,7 +14,7 @@ public class TodoInMemoryTests
         await using var context = new MockDb().CreateDbContext();
 
         // Act
-        var notFoundResult = (NotFound)await TodoEndpointsV1.GetTodo(404, context);
+        var notFoundResult = (NotFound)await TodoEndpointsV1.GetTodo(1, context);
 
         //Assert
         Assert.Equal(404, notFoundResult.StatusCode);

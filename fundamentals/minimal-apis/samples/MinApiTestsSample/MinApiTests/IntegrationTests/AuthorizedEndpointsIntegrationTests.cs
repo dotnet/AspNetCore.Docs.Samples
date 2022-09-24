@@ -21,6 +21,7 @@ public class AuthorizedEndpointsIntegrationTests : IClassFixture<TestWebApplicat
         new object[] { "true", HttpStatusCode.OK }
     };
 
+    // Verify authorized requests can access /admin endpoint.
     [Theory]
     [MemberData(nameof(AdminFlags))]
     public async Task GetAdminEndpointIsReturnedForAnAuthorizedRequest(string isAdmin, HttpStatusCode code)
