@@ -1,6 +1,6 @@
 using WebMinRouteGroup.Services;
 
-namespace MinApiTests.IntegrationTests.Helpers;
+namespace IntegrationTests.Helpers;
 
 public class TestEmailService : IEmailService
 {

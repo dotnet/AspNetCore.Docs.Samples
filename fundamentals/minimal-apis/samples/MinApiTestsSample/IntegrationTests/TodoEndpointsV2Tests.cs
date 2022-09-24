@@ -1,19 +1,21 @@
 using System.Net;
 using System.Net.Http.Json;
+using IntegrationTests.Helpers;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using MinApiTests.IntegrationTests.Helpers;
 using WebMinRouteGroup.Data;
+using WebMinRouteGroup.Services;
 
-namespace MinApiTests.IntegrationTests;
+namespace IntegrationTests;
 
 [Collection("Sequential")]
-public class TodoIntegrationTestsV1 : IClassFixture<TestWebApplicationFactory<Program>>
+public class TodoEndpointsV2Tests : IClassFixture<TestWebApplicationFactory<Program>>
 {
     private readonly TestWebApplicationFactory<Program> _factory;
     private readonly HttpClient _httpClient;
 
-    public TodoIntegrationTestsV1(TestWebApplicationFactory<Program> factory)
+    public TodoEndpointsV2Tests(TestWebApplicationFactory<Program> factory)
     {
         _factory = factory;
         _httpClient = factory.CreateClient();
@@ -29,7 +31,7 @@ public class TodoIntegrationTestsV1 : IClassFixture<TestWebApplicationFactory<Pr
     [MemberData(nameof(InvalidTodos))]
     public async Task PostTodoWithValidationProblems(TodoDto todo, string errorMessage)
     {
-        var response = await _httpClient.PostAsJsonAsync("/todos/v1", todo);
+        var response = await _httpClient.PostAsJsonAsync("/todos/v2", todo);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
@@ -52,7 +54,15 @@ public class TodoIntegrationTestsV1 : IClassFixture<TestWebApplicationFactory<Pr
             }
         }
 
-        var response = await _httpClient.PostAsJsonAsync("/todos/v1", new TodoDto
+        var client = _factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureTestServices(services =>
+            {
+                services.AddSingleton<IEmailService, TestEmailService>();
+            });
+        }).CreateClient();
+
+        var response = await client.PostAsJsonAsync("/todos/v2", new TodoDto
         {
             Title = "Test title",
             Description = "Test description",
@@ -61,7 +71,7 @@ public class TodoIntegrationTestsV1 : IClassFixture<TestWebApplicationFactory<Pr
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
-        var todos = await _httpClient.GetFromJsonAsync<List<Todo>>("/todos/v1");
+        var todos = await client.GetFromJsonAsync<List<Todo>>("/todos/v2");
 
         Assert.NotNull(todos);
         Assert.Single(todos);

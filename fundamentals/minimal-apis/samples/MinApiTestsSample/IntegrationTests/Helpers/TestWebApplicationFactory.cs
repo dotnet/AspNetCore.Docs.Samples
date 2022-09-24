@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebMinRouteGroup.Data;
 
-namespace MinApiTests.IntegrationTests.Helpers;
+namespace IntegrationTests.Helpers;
 
 public class TestWebApplicationFactory<TProgram>
     : WebApplicationFactory<TProgram> where TProgram : class
