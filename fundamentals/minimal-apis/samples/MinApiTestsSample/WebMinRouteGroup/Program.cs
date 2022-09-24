@@ -5,14 +5,12 @@ using WebMinRouteGroup.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthorization(o => o.AddPolicy("AdminsOnly",
-                                  b => b.RequireClaim("admin", "true")));
+//builder.Services.AddAuthorization(o => o.AddPolicy("AdminsOnly",
+//                                  b => b.RequireClaim("admin", "true")));
 
 builder.Services.AddTransient<ITodoService, TodoService>();
 builder.Services.AddSingleton<IEmailService, EmailService>();
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<TodoGroupDbContext>(options =>
 {
     var path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
@@ -25,18 +23,10 @@ using var scope = app.Services.CreateScope();
 var db = scope.ServiceProvider.GetService<TodoGroupDbContext>();
 db?.Database.MigrateAsync();
 
-app.UseAuthorization();
+//app.UseAuthorization();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.MapGet("/", () => "Hello World!");
-
-app.MapGet("/admin", () => "Authorized Endpoint")
-    .RequireAuthorization("AdminsOnly");
+//app.MapGet("/admin", () => "Authorized Endpoint")
+//    .RequireAuthorization("AdminsOnly");
 
 // todoV1 endpoints
 app.MapGroup("/todos/v1")
