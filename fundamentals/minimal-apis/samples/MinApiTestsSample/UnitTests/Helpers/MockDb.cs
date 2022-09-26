@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebMinRouteGroup.Data;
 
-namespace MinApiTests.UnitTests.Helpers;
+namespace UnitTests.Helpers;
 
 public class MockDb : IDbContextFactory<TodoGroupDbContext>
 {

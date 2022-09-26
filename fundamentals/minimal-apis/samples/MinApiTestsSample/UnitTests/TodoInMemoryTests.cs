@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Http.HttpResults;
-using MinApiTests.UnitTests.Helpers;
+using UnitTests.Helpers;
 using WebMinRouteGroup;
 using WebMinRouteGroup.Data;
 
-namespace MinApiTests.UnitTests;
+namespace UnitTests;
 
 public class TodoInMemoryTests
 {
@@ -14,7 +14,7 @@ public class TodoInMemoryTests
         await using var context = new MockDb().CreateDbContext();
 
         // Act
-        var notFoundResult = (NotFound)await TodoEndpointsV1.GetTodo(404, context);
+        var notFoundResult = (NotFound)await TodoEndpointsV1.GetTodo(1, context);
 
         //Assert
         Assert.Equal(404, notFoundResult.StatusCode);

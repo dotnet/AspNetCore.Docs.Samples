@@ -4,7 +4,7 @@ using WebMinRouteGroup;
 using WebMinRouteGroup.Data;
 using WebMinRouteGroup.Services;
 
-namespace MinApiTests.UnitTests;
+namespace UnitTests;
 
 public class TodoMoqTests
 {
@@ -14,11 +14,11 @@ public class TodoMoqTests
         // Arrange
         var mock = new Mock<ITodoService>();
 
-        mock.Setup(m => m.Find(It.Is<int>(id => id == 404)))
+        mock.Setup(m => m.Find(It.Is<int>(id => id == 1)))
             .ReturnsAsync((Todo?)null);
 
         // Act
-        var notFoundResult = (NotFound)await TodoEndpointsV2.GetTodo(404, mock.Object);
+        var notFoundResult = (NotFound)await TodoEndpointsV2.GetTodo(1, mock.Object);
 
         //Assert
         Assert.Equal(404, notFoundResult.StatusCode);

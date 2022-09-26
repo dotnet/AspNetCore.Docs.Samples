@@ -1,16 +1,16 @@
 using System.Net;
 using System.Net.Http.Headers;
+using IntegrationTests.Helpers;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using MinApiTests.IntegrationTests.Helpers;
 
-namespace MinApiTests.IntegrationTests;
+namespace IntegrationTests;
 
-public class AuthorizedEndpointsIntegrationTests : IClassFixture<TestWebApplicationFactory<Program>>
+public class AuthorizedEndpointsTests : IClassFixture<TestWebApplicationFactory<Program>>
 {
     private readonly TestWebApplicationFactory<Program> _factory;
 
-    public AuthorizedEndpointsIntegrationTests(TestWebApplicationFactory<Program> factory)
+    public AuthorizedEndpointsTests(TestWebApplicationFactory<Program> factory)
     {
         _factory = factory;
     }
@@ -43,5 +43,18 @@ public class AuthorizedEndpointsIntegrationTests : IClassFixture<TestWebApplicat
 
         // Assert
         Assert.Equal(code, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GetAdminEndpointReturnsUnauthorizedForAnonymousUser()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+
+        //Act
+        var response = await client.GetAsync("/admin");
+
+        // Assert
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 }
