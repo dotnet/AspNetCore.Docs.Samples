@@ -131,10 +131,11 @@ public class Values3Controller : ControllerBase
 [ApiController]
 public class Values4Controller : ControllerBase
 {
-    // /api/values3/divide/1/2
+    // /api/values4/divide/1/2
     [HttpGet("{Numerator}/{Denominator}")]
     public IActionResult Divide(double Numerator, double Denominator)
     {
+        var result = Numerator / Denominator;
         return Ok(Numerator/Denominator);
     }
 
@@ -142,6 +143,7 @@ public class Values4Controller : ControllerBase
     [HttpGet("{radicand}")]
     public IActionResult Squareroot(double radicand)
     {
+        var result = Math.Sqrt(radicand);
             return Ok(Math.Sqrt(radicand));
     }
 }
