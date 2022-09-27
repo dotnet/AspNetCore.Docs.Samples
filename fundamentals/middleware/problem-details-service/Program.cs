@@ -276,7 +276,6 @@ else
         exceptionHandlerApp.Run(async context =>
         {
             context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-
             context.Response.ContentType = Text.Plain;
 
             var title = "Bad Input";
