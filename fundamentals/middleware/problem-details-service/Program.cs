@@ -1,4 +1,4 @@
-#define API_CONTROLLER //  MIDDLEWARE API_CONTROLLER API_CONT_SHORT DEFAULT DISABLE
+#define TEST_EX //  MIDDLEWARE API_CONTROLLER API_CONT_SHORT DEFAULT DISABLE
 #if NEVER
 #elif MIDDLEWARE
 // <snippet_middleware>
@@ -250,4 +250,59 @@ app.MapControllers();
 
 app.Run();
 // </snippet_disable>
+#elif TEST_EX
+// <snippet_ex>
+using Microsoft.AspNetCore.Diagnostics;
+using static System.Net.Mime.MediaTypeNames;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
+
+var app = builder.Build();
+
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
+{
+    app.UseExceptionHandler(exceptionHandlerApp =>
+    {
+        exceptionHandlerApp.Run(async context =>
+        {
+            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+            context.Response.ContentType = Text.Plain;
+
+            if (context.RequestServices.GetService<IProblemDetailsService>() is
+                { } problemDetailsService)
+            {
+                var exceptionHandlerFeature =
+               context.Features.Get<IExceptionHandlerFeature>();
+
+                // Examine exceptionHandlerFeature?.Error for more details.
+
+                await problemDetailsService.WriteAsync(new ProblemDetailsContext
+                {
+                    HttpContext = context,
+                    ProblemDetails =
+                {
+                    Title = "Bad Input",
+                    Detail = "Invalid input",
+                    Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+                }
+                });
+            }
+        });
+    });
+}
+
+app.MapControllers();
+app.Run();
+// </snippet_lambda>
 #endif

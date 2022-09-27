@@ -15,7 +15,7 @@ public class Values2Controller : ControllerBase
             return BadRequest();
         }
 
-        return Ok(Numerator / Denominator);
+        return Ok(Numerator/Denominator);
     }
 
     // /api/values2 /squareroot/4
@@ -51,8 +51,7 @@ public class ValuesController : ControllerBase
             return BadRequest();
         }
 
-        var calculation = Numerator / Denominator;
-        return Ok(calculation);
+        return Ok(Numerator/Denominator);
     }
 
     // /api/values/squareroot/4
@@ -69,8 +68,7 @@ public class ValuesController : ControllerBase
             return BadRequest();
         }
 
-        var calculation = Math.Sqrt(radicand);
-        return Ok(calculation);
+        return Ok(Math.Sqrt(radicand));
     }
 
 }
@@ -100,8 +98,7 @@ public class Values3Controller : ControllerBase
                 );
         }
 
-        var calculation = Numerator / Denominator;
-        return Ok(calculation);
+        return Ok(Numerator/Denominator);
     }
 
     // /api/values3/squareroot/4
@@ -123,9 +120,28 @@ public class Values3Controller : ControllerBase
                 );
         }
 
-        var calculation = Math.Sqrt(radicand);
-        return Ok(calculation);
+        return Ok(Math.Sqrt(radicand));
     }
 
 }
 // </snippet3>
+
+// To test unhandled exceptions
+[Route("api/[controller]/[action]")]
+[ApiController]
+public class Values4Controller : ControllerBase
+{
+    // /api/values3/divide/1/2
+    [HttpGet("{Numerator}/{Denominator}")]
+    public IActionResult Divide(double Numerator, double Denominator)
+    {
+        return Ok(Numerator/Denominator);
+    }
+
+    // /api/values4/squareroot/4
+    [HttpGet("{radicand}")]
+    public IActionResult Squareroot(double radicand)
+    {
+            return Ok(Math.Sqrt(radicand));
+    }
+}
