@@ -279,22 +279,33 @@ else
 
             context.Response.ContentType = Text.Plain;
 
+            var title = "Bad Input";
+            var detail = "Invalid input";
+            var type = "https://errors.example.com/badInput";
+
             if (context.RequestServices.GetService<IProblemDetailsService>() is
                 { } problemDetailsService)
             {
                 var exceptionHandlerFeature =
                context.Features.Get<IExceptionHandlerFeature>();
 
-                // Examine exceptionHandlerFeature?.Error for more details.
+                var exceptionType = exceptionHandlerFeature?.Error;
+                if (exceptionType != null &&
+                   exceptionType.Message.Contains("infinity"))
+                {
+                    title = "Arguement exception";
+                    detail = "Invalid input";
+                    type = "https://errors.example.com/arguementException";
+                }
 
                 await problemDetailsService.WriteAsync(new ProblemDetailsContext
                 {
                     HttpContext = context,
                     ProblemDetails =
                 {
-                    Title = "Bad Input",
-                    Detail = "Invalid input",
-                    Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1"
+                    Title = title,
+                    Detail = detail,
+                    Type = type
                 }
                 });
             }
