@@ -15,7 +15,7 @@ public class Values2Controller : ControllerBase
             return BadRequest();
         }
 
-        return Ok(Numerator/Denominator);
+        return Ok(Numerator / Denominator);
     }
 
     // /api/values2 /squareroot/4
@@ -51,7 +51,7 @@ public class ValuesController : ControllerBase
             return BadRequest();
         }
 
-        return Ok(Numerator/Denominator);
+        return Ok(Numerator / Denominator);
     }
 
     // /api/values/squareroot/4
@@ -98,7 +98,7 @@ public class Values3Controller : ControllerBase
                 );
         }
 
-        return Ok(Numerator/Denominator);
+        return Ok(Numerator / Denominator);
     }
 
     // /api/values3/squareroot/4
@@ -135,7 +135,6 @@ public class Values4Controller : ControllerBase
     [HttpGet("{Numerator}/{Denominator}")]
     public IActionResult Divide(double Numerator, double Denominator)
     {
-        var result = Numerator / Denominator;
         return Ok(Numerator/Denominator);
     }
 
@@ -143,7 +142,6 @@ public class Values4Controller : ControllerBase
     [HttpGet("{radicand}")]
     public IActionResult Squareroot(double radicand)
     {
-        var result = Math.Sqrt(radicand);
-            return Ok(Math.Sqrt(radicand));
+        return Ok(Math.Sqrt(radicand));
     }
 }
