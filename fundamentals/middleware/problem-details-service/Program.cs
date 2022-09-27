@@ -1,4 +1,4 @@
-#define TEST_EX //  MIDDLEWARE API_CONTROLLER API_CONT_SHORT DEFAULT DISABLE
+#define TEST_LAMBDA //  MIDDLEWARE API_CONTROLLER API_CONT_SHORT DEFAULT DISABLE
 #if NEVER
 #elif MIDDLEWARE
 // <snippet_middleware>
@@ -250,8 +250,8 @@ app.MapControllers();
 
 app.Run();
 // </snippet_disable>
-#elif TEST_EX
-// <snippet_ex>
+#elif TEST_LAMBDA
+// <snippet_lambda>
 using Microsoft.AspNetCore.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 
