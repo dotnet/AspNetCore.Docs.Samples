@@ -38,4 +38,3 @@ app.MapGet("/book{id}", Results<Ok<Book>, NotFound> (int id, List<Book> bookList
 
 app.Run();
 record Book(int Id, string Title, string Author);
-
