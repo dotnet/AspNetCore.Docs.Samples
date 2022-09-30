@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
@@ -7,20 +6,19 @@ using AngleSharp.Html.Dom;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Xunit;
 using RazorPagesProject.Data;
 using RazorPagesProject.Services;
 using RazorPagesProject.Tests.Helpers;
+using Xunit;
 
 namespace RazorPagesProject.Tests
 {
     #region snippet1
-    public class IndexPageTests : 
+    public class IndexPageTests :
         IClassFixture<CustomWebApplicationFactory<RazorPagesProject.Startup>>
     {
         private readonly HttpClient _client;
-        private readonly CustomWebApplicationFactory<RazorPagesProject.Startup> 
+        private readonly CustomWebApplicationFactory<RazorPagesProject.Startup>
             _factory;
 
         public IndexPageTests(
@@ -28,9 +26,9 @@ namespace RazorPagesProject.Tests
         {
             _factory = factory;
             _client = factory.CreateClient(new WebApplicationFactoryClientOptions
-                {
-                    AllowAutoRedirect = false
-                });
+            {
+                AllowAutoRedirect = false
+            });
         }
         #endregion
 
@@ -59,42 +57,20 @@ namespace RazorPagesProject.Tests
         public async Task Post_DeleteMessageHandler_ReturnsRedirectToRoot()
         {
             // Arrange
-            var client = _factory.WithWebHostBuilder(builder =>
-                {
-                    builder.ConfigureServices(services =>
-                    {
-                        var serviceProvider = services.BuildServiceProvider();
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices
+                    .GetRequiredService<ApplicationDbContext>();
 
-                        using (var scope = serviceProvider.CreateScope())
-                        {
-                            var scopedServices = scope.ServiceProvider;
-                            var db = scopedServices
-                                .GetRequiredService<ApplicationDbContext>();
-                            var logger = scopedServices
-                                .GetRequiredService<ILogger<IndexPageTests>>();
+                Utilities.ReinitializeDbForTests(db);
+            }
 
-                            try
-                            {
-                                Utilities.ReinitializeDbForTests(db);
-                            }
-                            catch (Exception ex)
-                            {
-                                logger.LogError(ex, "An error occurred seeding " +
-                                    "the database with test messages. Error: {Message}", 
-                                    ex.Message);
-                            }
-                        }
-                    });
-                })
-                .CreateClient(new WebApplicationFactoryClientOptions
-                {
-                    AllowAutoRedirect = false
-                });
-            var defaultPage = await client.GetAsync("/");
+            var defaultPage = await _client.GetAsync("/");
             var content = await HtmlHelpers.GetDocumentAsync(defaultPage);
 
             //Act
-            var response = await client.SendAsync(
+            var response = await _client.SendAsync(
                 (IHtmlFormElement)content.QuerySelector("form[id='messages']"),
                 (IHtmlButtonElement)content.QuerySelector("form[id='messages']")
                     .QuerySelector("div[class='panel-body']")
@@ -119,7 +95,8 @@ namespace RazorPagesProject.Tests
             var response = await _client.SendAsync(
                 (IHtmlFormElement)content.QuerySelector("form[id='addMessage']"),
                 (IHtmlButtonElement)content.QuerySelector("button[id='addMessageBtn']"),
-                new Dictionary<string, string> {
+                new Dictionary<string, string>
+                {
                     ["Message.Text"] = messageText
                 });
 
@@ -142,7 +119,8 @@ namespace RazorPagesProject.Tests
             var response = await _client.SendAsync(
                 (IHtmlFormElement)content.QuerySelector("form[id='addMessage']"),
                 (IHtmlButtonElement)content.QuerySelector("button[id='addMessageBtn']"),
-                new Dictionary<string, string> {
+                new Dictionary<string, string>
+                {
                     ["Message.Text"] = messageText
                 });
 
