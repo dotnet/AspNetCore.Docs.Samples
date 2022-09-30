@@ -4,21 +4,25 @@ using System.Net.Mime;
 using Microsoft.AspNetCore.Mvc;
 using WebApiSample.Models;
 
-public partial class ProductsController : ControllerBase
+[ApiController]
+[Route("products/iresult")]
+public class IResultProductsController : ControllerBase
 {
-#if IResult
+    private readonly ProductContext _productContext;
+
+    public IResultProductsController(ProductContext productContext)
+    {
+        _productContext = productContext;
+    }
+
     // <snippet_GetByIdIResult>
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IResult GetById(int id)
     {
-        if (!_repository.TryGetProduct(id, out var product))
-        {
-            return Results.NotFound();
-        }
-
-        return Results.Ok(product);
+        var product = _productContext.Products.Find(id);
+        return product == null ? Results.NotFound() : Results.Ok(product);
     }
     // </snippet_GetByIdIResult>
 
@@ -34,11 +38,11 @@ public partial class ProductsController : ControllerBase
             return Results.BadRequest();
         }
 
-        await _repository.AddProductAsync(product);
+        _productContext.Products.Add(product);
+        await _productContext.SaveChangesAsync();
 
         var location = Url.Action(nameof(GetById), new { id = product.Id }) ?? $"/{product.Id}";
         return Results.Created(location, product);
     }
     // </snippet_CreateAsyncIResult>
-#endif
 }

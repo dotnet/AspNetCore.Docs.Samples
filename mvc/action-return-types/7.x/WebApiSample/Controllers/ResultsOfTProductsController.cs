@@ -4,19 +4,23 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using WebApiSample.Models;
 
-public partial class ProductsController : ControllerBase
+[ApiController]
+[Route("products/resultsoft")]
+public class ResultsOfTProductsController : ControllerBase
 {
-#if ResultsOfT
+    private readonly ProductContext _productContext;
+
+    public ResultsOfTProductsController(ProductContext productContext)
+    {
+        _productContext = productContext;
+    }
+
     // <snippet_GetByIdResultsOfT>
     [HttpGet("{id}")]
     public Results<NotFound, Ok<Product>> GetById(int id)
     {
-        if (!_repository.TryGetProduct(id, out var product))
-        {
-            return TypedResults.NotFound();
-        }
-
-        return TypedResults.Ok(product);
+        var product = _productContext.Products.Find(id);
+        return product == null ? TypedResults.NotFound() : TypedResults.Ok(product);
     }
     // </snippet_GetByIdResultsOfT>
 
@@ -29,11 +33,11 @@ public partial class ProductsController : ControllerBase
             return TypedResults.BadRequest();
         }
 
-        await _repository.AddProductAsync(product);
+        _productContext.Products.Add(product);
+        await _productContext.SaveChangesAsync();
 
         var location = Url.Action(nameof(GetById), new { id = product.Id }) ?? $"/{product.Id}";
         return TypedResults.Created(location, product);
     }
     // </snippet_CreateAsyncResultsOfT>
-#endif
 }

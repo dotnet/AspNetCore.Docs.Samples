@@ -1,31 +1,31 @@
 namespace WebApiSample.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApiSample.Models;
-using WebApiSample.Repositories;
 
 [ApiController]
 [Route("[controller]")]
 public partial class ProductsController : ControllerBase
 {
-    private readonly ProductsRepository _repository;
+    private readonly ProductContext _productContext;
 
-    public ProductsController(ProductsRepository repository)
+    public ProductsController(ProductContext productContext)
     {
-        _repository = repository;
+        _productContext = productContext;
     }
 
     // <snippet_Get>
     [HttpGet]
-    public List<Product> Get() =>
-        _repository.GetProducts();
+    public Task<List<Product>> Get() =>
+        _productContext.Products.OrderBy(p => p.Name).ToListAsync();
     // </snippet_Get>
 
     // <snippet_GetOnSaleProducts>
     [HttpGet("syncsale")]
     public IEnumerable<Product> GetOnSaleProducts()
     {
-        var products = _repository.GetProducts();
+        var products = _productContext.Products.OrderBy(p => p.Name).ToList();
 
         foreach (var product in products)
         {
@@ -41,7 +41,7 @@ public partial class ProductsController : ControllerBase
     [HttpGet("asyncsale")]
     public async IAsyncEnumerable<Product> GetOnSaleProductsAsync()
     {
-        var products = _repository.GetProductsAsync();
+        var products = _productContext.Products.OrderBy(p => p.Name).AsAsyncEnumerable();
 
         await foreach (var product in products)
         {
