@@ -37,5 +37,6 @@ app.MapGet("/book{id}", Results<Ok<Book>, NotFound> (int id, List<Book> bookList
 });
 
 app.MapGet("/books", (List<Book> bookList) => TypedResults.Ok(bookList));
+
 app.Run();
 record Book(int Id, string Title, string Author);
