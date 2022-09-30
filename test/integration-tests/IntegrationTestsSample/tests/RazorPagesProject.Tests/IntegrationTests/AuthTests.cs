@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -110,9 +110,9 @@ namespace RazorPagesProject.Tests
                 {
                     builder.ConfigureTestServices(services =>
                     {
-                        services.AddAuthentication("Test")
+                        services.AddAuthentication(defaultScheme: "TestScheme")
                             .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
-                                "Test", options => {});
+                                "TestScheme", options => {});
                     });
                 })
                 .CreateClient(new WebApplicationFactoryClientOptions
@@ -121,7 +121,7 @@ namespace RazorPagesProject.Tests
                 });
 
             client.DefaultRequestHeaders.Authorization = 
-                new AuthenticationHeaderValue("Test");
+                new AuthenticationHeaderValue(scheme: "TestScheme");
 
             //Act
             var response = await client.GetAsync("/SecurePage");
@@ -146,7 +146,7 @@ namespace RazorPagesProject.Tests
             var claims = new[] { new Claim(ClaimTypes.Name, "Test user") };
             var identity = new ClaimsIdentity(claims, "Test");
             var principal = new ClaimsPrincipal(identity);
-            var ticket = new AuthenticationTicket(principal, "Test");
+            var ticket = new AuthenticationTicket(principal, "TestScheme");
 
             var result = AuthenticateResult.Success(ticket);
 
