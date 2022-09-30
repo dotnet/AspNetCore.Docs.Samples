@@ -30,13 +30,15 @@ public class SampleRateLimiterPolicy : IRateLimiterPolicy<string>
 
     public RateLimitPartition<string> GetPartition(HttpContext httpContext)
     {
-        return RateLimitPartition.CreateSlidingWindowLimiter<string>(string.Empty, 
-            key => new SlidingWindowRateLimiterOptions(
-                    permitLimit: _options.permitLimit,
-                    queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                    queueLimit: _options.queueLimit,
-                    window: TimeSpan.FromSeconds(_options.window),
-                    segmentsPerWindow: _options.segmentsPerWindow));
+        return RateLimitPartition.GetSlidingWindowLimiter<string>(string.Empty, 
+            key => new SlidingWindowRateLimiterOptions
+            {
+                PermitLimit = _options.permitLimit,
+                QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                QueueLimit = _options.queueLimit,
+                Window = TimeSpan.FromSeconds(_options.window),
+                SegmentsPerWindow = _options.segmentsPerWindow
+            });
     
     }
 }
