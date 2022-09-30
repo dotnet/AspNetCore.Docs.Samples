@@ -12,10 +12,13 @@ static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
 app.UseRateLimiter(new RateLimiterOptions()
     .AddFixedWindowLimiter(policyName: "fixed",
-          new FixedWindowRateLimiterOptions(permitLimit: 4,
-          window: TimeSpan.FromSeconds(12),
-          queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-          queueLimit: 2)));
+        options =>
+        {
+            options.PermitLimit = 4;
+            options.Window = TimeSpan.FromSeconds(12);
+            options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+            options.QueueLimit = 2;
+        }));
 
 app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
                            .RequireRateLimiting("fixed");
@@ -41,10 +44,13 @@ var fixedPolicy = "fixed";
 
 app.UseRateLimiter(new RateLimiterOptions()
     .AddFixedWindowLimiter(policyName: fixedPolicy,
-          new FixedWindowRateLimiterOptions(permitLimit: myOptions.permitLimit,
-          window: TimeSpan.FromSeconds(myOptions.window),
-          queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-          queueLimit: myOptions.queueLimit)));
+        options =>
+        {
+            options.PermitLimit = myOptions.permitLimit;
+            options.Window = TimeSpan.FromSeconds(myOptions.window);
+            options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+            options.QueueLimit = myOptions.queueLimit;
+        }));
 
 app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
                            .RequireRateLimiting(fixedPolicy);
@@ -68,11 +74,14 @@ var slidingPolicy = "sliding";
 
 app.UseRateLimiter(new RateLimiterOptions()
     .AddSlidingWindowLimiter(policyName: slidingPolicy,
-          new SlidingWindowRateLimiterOptions(permitLimit: myOptions.permitLimit,
-          window: TimeSpan.FromSeconds(myOptions.window),
-          segmentsPerWindow: myOptions.segmentsPerWindow,
-          queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-          queueLimit: myOptions.queueLimit)));
+        options =>
+        {
+            options.PermitLimit = myOptions.permitLimit;
+            options.Window = TimeSpan.FromSeconds(myOptions.window);
+            options.SegmentsPerWindow = myOptions.segmentsPerWindow;
+            options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+            options.QueueLimit = myOptions.queueLimit;
+        }));
 
 app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
                            .RequireRateLimiting(slidingPolicy);
@@ -97,9 +106,12 @@ app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
 
 app.UseRateLimiter(new RateLimiterOptions()
     .AddConcurrencyLimiter(policyName: concurrencyPolicy,
-          new ConcurrencyLimiterOptions(permitLimit: myOptions.permitLimit,
-          queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-          queueLimit: myOptions.queueLimit)));
+        options =>
+        {
+            options.PermitLimit = myOptions.permitLimit;
+            options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+            options.QueueLimit = myOptions.queueLimit;
+        }));
 
 app.MapGet("/", async () =>
 {
@@ -128,12 +140,15 @@ app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
 
 app.UseRateLimiter(new RateLimiterOptions()
     .AddTokenBucketLimiter(policyName: tokenPolicy,
-          new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit,
-                queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                queueLimit: myOptions.queueLimit,
-                replenishmentPeriod: TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
-                tokensPerPeriod: myOptions.tokensPerPeriod,
-                autoReplenishment: myOptions.autoReplenishment)));
+        options =>
+        {
+            options.TokenLimit = myOptions.tokenLimit;
+            options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+            options.QueueLimit = myOptions.queueLimit;
+            options.ReplenishmentPeriod = TimeSpan.FromSeconds(myOptions.replenishmentPeriod);
+            options.TokensPerPeriod = myOptions.tokensPerPeriod;
+            options.AutoReplenishment = myOptions.autoReplenishment;
+        }));
 
 app.MapGet("/", () => Results.Ok($"Token Limiter {GetTicks()}"))
                            .RequireRateLimiting(tokenPolicy);
@@ -225,14 +240,15 @@ var options = new RateLimiterOptions()
             username = context.User?.ToString()!;
         }
 
-        return RateLimitPartition.CreateSlidingWindowLimiter<string>(username,
-              key => new SlidingWindowRateLimiterOptions(
-              permitLimit: myOptions.permitLimit,
-              queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-              queueLimit: myOptions.queueLimit,
-              window: TimeSpan.FromSeconds(myOptions.window),
-              segmentsPerWindow: myOptions.segmentsPerWindow
-            ));
+        return RateLimitPartition.GetSlidingWindowLimiter<string>(username,
+              key => new SlidingWindowRateLimiterOptions
+              {
+                  PermitLimit = myOptions.permitLimit,
+                  QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                  QueueLimit = myOptions.queueLimit,
+                  Window = TimeSpan.FromSeconds(myOptions.window),
+                  SegmentsPerWindow = myOptions.segmentsPerWindow
+              });
 
     });
 
@@ -242,19 +258,22 @@ options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, IPAddress>(co
 
     if (!IPAddress.IsLoopback(remoteIPaddress!))
     {
-        return RateLimitPartition.CreateTokenBucketLimiter<IPAddress>
+        return RateLimitPartition.GetTokenBucketLimiter<IPAddress>
            (remoteIPaddress!, key =>
-                 new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit2,
-                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                     queueLimit: myOptions.queueLimit,
-                     replenishmentPeriod: 
+                 new TokenBucketRateLimiterOptions
+                 {
+                     TokenLimit = myOptions.tokenLimit2,
+                     QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                     QueueLimit = myOptions.queueLimit,
+                     ReplenishmentPeriod = 
                                  TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
-                     tokensPerPeriod: myOptions.tokensPerPeriod,
-                     autoReplenishment: myOptions.autoReplenishment));
+                     TokensPerPeriod = myOptions.tokensPerPeriod,
+                     AutoReplenishment = myOptions.autoReplenishment
+                 });
     }
     else
     {
-        return RateLimitPartition.CreateNoLimiter<IPAddress>(IPAddress.Loopback);
+        return RateLimitPartition.GetNoLimiter<IPAddress>(IPAddress.Loopback);
     }
 });
 
@@ -332,34 +351,43 @@ app.Configuration.GetSection(MyRateLimitOptions.MyRateLimit).Bind(myOptions);
 
 app.UseRateLimiter(new RateLimiterOptions()
     .AddConcurrencyLimiter(policyName: getPolicyName,
-          new ConcurrencyLimiterOptions(permitLimit: myOptions.permitLimit,
-          queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-          queueLimit: myOptions.queueLimit))
+        options =>
+        {
+            options.PermitLimit = myOptions.permitLimit;
+            options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+            options.QueueLimit = myOptions.queueLimit;
+        })
     .AddPolicy(policyName: postPolicyName, partitioner: httpContext =>
     {
         string userName = httpContext?.User?.Identity?.Name ?? string.Empty;
 
         if (!StringValues.IsNullOrEmpty(userName))
         {
-            return RateLimitPartition.CreateTokenBucketLimiter(userName, key =>
-                new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit2,
-                    queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                    queueLimit: myOptions.queueLimit,
-                    replenishmentPeriod:
+            return RateLimitPartition.GetTokenBucketLimiter(userName, key =>
+                new TokenBucketRateLimiterOptions
+                {
+                    TokenLimit = myOptions.tokenLimit2,
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    QueueLimit = myOptions.queueLimit,
+                    ReplenishmentPeriod =
                                 TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
-                    tokensPerPeriod: myOptions.tokensPerPeriod,
-                    autoReplenishment: myOptions.autoReplenishment));
+                    TokensPerPeriod = myOptions.tokensPerPeriod,
+                    AutoReplenishment = myOptions.autoReplenishment
+                });
         }
         else
         {
-            return RateLimitPartition.CreateTokenBucketLimiter("Anon", key =>
-                new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit,
-                    queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                    queueLimit: myOptions.queueLimit,
-                    replenishmentPeriod:
+            return RateLimitPartition.GetTokenBucketLimiter("Anon", key =>
+                new TokenBucketRateLimiterOptions 
+                {
+                    TokenLimit = myOptions.tokenLimit,
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    QueueLimit = myOptions.queueLimit,
+                    ReplenishmentPeriod =
                                TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
-                    tokensPerPeriod: myOptions.tokensPerPeriod,
-                    autoReplenishment: true));
+                    TokensPerPeriod = myOptions.tokensPerPeriod,
+                    AutoReplenishment = true
+                });
         }
     }));
 // </snippet_adm2>
@@ -410,25 +438,31 @@ var options = new RateLimiterOptions()
                                                                     ?? string.Empty;
          if (!StringValues.IsNullOrEmpty(accessToken))
          {
-             return RateLimitPartition.CreateTokenBucketLimiter(accessToken, key =>
-                 new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit2,
-                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                     queueLimit: myOptions.queueLimit,
-                     replenishmentPeriod:
+             return RateLimitPartition.GetTokenBucketLimiter(accessToken, key =>
+                 new TokenBucketRateLimiterOptions
+                 {
+                     TokenLimit = myOptions.tokenLimit2,
+                     QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                     QueueLimit = myOptions.queueLimit,
+                     ReplenishmentPeriod =
                                  TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
-                     tokensPerPeriod: myOptions.tokensPerPeriod,
-                     autoReplenishment: myOptions.autoReplenishment));
+                     TokensPerPeriod = myOptions.tokensPerPeriod,
+                     AutoReplenishment = myOptions.autoReplenishment
+                 });
          }
          else
          {
-             return RateLimitPartition.CreateTokenBucketLimiter("Anon", key =>
-                 new TokenBucketRateLimiterOptions(tokenLimit: myOptions.tokenLimit,
-                     queueProcessingOrder: QueueProcessingOrder.OldestFirst,
-                     queueLimit: myOptions.queueLimit,
-                     replenishmentPeriod:
+             return RateLimitPartition.GetTokenBucketLimiter("Anon", key =>
+                 new TokenBucketRateLimiterOptions
+                 {
+                     TokenLimit =  myOptions.tokenLimit,
+                     QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                     QueueLimit = myOptions.queueLimit,
+                     ReplenishmentPeriod =
                                   TimeSpan.FromSeconds(myOptions.replenishmentPeriod),
-                     tokensPerPeriod: myOptions.tokensPerPeriod,
-                     autoReplenishment: true));
+                     TokensPerPeriod = myOptions.tokensPerPeriod,
+                     AutoReplenishment = true
+                 });
          }
      });
 
