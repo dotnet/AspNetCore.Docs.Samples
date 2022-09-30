@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace RazorPagesProject.Services
@@ -18,7 +19,7 @@ namespace RazorPagesProject.Services
             var response = await Client.GetAsync($"/users/{Uri.EscapeDataString(userName)}");
             response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadAsAsync<GithubUser>();
+            return await response.Content.ReadFromJsonAsync<GithubUser>();
         }
     }
 }
