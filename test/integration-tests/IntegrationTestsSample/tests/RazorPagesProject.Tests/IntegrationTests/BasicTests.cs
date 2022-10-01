@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
 
@@ -6,11 +6,11 @@ namespace RazorPagesProject.Tests.IntegrationTests
 {
     #region snippet1
     public class BasicTests 
-        : IClassFixture<WebApplicationFactory<RazorPagesProject.Startup>>
+        : IClassFixture<WebApplicationFactory<RazorPagesProject.Program>>
     {
-        private readonly WebApplicationFactory<RazorPagesProject.Startup> _factory;
+        private readonly WebApplicationFactory<RazorPagesProject.Program> _factory;
 
-        public BasicTests(WebApplicationFactory<RazorPagesProject.Startup> factory)
+        public BasicTests(WebApplicationFactory<RazorPagesProject.Program> factory)
         {
             _factory = factory;
         }

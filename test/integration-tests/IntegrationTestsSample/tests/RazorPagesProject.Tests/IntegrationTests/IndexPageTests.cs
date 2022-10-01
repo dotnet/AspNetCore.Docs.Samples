@@ -15,14 +15,14 @@ namespace RazorPagesProject.Tests
 {
     #region snippet1
     public class IndexPageTests :
-        IClassFixture<CustomWebApplicationFactory<RazorPagesProject.Startup>>
+        IClassFixture<CustomWebApplicationFactory<RazorPagesProject.Program>>
     {
         private readonly HttpClient _client;
-        private readonly CustomWebApplicationFactory<RazorPagesProject.Startup>
+        private readonly CustomWebApplicationFactory<RazorPagesProject.Program>
             _factory;
 
         public IndexPageTests(
-            CustomWebApplicationFactory<RazorPagesProject.Startup> factory)
+            CustomWebApplicationFactory<RazorPagesProject.Program> factory)
         {
             _factory = factory;
             _client = factory.CreateClient(new WebApplicationFactoryClientOptions

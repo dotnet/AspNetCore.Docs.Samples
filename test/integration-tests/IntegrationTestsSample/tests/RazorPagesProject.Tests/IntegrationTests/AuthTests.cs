@@ -18,13 +18,13 @@ using RazorPagesProject.Tests.Helpers;
 namespace RazorPagesProject.Tests
 {
     public class AuthTests : 
-        IClassFixture<CustomWebApplicationFactory<RazorPagesProject.Startup>>
+        IClassFixture<CustomWebApplicationFactory<Program>>
     {
-        private readonly CustomWebApplicationFactory<RazorPagesProject.Startup> 
+        private readonly CustomWebApplicationFactory<Program> 
             _factory;
 
         public AuthTests(
-            CustomWebApplicationFactory<RazorPagesProject.Startup> factory)
+            CustomWebApplicationFactory<Program> factory)
         {
             _factory = factory;
         }
