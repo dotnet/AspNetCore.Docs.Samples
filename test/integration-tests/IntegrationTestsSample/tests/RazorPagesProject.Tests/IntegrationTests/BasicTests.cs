@@ -6,11 +6,11 @@ namespace RazorPagesProject.Tests.IntegrationTests
 {
     #region snippet1
     public class BasicTests 
-        : IClassFixture<WebApplicationFactory<RazorPagesProject.Program>>
+        : IClassFixture<WebApplicationFactory<Program>>
     {
-        private readonly WebApplicationFactory<RazorPagesProject.Program> _factory;
+        private readonly WebApplicationFactory<Program> _factory;
 
-        public BasicTests(WebApplicationFactory<RazorPagesProject.Program> factory)
+        public BasicTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory;
         }
