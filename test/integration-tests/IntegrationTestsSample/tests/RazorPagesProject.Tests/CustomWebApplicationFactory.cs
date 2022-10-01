@@ -26,6 +26,8 @@ namespace RazorPagesProject.Tests
                     options.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
             });
+
+            builder.UseEnvironment("Development");
         }
     }
     #endregion

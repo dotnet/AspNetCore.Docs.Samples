@@ -60,8 +60,7 @@ namespace RazorPagesProject.Tests
             using (var scope = _factory.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
-                var db = scopedServices
-                    .GetRequiredService<ApplicationDbContext>();
+                var db = scopedServices.GetRequiredService<ApplicationDbContext>();
 
                 Utilities.ReinitializeDbForTests(db);
             }
