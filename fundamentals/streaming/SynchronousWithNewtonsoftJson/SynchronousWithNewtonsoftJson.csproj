@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <AssemblyName>ASPNetCoreStreamingExample.SynchronousWithNewtonsoftJson</AssemblyName>
+    <RootNamespace>ASPNetCoreStreamingExample.SynchronousWithNewtonsoftJson</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

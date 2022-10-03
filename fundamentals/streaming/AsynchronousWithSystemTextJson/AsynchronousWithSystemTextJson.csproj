@@ -4,6 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <AssemblyName>ASPNetCoreStreamingExample.AsynchronousWithSystemTextJson</AssemblyName>
+    <RootNamespace>ASPNetCoreStreamingExample.AsynchronousWithSystemTextJson</RootNamespace>
   </PropertyGroup>
 
 </Project>
