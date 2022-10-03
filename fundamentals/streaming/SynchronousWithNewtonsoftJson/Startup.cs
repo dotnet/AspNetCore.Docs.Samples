@@ -13,45 +13,45 @@ using ASPNetCoreStreamingExample.SynchronousWithNewtonsoftJson.Model;
 
 namespace ASPNetCoreStreamingExample.SynchronousWithNewtonsoftJson
 {
-  public class Startup
-  {
-    public Startup(IConfiguration configuration)
+    public class Startup
     {
-      Configuration = configuration;
-    }
-
-    public IConfiguration Configuration { get; }
-
-    public void ConfigureServices(IServiceCollection services)
-    {
-      // Song lyrics source to be injected into instances.
-      services.AddSingleton<ILyricsSource, LyricsSource>();
-
-      var serializer = JsonSerializer.CreateDefault();
-
-      services.AddSingleton(serializer);
-
-      services.AddControllers().AddNewtonsoftJson();
-
-      // Allow synchronous I/O from Newtonsoft.Json.
-      services.Configure<KestrelServerOptions>(
-        options =>
+        public Startup(IConfiguration configuration)
         {
-          options.AllowSynchronousIO = true;
-        });
+            Configuration = configuration;
+        }
+
+        public IConfiguration Configuration { get; }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            // Song lyrics source to be injected into instances.
+            services.AddSingleton<ILyricsSource, LyricsSource>();
+
+            var serializer = JsonSerializer.CreateDefault();
+
+            services.AddSingleton(serializer);
+
+            services.AddControllers().AddNewtonsoftJson();
+
+            // Allow synchronous I/O from Newtonsoft.Json.
+            services.Configure<KestrelServerOptions>(
+              options =>
+              {
+                  options.AllowSynchronousIO = true;
+              });
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+                app.UseDeveloperExceptionPage();
+
+            // Register our middleware.
+            app.UseSongLyrics();
+
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
+        }
     }
-
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-    {
-      if (env.IsDevelopment())
-        app.UseDeveloperExceptionPage();
-
-      // Register our middleware.
-      app.UseSongLyrics();
-
-      app.UseRouting();
-      app.UseAuthorization();
-      app.UseEndpoints(endpoints => endpoints.MapControllers());
-    }
-  }
 }

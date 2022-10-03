@@ -1,28 +1,28 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ASPNetCoreStreamingExample.AsynchronousWithSystemTextJson.Model
 {
-  public class LyricsSource : ILyricsSource
-  {
-    public async IAsyncEnumerable<string> GetSongLyrics()
+    public class LyricsSource : ILyricsSource
     {
-      int lineIndex = 0;
+        public async IAsyncEnumerable<string> GetSongLyrics()
+        {
+            int lineIndex = 0;
 
-      while (true)
-       {
-        yield return Lyrics[lineIndex];
+            while (true)
+            {
+                yield return Lyrics[lineIndex];
 
-        lineIndex = (lineIndex + 1) % Lyrics.Length;
+                lineIndex = (lineIndex + 1) % Lyrics.Length;
 
-        await Task.Delay(millisecondsDelay: 200);
-      }
-    }
+                await Task.Delay(millisecondsDelay: 200);
+            }
+        }
 
-    const string Song =
-@"We're no strangers to love
+        const string Song =
+    @"We're no strangers to love
 You know the rules and so do I
 A full commitment's what I'm thinking of
 You wouldn't get this from any other guy
@@ -79,6 +79,6 @@ Never gonna let you down
 Never gonna run around and desert you
 Never gonna make you cry";
 
-    readonly string[] Lyrics = Song.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
-  }
+        readonly string[] Lyrics = Song.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).ToArray();
+    }
 }
