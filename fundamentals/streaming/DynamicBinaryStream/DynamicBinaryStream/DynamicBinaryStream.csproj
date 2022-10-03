@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0-windows7</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AssemblyName>ASPNetCoreStreamingExample.DynamicBinaryStream</AssemblyName>
+    <RootNamespace>ASPNetCoreStreamingExample.DynamicBinaryStream</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AnimatedGif" Version="1.0.5" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+</Project>
