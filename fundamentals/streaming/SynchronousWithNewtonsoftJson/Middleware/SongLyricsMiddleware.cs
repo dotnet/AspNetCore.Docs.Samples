@@ -41,6 +41,9 @@ namespace ASPNetCoreStreamingExample.SynchronousWithNewtonsoftJson.Middleware
             {
                 foreach (string line in _lyricsSource.GetSongLyrics())
                 {
+                    // Since we are performing our own writes outside of the JsonTextWriter, we need it to be logically
+                    // set up and torn down for each object we output. Simply calling Flush() might work in practice but
+                    // is assuming internal implementation details.
                     using (var streamWriter = new StreamWriter(context.Response.Body))
                     using (var jsonWriter = new JsonTextWriter(streamWriter))
                         _serializer.Serialize(jsonWriter, line);
