@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
 
-namespace RazorPagesProject.Services
+namespace RazorPagesProject.Services;
+
+#region snippet1
+public interface IQuoteService
 {
-    #region snippet1
-    public interface IQuoteService
-    {
-        Task<string> GenerateQuote();
-    }
-    #endregion
+    Task<string> GenerateQuote();
 }
+#endregion

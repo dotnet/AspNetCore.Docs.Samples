@@ -1,9 +1,8 @@
 using System.Threading.Tasks;
 
-namespace RazorPagesProject.Services
+namespace RazorPagesProject.Services;
+
+public interface IGithubClient
 {
-    public interface IGithubClient
-  {
     Task<GithubUser> GetUserAsync(string userName);
-  }
 }

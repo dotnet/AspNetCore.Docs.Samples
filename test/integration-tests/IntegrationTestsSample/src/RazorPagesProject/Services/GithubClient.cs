@@ -3,23 +3,22 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-namespace RazorPagesProject.Services
+namespace RazorPagesProject.Services;
+
+public class GithubClient : IGithubClient
 {
-    public class GithubClient : IGithubClient
+    public GithubClient(HttpClient client)
     {
-        public GithubClient(HttpClient client)
-        {
-            Client = client;
-        }
+        Client = client;
+    }
 
-        public HttpClient Client { get; }
+    public HttpClient Client { get; }
 
-        public async Task<GithubUser> GetUserAsync(string userName)
-        {
-            var response = await Client.GetAsync($"/users/{Uri.EscapeDataString(userName)}");
-            response.EnsureSuccessStatusCode();
+    public async Task<GithubUser> GetUserAsync(string userName)
+    {
+        var response = await Client.GetAsync($"/users/{Uri.EscapeDataString(userName)}");
+        response.EnsureSuccessStatusCode();
 
-            return await response.Content.ReadFromJsonAsync<GithubUser>();
-        }
+        return await response.Content.ReadFromJsonAsync<GithubUser>();
     }
 }
