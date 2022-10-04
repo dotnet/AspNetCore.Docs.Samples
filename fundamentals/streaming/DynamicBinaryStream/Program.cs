@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ASPNetCoreStreamingExample.DynamicBinaryStream
 {
