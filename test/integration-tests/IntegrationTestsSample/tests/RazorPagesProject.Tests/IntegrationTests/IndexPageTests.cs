@@ -13,7 +13,7 @@ using Xunit;
 
 namespace RazorPagesProject.Tests.IntegrationTests;
 
-#region snippet1
+// <snippet1>
 public class IndexPageTests :
     IClassFixture<CustomWebApplicationFactory<Program>>
 {
@@ -30,9 +30,9 @@ public class IndexPageTests :
             AllowAutoRedirect = false
         });
     }
-    #endregion
+// </snippet1>
 
-    #region snippet2
+// <snippet2>
     [Fact]
     public async Task Post_DeleteAllMessagesHandler_ReturnsRedirectToRoot()
     {
@@ -50,9 +50,9 @@ public class IndexPageTests :
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
         Assert.Equal("/", response.Headers.Location.OriginalString);
     }
-    #endregion
+// </snippet2>
 
-    #region snippet3
+// <snippet3>
     [Fact]
     public async Task Post_DeleteMessageHandler_ReturnsRedirectToRoot()
     {
@@ -80,7 +80,7 @@ public class IndexPageTests :
         Assert.Equal(HttpStatusCode.Redirect, response.StatusCode);
         Assert.Equal("/", response.Headers.Location.OriginalString);
     }
-    #endregion
+// </snippet3>
 
     [Fact]
     public async Task Post_AddMessageHandler_ReturnsSuccess_WhenMissingMessageText()
@@ -148,7 +148,7 @@ public class IndexPageTests :
         Assert.Equal("/", response.Headers.Location.OriginalString);
     }
 
-    #region snippet4
+// <snippet4>
     // Quote ©1975 BBC: The Doctor (Tom Baker); Pyramids of Mars
     // https://www.bbc.co.uk/programmes/p00pys55
     public class TestQuoteService : IQuoteService
@@ -160,9 +160,9 @@ public class IndexPageTests :
                 "and time is my business.");
         }
     }
-    #endregion
+// </snippet4>
 
-    #region snippet5
+// <snippet5>
     [Fact]
     public async Task Get_QuoteService_ProvidesQuoteInPage()
     {
@@ -185,5 +185,5 @@ public class IndexPageTests :
         Assert.Equal("Something's interfering with time, Mr. Scarman, " +
             "and time is my business.", quoteElement.Attributes["value"].Value);
     }
-    #endregion
+// </snippet5>
 }

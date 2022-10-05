@@ -7,7 +7,7 @@ using RazorPagesProject.Data;
 
 namespace RazorPagesProject.Tests;
 
-#region snippet1
+// <snippet1>
 public class CustomWebApplicationFactory<TStartup>
     : WebApplicationFactory<TStartup> where TStartup : class
 {
@@ -30,4 +30,4 @@ public class CustomWebApplicationFactory<TStartup>
         builder.UseEnvironment("Development");
     }
 }
-#endregion
+// </snippet1>

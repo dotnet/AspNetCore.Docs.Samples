@@ -15,7 +15,7 @@ public class ApplicationDbContext : IdentityDbContext
 
     public virtual DbSet<Message> Messages { get; set; }
 
-    #region snippet1
+    // <snippet1>
     public async virtual Task<List<Message>> GetMessagesAsync()
     {
         return await Messages
@@ -23,29 +23,29 @@ public class ApplicationDbContext : IdentityDbContext
             .AsNoTracking()
             .ToListAsync();
     }
-    #endregion
+    // </snippet1>
 
-    #region snippet2
+    // <snippet2>
     public async virtual Task AddMessageAsync(Message message)
     {
         await Messages.AddAsync(message);
         await SaveChangesAsync();
     }
-    #endregion
+    // </snippet2>
 
-    #region snippet3
+    // <snippet3>
     public async virtual Task DeleteAllMessagesAsync()
     {
         foreach (Message message in Messages)
         {
             Messages.Remove(message);
         }
-        
+
         await SaveChangesAsync();
     }
-    #endregion
+    // </snippet3>
 
-    #region snippet4
+    // <snippet4>
     public async virtual Task DeleteMessageAsync(int id)
     {
         var message = await Messages.FindAsync(id);
@@ -56,7 +56,7 @@ public class ApplicationDbContext : IdentityDbContext
             await SaveChangesAsync();
         }
     }
-    #endregion
+    // </snippet4>
 
     public void Initialize()
     {

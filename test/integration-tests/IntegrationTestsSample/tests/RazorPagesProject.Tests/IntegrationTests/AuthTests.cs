@@ -29,7 +29,7 @@ public class AuthTests :
         _factory = factory;
     }
 
-    #region snippet1
+// <snippet1>
     [Fact]
     public async Task Get_GithubProfilePageCanGetAGithubUser()
     {
@@ -78,9 +78,9 @@ public class AuthTests :
             }
         }
     }
-    #endregion
+// </snippet1>
 
-    #region snippet2
+// <snippet2>
     [Fact]
     public async Task Get_SecurePageRedirectsAnUnauthenticatedUser()
     {
@@ -99,9 +99,9 @@ public class AuthTests :
         Assert.StartsWith("http://localhost/Identity/Account/Login",
             response.Headers.Location.OriginalString);
     }
-    #endregion
+// </snippet2>
 
-    #region snippet3
+// <snippet3>
     [Fact]
     public async Task Get_SecurePageIsReturnedForAnAuthenticatedUser()
     {
@@ -129,10 +129,10 @@ public class AuthTests :
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
-    #endregion
+// </snippet3>
 }
 
-#region snippet4
+// <snippet4>
 public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
     public TestAuthHandler(IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -153,4 +153,4 @@ public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions
         return Task.FromResult(result);
     }
 }
-#endregion
+// </snippet4>

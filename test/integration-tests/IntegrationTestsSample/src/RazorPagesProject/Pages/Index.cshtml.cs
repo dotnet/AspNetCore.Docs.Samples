@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +8,7 @@ using RazorPagesProject.Services;
 
 namespace RazorPagesProject.Pages
 {
-    #region snippet1
+    // <snippet1>
     public class IndexModel : PageModel
     {
         private readonly ApplicationDbContext _db;
@@ -36,7 +36,7 @@ namespace RazorPagesProject.Pages
 
             Quote = await _quoteService.GenerateQuote();
         }
-        #endregion
+        // </snippet1>
 
         public async Task<IActionResult> OnPostAddMessageAsync()
         {
