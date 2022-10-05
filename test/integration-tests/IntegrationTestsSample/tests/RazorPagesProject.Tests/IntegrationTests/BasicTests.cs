@@ -4,7 +4,7 @@ using Xunit;
 
 namespace RazorPagesProject.Tests.IntegrationTests;
 
-#region snippet1
+// <snippet1>
 public class BasicTests 
     : IClassFixture<WebApplicationFactory<Program>>
 {
@@ -35,4 +35,4 @@ public class BasicTests
             response.Content.Headers.ContentType.ToString());
     }
 }
-#endregion
+// </snippet1>

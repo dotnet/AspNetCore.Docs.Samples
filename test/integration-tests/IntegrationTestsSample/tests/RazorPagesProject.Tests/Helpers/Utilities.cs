@@ -5,7 +5,7 @@ namespace RazorPagesProject.Tests.Helpers;
 
 public static class Utilities
 {
-    #region snippet1
+// <snippet1>
     public static void InitializeDbForTests(ApplicationDbContext db)
     {
         db.Messages.AddRange(GetSeedingMessages());
@@ -28,5 +28,5 @@ public static class Utilities
                 "nothing is inexplicable; only unexplained." }
         };
     }
-    #endregion
+// </snippet1>
 }

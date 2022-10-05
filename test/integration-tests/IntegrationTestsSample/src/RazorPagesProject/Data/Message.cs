@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RazorPagesProject.Data;
 
-#region snippet1
+// <snippet1>
 public class Message
 {
     public int Id { get; set; }
@@ -12,4 +12,4 @@ public class Message
     [StringLength(200, ErrorMessage = "There's a 200 character limit on messages. Please shorten your message.")]
     public string Text { get; set; }
 }
-#endregion
+// </snippet1>

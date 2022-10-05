@@ -18,12 +18,12 @@ services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDataba
 services.AddDefaultIdentity<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-#region snippet1
+// <snippet1>
 services.AddRazorPages(options =>
 {
     options.Conventions.AuthorizePage("/SecurePage");
 });
-#endregion
+// </snippet1>
 
 services.AddHttpClient<IGithubClient, GithubClient>(client =>
 {
@@ -31,9 +31,9 @@ services.AddHttpClient<IGithubClient, GithubClient>(client =>
     client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("Yolo", "0.1.0"));
 });
 
-#region snippet2
+// <snippet2>
 services.AddScoped<IQuoteService, QuoteService>();
-#endregion
+// </snippet2>
 
 services.AddDatabaseDeveloperPageExceptionFilter();
 
