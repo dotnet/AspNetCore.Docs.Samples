@@ -1,12 +1,6 @@
-using System;
-using System.Linq;
 using System.Net.Http.Headers;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using RazorPagesProject.Data;
 using RazorPagesProject.Services;
 

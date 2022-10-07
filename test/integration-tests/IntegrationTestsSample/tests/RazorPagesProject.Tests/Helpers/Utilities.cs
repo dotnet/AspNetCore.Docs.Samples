@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using RazorPagesProject.Data;
 
 namespace RazorPagesProject.Tests.Helpers;
