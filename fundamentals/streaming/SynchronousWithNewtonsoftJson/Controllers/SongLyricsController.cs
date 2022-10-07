@@ -1,9 +1,7 @@
 namespace SynchronousWithNewtonsoftJson.Controllers;
 
 using Microsoft.AspNetCore.Mvc;
-
 using Newtonsoft.Json;
-
 using SynchronousWithNewtonsoftJson.Model;
 using SynchronousWithNewtonsoftJson.Results;
 

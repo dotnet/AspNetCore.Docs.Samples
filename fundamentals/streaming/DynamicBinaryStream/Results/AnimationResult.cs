@@ -1,7 +1,6 @@
 namespace DynamicBinaryStream.Results;
 
 using System.Drawing;
-
 using Microsoft.AspNetCore.Mvc;
 
 public class AnimationResult : IActionResult

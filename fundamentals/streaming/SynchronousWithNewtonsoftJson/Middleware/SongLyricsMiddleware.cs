@@ -1,9 +1,7 @@
 namespace SynchronousWithNewtonsoftJson.Middleware;
 
 using Microsoft.AspNetCore.Http;
-
 using Newtonsoft.Json;
-
 using SynchronousWithNewtonsoftJson.Model;
 
 public class SongLyricsMiddleware

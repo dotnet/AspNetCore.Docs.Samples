@@ -1,8 +1,7 @@
 namespace AsynchronousWithSystemTextJson.Controllers;
 
-using Microsoft.AspNetCore.Mvc;
-
 using AsynchronousWithSystemTextJson.Model;
+using Microsoft.AspNetCore.Mvc;
 
 [Route("/v1")]
 public class SongLyricsController : Controller

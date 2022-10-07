@@ -2,7 +2,6 @@ namespace DynamicBinaryStream.Controllers;
 
 using DynamicBinaryStream.Model;
 using DynamicBinaryStream.Results;
-
 using Microsoft.AspNetCore.Mvc;
 
 public class AnimationController

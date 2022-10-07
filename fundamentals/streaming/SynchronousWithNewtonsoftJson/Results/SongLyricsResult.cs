@@ -1,9 +1,7 @@
 namespace SynchronousWithNewtonsoftJson.Results;
 
 using Microsoft.AspNetCore.Mvc;
-
 using Newtonsoft.Json;
-
 using SynchronousWithNewtonsoftJson.Model;
 
 public class SongLyricsResult : IActionResult
