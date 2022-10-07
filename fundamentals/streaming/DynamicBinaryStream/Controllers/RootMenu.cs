@@ -1,17 +1,17 @@
+namespace DynamicBinaryStream.Controllers;
+
 using Microsoft.AspNetCore.Mvc;
 
-namespace ASPNetCoreStreamingExample.DynamicBinaryStream.Controllers
+public class RootMenu : Controller
 {
-    public class RootMenu : Controller
+    [HttpGet("/menu")]
+    public ContentResult GetMenu()
     {
-        [HttpGet("/menu")]
-        public ContentResult GetMenu()
-        {
-            return
-                new ContentResult()
-                {
-                    ContentType = "text/html",
-                    Content =
+        return
+            new ContentResult()
+            {
+                ContentType = "text/html",
+                Content =
 @"<html>
   <head>
     <title>ASP.NET Core Streaming Sample - Asynchronous using System.text.Json</title>
@@ -22,7 +22,6 @@ namespace ASPNetCoreStreamingExample.DynamicBinaryStream.Controllers
     <a href=""/v1/sing"" target=""_blank"">/v1/sing &ndash; Get song lyrics</a>
   </body>
 </html>"
-                };
-        }
+            };
     }
 }

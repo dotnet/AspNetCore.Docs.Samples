@@ -1,9 +1,6 @@
-using System.Collections.Generic;
+namespace SynchronousWithNewtonsoftJson.Model;
 
-namespace ASPNetCoreStreamingExample.SynchronousWithNewtonsoftJson.Model
+public interface ILyricsSource
 {
-    public interface ILyricsSource
-    {
-        IEnumerable<string> GetSongLyrics();
-    }
+    IEnumerable<string> GetSongLyrics();
 }

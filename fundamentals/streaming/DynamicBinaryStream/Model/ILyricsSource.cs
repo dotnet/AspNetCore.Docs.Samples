@@ -1,9 +1,6 @@
-using System.Collections.Generic;
+namespace DynamicBinaryStream.Model;
 
-namespace ASPNetCoreStreamingExample.DynamicBinaryStream.Model
+public interface ILyricsSource
 {
-    public interface ILyricsSource
-    {
-        IAsyncEnumerable<string> GetSongLyrics();
-    }
+    IAsyncEnumerable<string> GetSongLyrics();
 }

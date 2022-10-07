@@ -1,24 +1,22 @@
+namespace AsynchronousWithSystemTextJson.Controllers;
+
 using Microsoft.AspNetCore.Mvc;
 
-using ASPNetCoreStreamingExample.AsynchronousWithSystemTextJson.Model;
-using System.Collections.Generic;
+using AsynchronousWithSystemTextJson.Model;
 
-namespace ASPNetCoreStreamingExample.AsynchronousWithSystemTextJson.Controllers
+[Route("/v1")]
+public class SongLyricsController : Controller
 {
-    [Route("/v1")]
-    public class SongLyricsController : Controller
+    ILyricsSource _lyricsSource;
+
+    public SongLyricsController(ILyricsSource lyricsSource)
     {
-        ILyricsSource _lyricsSource;
+        _lyricsSource = lyricsSource;
+    }
 
-        public SongLyricsController(ILyricsSource lyricsSource)
-        {
-            _lyricsSource = lyricsSource;
-        }
-
-        [HttpGet("sing")]
-        public IAsyncEnumerable<string> PerformSong()
-        {
-            return _lyricsSource.GetSongLyrics();
-        }
+    [HttpGet("sing")]
+    public IAsyncEnumerable<string> PerformSong()
+    {
+        return _lyricsSource.GetSongLyrics();
     }
 }

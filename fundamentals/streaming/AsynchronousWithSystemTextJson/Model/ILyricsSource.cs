@@ -1,9 +1,6 @@
-using System.Collections.Generic;
+namespace AsynchronousWithSystemTextJson.Model;
 
-namespace ASPNetCoreStreamingExample.AsynchronousWithSystemTextJson.Model
+public interface ILyricsSource
 {
-    public interface ILyricsSource
-    {
-        IAsyncEnumerable<string> GetSongLyrics();
-    }
+    IAsyncEnumerable<string> GetSongLyrics();
 }

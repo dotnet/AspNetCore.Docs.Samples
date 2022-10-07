@@ -1,75 +1,70 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
+namespace SynchronousWithNewtonsoftJson.Results;
 
 using Microsoft.AspNetCore.Mvc;
 
 using Newtonsoft.Json;
 
-using ASPNetCoreStreamingExample.SynchronousWithNewtonsoftJson.Model;
+using SynchronousWithNewtonsoftJson.Model;
 
-namespace ASPNetCoreStreamingExample.SynchronousWithNewtonsoftJson.Results
+public class SongLyricsResult : IActionResult
 {
-    public class SongLyricsResult : IActionResult
+    ILyricsSource _lyricsSource;
+    JsonSerializer _serializer;
+
+    public SongLyricsResult(ILyricsSource lyricsSource, JsonSerializer serializer)
     {
-        ILyricsSource _lyricsSource;
-        JsonSerializer _serializer;
+        _lyricsSource = lyricsSource;
+        _serializer = serializer;
+    }
 
-        public SongLyricsResult(ILyricsSource lyricsSource, JsonSerializer serializer)
+    static readonly byte[] JSONArrayStart = new byte[] { (byte)'[' };
+    static readonly byte[] JSONArraySeparator = new byte[] { (byte)',' };
+
+    public async Task ExecuteResultAsync(ActionContext context)
+    {
+        Console.WriteLine(
+          "[{0:yyyy-MM-dd HH:mm:ss}] Start streaming result to {1}",
+          DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+          context.HttpContext.Connection.RemoteIpAddress);
+
+        var startTimeUTC = DateTime.UtcNow;
+
+        try
         {
-            _lyricsSource = lyricsSource;
-            _serializer = serializer;
-        }
+            await context.HttpContext.Response.Body.WriteAsync(JSONArrayStart, context.HttpContext.RequestAborted);
 
-        static readonly byte[] JSONArrayStart = new byte[] { (byte)'[' };
-        static readonly byte[] JSONArraySeparator = new byte[] { (byte)',' };
-
-        public async Task ExecuteResultAsync(ActionContext context)
-        {
-            Console.WriteLine(
-              "[{0:yyyy-MM-dd HH:mm:ss}] Start streaming result to {1}",
-              DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-              context.HttpContext.Connection.RemoteIpAddress);
-
-            var startTimeUTC = DateTime.UtcNow;
-
-            try
+            while (true)
             {
-                await context.HttpContext.Response.Body.WriteAsync(JSONArrayStart, context.HttpContext.RequestAborted);
-
-                while (true)
+                foreach (string line in _lyricsSource.GetSongLyrics())
                 {
-                    foreach (string line in _lyricsSource.GetSongLyrics())
-                    {
-                        using (var streamWriter = new StreamWriter(context.HttpContext.Response.Body))
-                        using (var jsonWriter = new JsonTextWriter(streamWriter))
-                            _serializer.Serialize(jsonWriter, line);
+                    using (var streamWriter = new StreamWriter(context.HttpContext.Response.Body))
+                    using (var jsonWriter = new JsonTextWriter(streamWriter))
+                        _serializer.Serialize(jsonWriter, line);
 
-                        await context.HttpContext.Response.Body.WriteAsync(JSONArraySeparator, context.HttpContext.RequestAborted);
+                    await context.HttpContext.Response.Body.WriteAsync(JSONArraySeparator, context.HttpContext.RequestAborted);
 
-                        await context.HttpContext.Response.Body.FlushAsync(context.HttpContext.RequestAborted);
+                    await context.HttpContext.Response.Body.FlushAsync(context.HttpContext.RequestAborted);
 
-                        await Task.Delay(200);
-                    }
+                    await Task.Delay(200);
                 }
-
-                // No JSONArrayEnd needs to be written, because the above loop will never exit.
             }
-            catch (OperationCanceledException)
-            {
-            }
-            finally
-            {
-                var stopTimeUTC = DateTime.UtcNow;
 
-                var duration = stopTimeUTC - startTimeUTC;
+            // No JSONArrayEnd needs to be written, because the above loop will never exit.
+        }
+        catch (OperationCanceledException)
+        {
+        }
+        finally
+        {
+            var stopTimeUTC = DateTime.UtcNow;
 
-                Console.WriteLine(
-                  "[{0:yyyy-MM-dd HH:mm:ss}] Stop streaming result to {1}, rickrolled for {2}",
-                  DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
-                  context.HttpContext.Connection.RemoteIpAddress,
-                  duration);
-            }
+            var duration = stopTimeUTC - startTimeUTC;
+
+            Console.WriteLine(
+              "[{0:yyyy-MM-dd HH:mm:ss}] Stop streaming result to {1}, rickrolled for {2}",
+              DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+              context.HttpContext.Connection.RemoteIpAddress,
+              duration);
         }
     }
 }

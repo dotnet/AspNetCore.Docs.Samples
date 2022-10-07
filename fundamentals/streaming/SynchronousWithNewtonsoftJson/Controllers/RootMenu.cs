@@ -1,17 +1,17 @@
+namespace SynchronousWithNewtonsoftJson.Controllers;
+
 using Microsoft.AspNetCore.Mvc;
 
-namespace SynchronousWithNewtonsoftJson.Controllers
+public class RootMenu : Controller
 {
-    public class RootMenu : Controller
+    [HttpGet("/menu")]
+    public ContentResult GetMenu()
     {
-        [HttpGet("/menu")]
-        public ContentResult GetMenu()
-        {
-            return
-                new ContentResult()
-                {
-                    ContentType = "text/html",
-                    Content =
+        return
+            new ContentResult()
+            {
+                ContentType = "text/html",
+                Content =
 @"<html>
   <head>
     <title>ASP.NET Core Streaming Sample - Asynchronous using System.text.Json</title>
@@ -23,7 +23,6 @@ namespace SynchronousWithNewtonsoftJson.Controllers
     <a href=""/middleware/sing"" target=""_blank"">/middleware/sing &ndash; Get song lyrics from Middleware</a>
   </body>
 </html>"
-                };
-        }
+            };
     }
 }

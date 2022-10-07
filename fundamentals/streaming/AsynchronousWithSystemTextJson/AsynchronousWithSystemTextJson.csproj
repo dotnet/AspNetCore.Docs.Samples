@@ -1,10 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <AssemblyName>ASPNetCoreStreamingExample.AsynchronousWithSystemTextJson</AssemblyName>
-    <RootNamespace>ASPNetCoreStreamingExample.AsynchronousWithSystemTextJson</RootNamespace>
+    <ImplicitUsings>true</ImplicitUsings>
   </PropertyGroup>
 
 </Project>

@@ -1,7 +1,6 @@
-using System;
-using System.Threading;
+namespace AsynchronousWithSystemTextJson;
 
-using ASPNetCoreStreamingExample.AsynchronousWithSystemTextJson.Model;
+using AsynchronousWithSystemTextJson.Model;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,47 +9,44 @@ using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace ASPNetCoreStreamingExample.AsynchronousWithSystemTextJson
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+        var builder = WebApplication.CreateBuilder(args);
 
-            // Song lyrics source to be injected into instances.
-            builder.Services.AddSingleton<ILyricsSource, LyricsSource>();
+        // Song lyrics source to be injected into instances.
+        builder.Services.AddSingleton<ILyricsSource, LyricsSource>();
 
-            builder.Services.AddControllers();
+        builder.Services.AddControllers();
 
-            var app = builder.Build();
+        var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
-                app.UseDeveloperExceptionPage();
+        if (app.Environment.IsDevelopment())
+            app.UseDeveloperExceptionPage();
 
-            app.UseRouting();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+        app.UseRouting();
+        app.UseAuthorization();
+        app.UseEndpoints(endpoints => endpoints.MapControllers());
 
-            var appBuilder = (IApplicationBuilder)app;
+        var appBuilder = (IApplicationBuilder)app;
 
-            var hostLifetime = appBuilder.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
+        var hostLifetime = appBuilder.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
 
-            hostLifetime.ApplicationStarted.Register(
-                () =>
-                {
-                    var addressesFeature = appBuilder.ServerFeatures.Get<IServerAddressesFeature>()!;
+        hostLifetime.ApplicationStarted.Register(
+            () =>
+            {
+                var addressesFeature = appBuilder.ServerFeatures.Get<IServerAddressesFeature>()!;
 
-                    Console.WriteLine();
-                    Console.WriteLine("Please browse to the hosted service:");
+                Console.WriteLine();
+                Console.WriteLine("Please browse to the hosted service:");
 
-                    foreach (var address in addressesFeature.Addresses)
-                        Console.WriteLine("* {0}/menu", address.Replace("0.0.0.0", "localhost"));
+                foreach (var address in addressesFeature.Addresses)
+                    Console.WriteLine("* {0}/menu", address.Replace("0.0.0.0", "localhost"));
 
-                    Console.WriteLine();
-                });
+                Console.WriteLine();
+            });
 
-            app.Run();
-        }
+        app.Run();
     }
 }

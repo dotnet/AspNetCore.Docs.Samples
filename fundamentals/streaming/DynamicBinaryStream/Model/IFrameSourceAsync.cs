@@ -1,10 +1,8 @@
-using System.Collections.Generic;
+namespace DynamicBinaryStream.Model;
+
 using System.Drawing;
 
-namespace ASPNetCoreStreamingExample.DynamicBinaryStream.Model
+public interface IFrameSourceAsync
 {
-    public interface IFrameSourceAsync
-    {
-        IAsyncEnumerable<Bitmap> GetFrames();
-    }
+    IAsyncEnumerable<Bitmap> GetFrames();
 }
