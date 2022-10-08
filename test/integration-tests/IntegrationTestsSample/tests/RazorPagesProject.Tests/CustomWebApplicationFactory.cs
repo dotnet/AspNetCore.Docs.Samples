@@ -5,8 +5,8 @@ using RazorPagesProject.Data;
 namespace RazorPagesProject.Tests;
 
 // <snippet1>
-public class CustomWebApplicationFactory<TStartup>
-    : WebApplicationFactory<TStartup> where TStartup : class
+public class CustomWebApplicationFactory<TProgram>
+    : WebApplicationFactory<TProgram> where TProgram : class
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
