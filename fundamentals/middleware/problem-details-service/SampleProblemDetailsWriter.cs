@@ -11,6 +11,7 @@ public class SampleProblemDetailsWriter : IProblemDetailsWriter
         // Additional customizations.
 
         // Write to the response.
-        return new ValueTask(context.HttpContext.Response.WriteAsJsonAsync(context.ProblemDetails));
+        var response = context.HttpContext.Response;
+        return new ValueTask(response.WriteAsJsonAsync(context.ProblemDetails));
     }
 }
