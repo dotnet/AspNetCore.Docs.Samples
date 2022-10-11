@@ -1,5 +1,8 @@
 public class SampleProblemDetailsWriter : IProblemDetailsWriter
 {
+    // Indicates that only responses with StatusCode == 400
+    // are handled by this writer. All others are
+    // handled by different registered writers if available.
     public bool CanWrite(ProblemDetailsContext context)
         => context.HttpContext.Response.StatusCode == 400;
 
