@@ -24,22 +24,20 @@ public class SampleRateLimiterPolicy : IRateLimiterPolicy<string>
         _options = options.Value;
     }
 
-    public Func<OnRejectedContext, CancellationToken, ValueTask>? 
-                                                     OnRejected { get => _onRejected; }
+    public Func<OnRejectedContext, CancellationToken, ValueTask>? OnRejected => _onRejected;
     // </snippet>
 
     public RateLimitPartition<string> GetPartition(HttpContext httpContext)
     {
-        return RateLimitPartition.GetSlidingWindowLimiter<string>(string.Empty, 
-            key => new SlidingWindowRateLimiterOptions
+        return RateLimitPartition.GetSlidingWindowLimiter(string.Empty,
+            _ => new SlidingWindowRateLimiterOptions
             {
-                PermitLimit = _options.permitLimit,
+                PermitLimit = _options.PermitLimit,
                 QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-                QueueLimit = _options.queueLimit,
-                Window = TimeSpan.FromSeconds(_options.window),
-                SegmentsPerWindow = _options.segmentsPerWindow
+                QueueLimit = _options.QueueLimit,
+                Window = TimeSpan.FromSeconds(_options.Window),
+                SegmentsPerWindow = _options.SegmentsPerWindow
             });
-    
     }
 }
 // </snippet_1>
