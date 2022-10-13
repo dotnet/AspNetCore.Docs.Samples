@@ -18,6 +18,8 @@ builder.Services.AddRateLimiter(_ => _
 
 var app = builder.Build();
 
+app.UseRateLimiter();
+
 static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
 app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
@@ -50,6 +52,8 @@ builder.Services.AddRateLimiter(_ => _
 
 var app = builder.Build();
 
+app.UseRateLimiter();
+
 static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
 app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
@@ -81,6 +85,8 @@ builder.Services.AddRateLimiter(_ => _
 
 var app = builder.Build();
 
+app.UseRateLimiter();
+
 static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
 app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
@@ -110,6 +116,8 @@ builder.Services.AddRateLimiter(_ => _
     }));
 
 var app = builder.Build();
+
+app.UseRateLimiter();
 
 static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
@@ -147,6 +155,8 @@ builder.Services.AddRateLimiter(_ => _
     }));
 
 var app = builder.Build();
+
+app.UseRateLimiter();
 
 static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
@@ -266,6 +276,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseRateLimiter();
 
 // <snippet>
 // Preceding code removed for brevity.
@@ -377,6 +388,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseRateLimiter();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -450,6 +462,7 @@ builder.Services.AddRateLimiter(limiterOptions =>
 var app = builder.Build();
 
 app.UseAuthorization();
+app.UseRateLimiter();
 
 app.MapGet("/", () => "Hello, World!");
 
