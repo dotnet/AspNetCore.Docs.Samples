@@ -7,6 +7,7 @@ namespace UnitTests;
 
 public class TodoInMemoryTests
 {
+    // <snippet_>
     [Fact]
     public async Task GetTodoReturnsNotFoundIfNotExists()
     {
@@ -19,6 +20,7 @@ public class TodoInMemoryTests
         //Assert
         Assert.Equal(404, notFoundResult.StatusCode);
     }
+    // </snippet_>
 
     [Fact]
     public async Task GetAllReturnsTodosFromDatabase()
@@ -90,7 +92,9 @@ public class TodoInMemoryTests
         var foundTodo = Assert.IsAssignableFrom<Todo>(okResult.Value);
         Assert.Equal(1, foundTodo.Id);
     }
+    // </snippet_1>
 
+    // <snippet_3>
     [Fact]
     public async Task CreateTodoCreatesTodoInDatabase()
     {
@@ -120,7 +124,7 @@ public class TodoInMemoryTests
             Assert.False(todo.IsDone);
         });
     }
-    // </snippet_1>
+    // </snippet_3>
 
     [Fact]
     public async Task UpdateTodoUpdatesTodoInDatabase()
