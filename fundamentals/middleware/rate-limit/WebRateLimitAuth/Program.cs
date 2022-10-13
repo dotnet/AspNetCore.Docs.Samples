@@ -458,8 +458,8 @@ app.MapGet("/jwt", (HttpContext context) => $"Hello {GetUserEndPointMethod(conte
     .RequireAuthorization();
 
 app.MapPost("/post", (HttpContext context) => $"Hello {GetUserEndPointMethod(context)}")
-       .RequireRateLimiting(jwtPolicyName)
-       .RequireAuthorization();
+    .RequireRateLimiting(jwtPolicyName)
+    .RequireAuthorization();
 
 app.Run();
 
