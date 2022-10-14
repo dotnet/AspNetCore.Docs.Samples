@@ -1,4 +1,4 @@
-#define JWT // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
+#define TOKEN // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
 #if NEVER
 #elif FIXED
 // <snippet_fixed>
@@ -56,7 +56,7 @@ app.UseRateLimiter();
 
 static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
-app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
+app.MapGet("/", () => Results.Ok($"Fixed Window Limiter {GetTicks()}"))
                            .RequireRateLimiting(fixedPolicy);
 
 app.Run();
@@ -89,7 +89,7 @@ app.UseRateLimiter();
 
 static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
 
-app.MapGet("/", () => Results.Ok($"Hello {GetTicks()}"))
+app.MapGet("/", () => Results.Ok($"Sliding Window Limiter {GetTicks()}"))
                            .RequireRateLimiting(slidingPolicy);
 
 app.Run();
