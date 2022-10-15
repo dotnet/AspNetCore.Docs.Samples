@@ -1,4 +1,4 @@
-#define TOKEN // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
+#define FIRST // FIRST ADMIN FIXED SLIDING CONCUR TOKEN FIXED2 JWT
 #if NEVER
 #elif FIXED
 // <snippet_fixed>
@@ -167,6 +167,8 @@ app.Run();
 // </snippet_token>
 #elif FIRST
 // <snippet_1>
+// <snippet>
+// Preceding code removed for brevity.
 using System.Globalization;
 using System.Net;
 using System.Threading.RateLimiting;
@@ -277,9 +279,6 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseRateLimiter();
-
-// <snippet>
-// Preceding code removed for brevity.
 
 app.UseAuthentication();
 app.UseAuthorization();
