@@ -1,4 +1,4 @@
-#define FIRST // FIRST SECOND
+#define SECOND // FIRST SECOND
 #if NEVER
 #elif FIRST
 // <snippet_1>
@@ -53,11 +53,6 @@ app.UseStaticFiles();
 
 app.MapRazorPages().RequireRateLimiting(slidingPolicy);
 app.MapDefaultControllerRoute().RequireRateLimiting(fixedPolicy);
-
-static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
-
-app.MapGet("/test", () => Results.Ok($"FixedWindowLimiter {GetTicks()}"))
-                           .RequireRateLimiting(fixedPolicy);
 
 app.Run();
 // </snippet_1>
@@ -115,11 +110,6 @@ app.UseStaticFiles();
 
 app.MapRazorPages();
 app.MapDefaultControllerRoute();
-
-static string GetTicks() => (DateTime.Now.Ticks & 0x11111).ToString("00000");
-
-app.MapGet("/test", () => Results.Ok($"FixedWindowLimiter {GetTicks()}"))
-                           .RequireRateLimiting(fixedPolicy);
 
 app.Run();
 // </snippet_2>
