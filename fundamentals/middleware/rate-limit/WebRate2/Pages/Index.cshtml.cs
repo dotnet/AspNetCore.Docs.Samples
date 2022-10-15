@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.RateLimiting;
 
 namespace WebRate2.Pages;
 // <snippet_1>
-[EnableRateLimitingAttribute("sliding")]
+[EnableRateLimiting("sliding")]
 public class IndexModel : PageModel
 {
     private readonly ILogger<IndexModel> _logger;

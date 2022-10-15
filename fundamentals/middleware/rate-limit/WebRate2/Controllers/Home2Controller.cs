@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Diagnostics;
 using WebMVCrm.Models;
 
 namespace WebMVCrm.Controllers;
 // <snippet_1>
-[EnableRateLimitingAttribute("fixed")]
+[EnableRateLimiting("fixed")]
 public class Home2Controller : Controller
 {
     private readonly ILogger<Home2Controller> _logger;
@@ -20,7 +20,7 @@ public class Home2Controller : Controller
         return View();
     }
 
-    [EnableRateLimitingAttribute("sliding")]
+    [EnableRateLimiting("sliding")]
     public ActionResult Privacy()
     {
         return View();
