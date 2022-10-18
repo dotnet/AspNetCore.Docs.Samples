@@ -18,11 +18,9 @@ namespace Contoso.API
                 httpClient.BaseAddress = new Uri("https://localhost:7123/");
             });
 
-            // Add services to the container.
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
-            // As always, handlers must be provided for the requirements of the authorization policies
             builder.Services.AddSingleton<IAuthorizationHandler, CanGetWeatherAuthorizationHandler>();
 
             builder.Services.AddAuthorization(options =>
@@ -32,13 +30,11 @@ namespace Contoso.API
             });
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
