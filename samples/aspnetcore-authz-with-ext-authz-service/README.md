@@ -2,10 +2,6 @@
 
 This is a sample that shows how we can implement additional authorization requirements with an external authorization service. In this example, we have an API (Contoso.API) secured with Azure AD. However, that is an additional authorization check with a custom API (Contoso.Security.API) which returns a payload describing whether this particular client app can invoke the GetWeather API.
 
-## Disclaimer
-
-The information contained in this README.md file and any accompanying materials (including, but not limited to, scripts, sample codes, etc.) are provided "AS-IS" and "WITH ALL FAULTS." Any estimated pricing information is provided solely for demonstration purposes and does not represent final pricing and Microsoft assumes no liability arising from your use of the information. Microsoft makes NO GUARANTEES OR WARRANTIES OF ANY KIND, WHETHER EXPRESSED OR IMPLIED, in providing this information, including any pricing information.
-
 ## Get Started
 
 1. Create an App Registration in your AAD Tenant. Be sure to assign it an AppRole. Under API permissions, add the AppRole as a permission and grant Admin consent. Note that in this setup, this App Registration represents both the API and the Client invoking the API. If you like, you can create 2 App Registrations. If you are using this setup, be sure to only perform the API permissions, add AppRole as a permission step for only the Client. Only the Client App Registration requires a Client Secret to be generated.
