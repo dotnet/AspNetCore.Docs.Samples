@@ -50,7 +50,3 @@ This is a sample that shows how we can implement additional authorization requir
     * TenantId: Tenant Id from AAD properties
 
 5. Now we can run the Solution and use Postman to invoke the API. You can add breakpoints in the Contoso.Security.API in SecurityPolicyController and observe the Client Id is being passed in that is used to assert whether it is allowed to Get Weather.
-
-## Have an issue?
-
-You are welcome to create an issue if you need help but please note that there is no timeline to answer or resolve any issues you have with the contents of this project. Use the contents of this project at your own risk! If you are interested to volunteer to maintain this, please feel free to reach out to be added as a contributor and send Pull Requests (PR).
