@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
-namespace Contoso.API.Authorization
+namespace Contoso.API.Authorization;
+
+public class CanGetWeatherRequirement : IAuthorizationRequirement
 {
-    public class CanGetWeatherRequirement : IAuthorizationRequirement
-    {
-    }
 }

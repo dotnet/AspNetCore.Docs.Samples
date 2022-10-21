@@ -1,7 +1,6 @@
-namespace Contoso.Security.API
+namespace Contoso.Security.API;
+
+public class SecurityPolicy
 {
-    public class SecurityPolicy
-    {
-        public bool CanGetWeather { get; set; }
-    }
+    public bool CanGetWeather { get; set; }
 }
