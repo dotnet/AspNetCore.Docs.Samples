@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -30,7 +30,7 @@ namespace Contoso.API.Authorization
                 {
                     var value = appid.Value;
 
-                    var client = _httpClientFactory.CreateClient(Constants.SecurityAPIClient);
+                    var client = _httpClientFactory.CreateClient(AppConstants.SecurityAPIClient);
                     var response = await client.GetAsync($"SecurityPolicy/{value}");
 
                     if (response.IsSuccessStatusCode)

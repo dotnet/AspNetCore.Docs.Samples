@@ -1,12 +1,9 @@
-using Contoso.API.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
 
 namespace Contoso.API.Controllers
 {
-    [Authorize(Policy = Constants.CanGetWeatherPolicyName)]
+    [Authorize(Policy = AppConstants.CanGetWeatherPolicyName)]
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase

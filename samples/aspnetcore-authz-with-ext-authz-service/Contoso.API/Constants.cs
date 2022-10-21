@@ -1,6 +1,6 @@
-﻿namespace Contoso.API
+namespace Contoso.API
 {
-    public static class Constants
+    public static class AppConstants
     {
         public const string SecurityAPIClient = "SecurityAPIClient";
         public const string CanGetWeatherPolicyName = "CanGetWeather";
