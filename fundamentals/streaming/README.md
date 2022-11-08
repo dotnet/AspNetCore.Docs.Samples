@@ -1,4 +1,4 @@
-# ASP.NET Core Streaming Example
+# ASP.NET Core streaming sample
 
 This repository contains sample code for the article "Streaming Responses in ASP.NET Core" in the ASP.NET Core documentation.
 
