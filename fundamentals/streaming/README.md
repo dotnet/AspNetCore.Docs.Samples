@@ -4,12 +4,13 @@ This repository contains sample code for the article "Streaming Responses in ASP
 
 ## What
 
-The project contains two implementations of the definition of a simple ASP.NET Core web site that contains endpoints that sing a song:
+The project contains three implementations of the definition of a basic ASP.NET Core web site that contains endpoints that play a song:
 
 * `AsynchronousWithSystemTextJson`
 * `SynchronousWithNewtonsoftJson`
+* `DynamicBinaryStream`
 
-These endpoints sing the song indefinitely, streaming the song repeatedly until the client disconnects. This acts as a demonstration of how to implement streaming endpoints with ASP.NET Core.
+These endpoints play the song indefinitely, streaming the song repeatedly until the client disconnects. This acts as a demonstration of how to implement streaming endpoints with ASP.NET Core.
 
 ## Compiling
 
@@ -19,17 +20,15 @@ This project can be compiled in Visual Studio, or with the `dotnet` command-line
 
 ## Running
 
-Within Visual Studio, this project will by default run using IIS Express. This can be changed to self-host with Kestrel.
-
-The project can also be launched with the `dotnet` command-line tool, which self-hosts with Kestrel:
+The project can be launched with Visual Studio or with the `dotnet` command-line tool:
 
 > `dotnet run`
 
 ## Using
 
-There are two examples that show alternative implementations. With an example server running, you can use a browser window or command-line tools to inspect output from the hosted endpoints. Simply append the desired endpoint onto the base URI displayed in the console where the server is running.
+There are three examples that show alternative implementations. With an example server running, you can use a browser window or command-line tools to inspect output from the hosted endpoints. Append the desired endpoint onto the base URI displayed in the console where the server is running.
 
-* Browser: Simply browse to the URL. Some browsers may spool up some of the response before they begin displaying it in realtime.
+* Browser: Browse to the URL. Some browsers may spool up some of the response before they begin displaying it in realtime.
 * PowerShell: _There is no built-in function in PowerShell that can display a web response in realtime._
 * Curl: `curl URL --no-buffer`
     * NB: Windows 10 ships with a native port of `curl.exe` -- specify the extension if calling from PowerShell, since PowerShell by default aliases `curl` to `Invoke-WebRequest`.
@@ -47,7 +46,7 @@ This project hosts itself on port 5100. A sample URL is:
 
 ### `SynchronousWithNewtonsoftJson`
 
-When running, this project presents a web server with two endpoints. These endpoints have identical behaviour, but one is implemented using an ASP.NET Core Controller and the other using ASP.NET Core Middleware.
+When running, this project presents a web server with two endpoints. These endpoints have identical behavior, but one is implemented using an ASP.NET Core Controller and the other using ASP.NET Core Middleware.
 
 * Controller Endpoint: `/v1/sing`
 * Middleware Endpoint: `/middleware/sing`

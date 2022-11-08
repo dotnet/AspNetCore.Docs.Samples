@@ -1,4 +1,0 @@
-[*.cs]
-indent_style = space
-indent_width = 2
-dotnet_sort_system_directives_first = true
