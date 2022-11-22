@@ -1,5 +1,7 @@
+using System.Data.Common;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using RazorPagesProject.Data;
 using RazorPagesProject.Services;
@@ -7,7 +9,20 @@ using RazorPagesProject.Services;
 var appBuilder = WebApplication.CreateBuilder(args);
 var services = appBuilder.Services;
 
-services.AddDbContext<ApplicationDbContext>(options => options.UseInMemoryDatabase("InMemoryDb"));
+// Create open SqliteConnection so EF won't automatically close it.
+services.AddSingleton<DbConnection>(container =>
+{
+    var connection = new SqliteConnection("DataSource=:memory:");
+    connection.Open();
+
+    return connection;
+});
+
+services.AddDbContext<ApplicationDbContext>((container, options) =>
+{
+    var connection = container.GetRequiredService<DbConnection>();
+    options.UseSqlite(connection);
+});
 
 services.AddDefaultIdentity<IdentityUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
