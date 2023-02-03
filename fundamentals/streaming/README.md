@@ -10,7 +10,7 @@ The project contains three implementations of the definition of a basic ASP.NET 
 * `SynchronousWithNewtonsoftJson`
 * `DynamicBinaryStream`
 
-These endpoints play the song indefinitely, streaming the song repeatedly until the client disconnects. This acts as a demonstration of how to implement streaming endpoints with ASP.NET Core.
+These endpoints stream the song indefinitely, repeating until the client disconnects. This provides a demonstration of how to implement streaming endpoints with ASP.NET Core.
 
 ## Compiling
 
