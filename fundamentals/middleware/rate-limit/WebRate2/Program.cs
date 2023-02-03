@@ -1,4 +1,4 @@
-#define SECOND // FIRST SECOND
+#define FIRST // FIRST SECOND
 #if NEVER
 #elif FIRST
 // <snippet_1>
