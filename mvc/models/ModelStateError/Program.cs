@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using ModelStateError.Data;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ModelStateErrorContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ModelStateErrorContext") ?? throw new InvalidOperationException("Connection string 'ModelStateErrorContext' not found.")));
+   options.UseInMemoryDatabase("Contacts"));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
