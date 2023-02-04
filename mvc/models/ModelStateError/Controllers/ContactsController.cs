@@ -58,14 +58,14 @@ namespace ModelStateError.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Email,PhoneNumber")] Contact contact)
         {
-            if (_context.Contact.Any(i => i.PhoneNumber == contact.PhoneNumber))
-            {
-                ModelState.AddModelError(nameof(contact.PhoneNumber), "The Name is already in use.");
-            }
-            if (_context.Contact.Any(i => i.Email == contact.Email))
-            {
-                ModelState.AddModelError(nameof(contact.Email), "The Email is already in use.");
-            }
+            //if (_context.Contact.Any(i => i.PhoneNumber == contact.PhoneNumber))
+            //{
+            //    ModelState.AddModelError(nameof(contact.PhoneNumber), "The Name is already in use.");
+            //}
+            //if (_context.Contact.Any(i => i.Email == contact.Email))
+            //{
+            //    ModelState.AddModelError(nameof(contact.Email), "The Email is already in use.");
+            //}
             if (ModelState.IsValid)
             {
                 _context.Add(contact);
@@ -102,14 +102,14 @@ namespace ModelStateError.Controllers
             {
                 return NotFound();
             }
-            if (_context.Contact.Any(i => i.PhoneNumber == contact.PhoneNumber))
-            {
-                ModelState.AddModelError(nameof(contact.PhoneNumber), "The Name is already in use.");
-            }
-            if (_context.Contact.Any(i => i.Email == contact.Email))
-            {
-                ModelState.AddModelError(nameof(contact.Email), "The Email is already in use.");
-            }
+            //if (_context.Contact.Any(i => i.PhoneNumber == contact.PhoneNumber))
+            //{
+            //    ModelState.AddModelError(nameof(contact.PhoneNumber), "The Name is already in use.");
+            //}
+            //if (_context.Contact.Any(i => i.Email == contact.Email))
+            //{
+            //    ModelState.AddModelError(nameof(contact.Email), "The Email is already in use.");
+            //}
             if (ModelState.IsValid)
             {
                 try
