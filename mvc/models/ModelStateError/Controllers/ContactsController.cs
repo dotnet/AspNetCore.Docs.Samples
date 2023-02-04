@@ -22,9 +22,9 @@ namespace ModelStateError.Controllers
         // GET: Contacts
         public async Task<IActionResult> Index()
         {
-              return _context.Contact != null ? 
-                          View(await _context.Contact.ToListAsync()) :
-                          Problem("Entity set 'ModelStateErrorContext.Contact'  is null.");
+            return _context.Contact != null ?
+                        View(await _context.Contact.ToListAsync()) :
+                        Problem("Entity set 'ModelStateErrorContext.Contact'  is null.");
         }
 
         // GET: Contacts/Details/5
@@ -165,14 +165,14 @@ namespace ModelStateError.Controllers
             {
                 _context.Contact.Remove(contact);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ContactExists(int id)
         {
-          return (_context.Contact?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Contact?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

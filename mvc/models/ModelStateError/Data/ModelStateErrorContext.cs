@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +9,7 @@ namespace ModelStateError.Data
 {
     public class ModelStateErrorContext : DbContext
     {
-        public ModelStateErrorContext (DbContextOptions<ModelStateErrorContext> options)
+        public ModelStateErrorContext(DbContextOptions<ModelStateErrorContext> options)
             : base(options)
         {
         }
