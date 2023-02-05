@@ -58,6 +58,7 @@ namespace ModelStateError.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Email,PhoneNumber")] Contact contact)
         {
+            // Attach Validation Error Message to the Model if seen
             if (_context.Contact.Any(i => i.PhoneNumber == contact.PhoneNumber))
             {
                 ModelState.AddModelError(nameof(contact.PhoneNumber), "The Name is already in use.");
@@ -102,6 +103,7 @@ namespace ModelStateError.Controllers
             {
                 return NotFound();
             }
+            // Attach Validation Error Message to the Model if seen
             if (_context.Contact.Any(i => i.PhoneNumber == contact.PhoneNumber))
             {
                 ModelState.AddModelError(nameof(contact.PhoneNumber), "The Name is already in use.");
