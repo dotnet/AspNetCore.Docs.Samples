@@ -35,7 +35,7 @@ namespace IResultImplementation
         public static IResult PostContact(IResultImplementationContext context, Contact contact)
         {
             context.Contact.Add(contact);
-             context.SaveChanges();
+            context.SaveChanges();
 
             return TypedResults.CreatedAtRoute<Contact>(contact, nameof(ContactsHandler.GetContact));
         }
@@ -54,7 +54,7 @@ namespace IResultImplementation
 
             try
             {
-                 context.SaveChanges();
+                context.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -80,14 +80,14 @@ namespace IResultImplementation
             {
                 return TypedResults.NotFound();
             }
-            var contact =  context.Contact.Find(id);
+            var contact = context.Contact.Find(id);
             if (contact == null)
             {
                 return TypedResults.NotFound();
             }
 
             context.Contact.Remove(contact);
-             context.SaveChanges();
+            context.SaveChanges();
 
             return TypedResults.NoContent();
         }

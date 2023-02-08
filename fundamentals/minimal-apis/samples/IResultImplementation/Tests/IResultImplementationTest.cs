@@ -37,7 +37,7 @@ namespace IResultImplementation.Tests
             mockContext.Setup(c => c.Contact).Returns(MockSet!.Object);
             int expectedStatusCode = 200;
             int expectedItemCount = 3;
-            
+
             //Act
             var result = (Ok<List<Contact>>)await ContactsHandler.GetContacts(mockContext.Object);
 
@@ -64,7 +64,7 @@ namespace IResultImplementation.Tests
             };
             int expectedStatusCode = 201;
             int expectedItemCount = 4;
-            
+
             //Act
             var result = (CreatedAtRoute<Contact>)ContactsHandler.PostContact(mockContext.Object, newContact);
 
