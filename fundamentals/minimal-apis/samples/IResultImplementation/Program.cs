@@ -1,37 +1,27 @@
-var builder = WebApplication.CreateBuilder(args);
+using IResultImplementation;
+using IResultImplementation.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<IResultImplementationContext>(options =>
  options.UseInMemoryDatabase("Contacts"));
 // Add services to the container.
-
+builder.Services.AddControllers();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
+app.MapControllers();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+app.MapGet("/api/contacts", ContactsHandler.GetContacts);
+app.MapGet("/api/contacts/{id}", ContactsHandler.GetContact);
+app.MapPost("/api/contacts", ContactsHandler.PostContact);
+app.MapPut("/api/contacts/{id}", ContactsHandler.PutContact);
+app.MapDelete("/api/contacts/{id}", ContactsHandler.DeleteContact);
 
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast = Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-});
+
+
 
 app.Run();
-
-internal record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
