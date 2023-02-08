@@ -1,5 +1,8 @@
 var builder = WebApplication.CreateBuilder(args);
 
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDbContext<IResultImplementationContext>(options =>
+ options.UseInMemoryDatabase("Contacts"));
 // Add services to the container.
 
 var app = builder.Build();
