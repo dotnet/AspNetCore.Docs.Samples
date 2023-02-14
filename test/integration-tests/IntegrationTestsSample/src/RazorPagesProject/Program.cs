@@ -1,3 +1,4 @@
+// <snippet_all>
 using System.Data.Common;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Identity;
@@ -90,3 +91,4 @@ using (var scope = app.Services.CreateScope())
 app.Run();
 
 public partial class Program { }
+// </snippet_all>
