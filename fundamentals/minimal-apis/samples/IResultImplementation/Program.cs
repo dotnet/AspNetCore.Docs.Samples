@@ -20,7 +20,4 @@ app.MapPost("/api/contacts", ContactsHandler.PostContact);
 app.MapPut("/api/contacts/{id}", ContactsHandler.PutContact);
 app.MapDelete("/api/contacts/{id}", ContactsHandler.DeleteContact);
 
-
-
-
 app.Run();

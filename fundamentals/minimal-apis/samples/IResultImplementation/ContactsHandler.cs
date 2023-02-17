@@ -9,16 +9,16 @@ namespace IResultImplementation
     {
 
         // GET: api/Contacts
-        public static async Task<IResult> GetContacts(IResultImplementationContext context)
+        public static IResult GetContacts(IResultImplementationContext context)
         {
             return TypedResults.Ok(context.Contact.ToList());
         }
 
         // GET: api/Contacts/5
         [HttpGet("{id}")]
-        public static async Task<IResult> GetContact(IResultImplementationContext context, int id)
+        public static IResult GetContact(IResultImplementationContext context, int id)
         {
-            var contact = await context.Contact.FindAsync(id);
+            var contact = context.Contact.Where(c => c.Id == id).FirstOrDefault();
 
             if (contact == null)
             {

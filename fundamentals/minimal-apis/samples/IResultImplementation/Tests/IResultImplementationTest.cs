@@ -29,7 +29,7 @@ namespace IResultImplementation.Tests
             MockSet.As<IQueryable<Contact>>().Setup(m => m.GetEnumerator()).Returns(() => Data.GetEnumerator());
         }
         [TestMethod]
-        public async Task GetContactReturnsContactsFromDatabase()
+        public void GetContactsReturnsContactsFromDatabase()
         {
             //Arrange
             var mockContext = new Mock<IResultImplementationContext>();
@@ -38,7 +38,7 @@ namespace IResultImplementation.Tests
             int expectedItemCount = 3;
 
             //Act
-            var result = (Ok<List<Contact>>)await ContactsHandler.GetContacts(mockContext.Object);
+            var result = (Ok<List<Contact>>)ContactsHandler.GetContacts(mockContext.Object);
 
             //Assert
             Assert.AreEqual(expectedStatusCode, result.StatusCode);
@@ -47,7 +47,42 @@ namespace IResultImplementation.Tests
         }
 
         [TestMethod]
-        public async Task CreateTodoSavesContactToDatabase()
+        public void GetContactReturnsAContactFromDatabase()
+        {
+            //Arrange
+            var mockContext = new Mock<IResultImplementationContext>();
+            mockContext.Setup(c => c.Contact).Returns(MockSet!.Object);
+            int expectedStatusCode = 200;
+            int expectedUserId = 2;
+
+            //Act
+            var result = (Ok<Contact>)ContactsHandler.GetContact(mockContext.Object, expectedUserId);
+
+            //Assert
+            Assert.AreEqual(expectedStatusCode, result.StatusCode);
+            Assert.AreEqual(expectedUserId, result.Value?.Id);
+
+        }
+
+        [TestMethod]
+        public void GetContactReturnsNotFound()
+        {
+            //Arrange
+            var mockContext = new Mock<IResultImplementationContext>();
+            mockContext.Setup(c => c.Contact).Returns(MockSet!.Object);
+            int expectedStatusCode = 404;
+            int expectedUserId = 20;
+
+            //Act
+            var result = (NotFound)ContactsHandler.GetContact(mockContext.Object, expectedUserId);
+
+            //Assert
+            Assert.AreEqual(expectedStatusCode, result.StatusCode);
+
+        }
+
+        [TestMethod]
+        public void CreateTodoSavesContactToDatabase()
         {
             //Arrange
             var mockDbContextOptions = new Mock<DbContextOptions<IResultImplementationContext>>();
