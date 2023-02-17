@@ -18,8 +18,8 @@ namespace IResultImplementation.Tests
             Data = new List<Contact>()
             {
                 new Contact() { Id = 1, Name = "John", Email = "john@tmail.com", PhoneNumber = "1234567890" },
-                new Contact(){ Id = 2, Name = "Jane", Email = "Jane@kam.com", PhoneNumber = "29384736273" },
-                new Contact(){Id = 3, Name = "Kahn", Email = "ema@email.com", PhoneNumber = "23239029202"}
+                new Contact() { Id = 2, Name = "Jane", Email = "Jane@kam.com", PhoneNumber = "29384736273" },
+                new Contact() {Id = 3, Name = "Kahn", Email = "ema@email.com", PhoneNumber = "23239029202"}
             }.AsQueryable();
 
             MockSet = new Mock<DbSet<Contact>>();
