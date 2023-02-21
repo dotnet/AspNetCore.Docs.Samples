@@ -3,7 +3,7 @@ using TimedBackgroundTasks;
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
-        services.AddHostedService<Worker>();
+        services.AddHostedService<TimedHostedService>();
     })
     .Build();
 
