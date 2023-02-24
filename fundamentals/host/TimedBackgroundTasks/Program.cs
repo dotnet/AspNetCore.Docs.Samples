@@ -1,10 +1,7 @@
 using TimedBackgroundTasks;
 
-IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services =>
-    {
-        services.AddHostedService<TimedHostedService>();
-    })
-    .Build();
+HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+builder.Services.AddHostedService<TimedHostedService>();
 
+IHost host = builder.Build();
 host.Run();
