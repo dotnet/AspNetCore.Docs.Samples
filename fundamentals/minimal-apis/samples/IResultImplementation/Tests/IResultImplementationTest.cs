@@ -89,12 +89,7 @@ namespace IResultImplementation.Tests
             var mockDbContextOptions = new Mock<DbContextOptions<IResultImplementationContext>>();
             var mockContext = new Mock<IResultImplementationContext>();
             mockContext.Setup(c => c.Contact).Returns(MockSet!.Object);
-            if(Data == null)
-            {
-                Assert.Fail("Data null");
-                return;
-            }
-            mockContext.Setup(c => c.Contact.Add(It.IsAny<Contact>())).Callback<Contact>(contact => Data = Data.Append(contact));
+            mockContext.Setup(c => c.Contact.Add(It.IsAny<Contact>())).Callback<Contact>(contact => Data = Data!.Append(contact));
             var newContact = new Contact()
             {
                 Id = 4,
@@ -111,7 +106,7 @@ namespace IResultImplementation.Tests
             //Assert
             Assert.AreEqual(newContact, result.Value);
             Assert.AreEqual(expectedStatusCode, result.StatusCode);
-            Assert.AreEqual(expectedItemCount, Data.Count());
+            Assert.AreEqual(expectedItemCount, Data!.Count());
         }
     }
 }
