@@ -49,6 +49,7 @@ public class ContactsController : Controller
     // POST: Contacts/Create
     // To protect from overposting attacks, enable the specific properties you want to bind to.
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    // <snippet_4>
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Name,Email,PhoneNumber")] Contact contact)
@@ -70,6 +71,7 @@ public class ContactsController : Controller
         }
         return View(contact);
     }
+    // </snippet_4>
 
     // GET: Contacts/Edit/5
     public async Task<IActionResult> Edit(int? id)
@@ -100,7 +102,7 @@ public class ContactsController : Controller
             return NotFound();
         }
 
-        // Attach Validation Error Message to the Model on validatio failure.
+        // Attach Validation Error Message to the Model on validation failure.
 
         if (_context.Contact.Any(i => i.PhoneNumber == contact.PhoneNumber))
         {
