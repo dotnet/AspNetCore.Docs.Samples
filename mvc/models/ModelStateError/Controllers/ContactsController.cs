@@ -52,7 +52,7 @@ public class ContactsController : Controller
     // <snippet_4>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("Id,Name,Email,PhoneNumber")] Contact contact)
+    public async Task<IActionResult> Create([Bind("Id,Name,ShortName,Email,PhoneNumber")] Contact contact)
     {
         // Attach Validation Error Message to the Model on validation failure.
 
@@ -100,7 +100,7 @@ public class ContactsController : Controller
     // <snippet_1>
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Email,PhoneNumber")] Contact contact)
+    public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ShortName,Email,PhoneNumber")] Contact contact)
     {
         if (id != contact.Id)
         {
