@@ -56,7 +56,7 @@ public class ContactsController : Controller
         // Attach Validation Error Message to the Model if seen
         if (_context.Contact.Any(i => i.PhoneNumber == contact.PhoneNumber))
         {
-            ModelState.AddModelError(nameof(contact.PhoneNumber), "The Name is already in use.");
+            ModelState.AddModelError(nameof(contact.PhoneNumber), "The Phone number is already in use.");
         }
         if (_context.Contact.Any(i => i.Email == contact.Email))
         {
@@ -104,7 +104,7 @@ public class ContactsController : Controller
 
         if (_context.Contact.Any(i => i.PhoneNumber == contact.PhoneNumber))
         {
-            ModelState.AddModelError(nameof(contact.PhoneNumber), "The Name is already in use.");
+            ModelState.AddModelError(nameof(contact.PhoneNumber), "The Phone number is already in use.");
         }
 
         if (_context.Contact.Any(i => i.Email == contact.Email))
@@ -155,7 +155,7 @@ public class ContactsController : Controller
     }
 
     // <snippet_2>
-        // POST: Contacts/Delete/5
+    // POST: Contacts/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
