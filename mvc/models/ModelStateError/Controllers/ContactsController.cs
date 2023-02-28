@@ -54,6 +54,8 @@ public class ContactsController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Id,Name,Email,PhoneNumber")] Contact contact)
     {
+        // Attach Validation Error Message to the Model on validation failure.
+        
         if (_context.Contact.Any(i => i.PhoneNumber == contact.PhoneNumber))
         {
             ModelState.AddModelError(nameof(contact.PhoneNumber), "The Phone number is already in use.");
