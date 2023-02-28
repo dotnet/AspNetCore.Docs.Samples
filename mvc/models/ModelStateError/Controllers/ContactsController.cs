@@ -72,6 +72,7 @@ public class ContactsController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        
         return View(contact);
     }
     // </snippet_4>
