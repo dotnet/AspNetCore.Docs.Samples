@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ModelStateError.Data;
 using ModelStateError.Models;
 
-namespace ModelStateError.Pages
+namespace ModelStateError
 {
     public class DetailsModel : PageModel
     {
