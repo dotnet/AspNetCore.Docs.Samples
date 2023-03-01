@@ -1,11 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using ModelStateError.Data;
 using ModelStateError.Models;
 
 namespace ModelStateError
@@ -26,12 +20,12 @@ namespace ModelStateError
 
         [BindProperty]
         public Contact Contact { get; set; }
-        
+
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
-           // Attach Validation Error Message to the Model on validation failure.          
+            // Attach Validation Error Message to the Model on validation failure.          
 
             if (_context.Contact.Any(i => i.PhoneNumber == Contact.PhoneNumber))
             {
@@ -39,7 +33,7 @@ namespace ModelStateError
             }
             if (_context.Contact.Any(i => i.Email == Contact.Email))
             {
-                ModelState.AddModelError("Contact.Email", "The Email is already in use."); 
+                ModelState.AddModelError("Contact.Email", "The Email is already in use.");
             }
             if (Contact.Name == Contact.ShortName)
             {

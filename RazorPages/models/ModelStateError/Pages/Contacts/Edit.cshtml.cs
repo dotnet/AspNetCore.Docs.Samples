@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ModelStateError.Data;
 using ModelStateError.Models;
 
 namespace ModelStateError
@@ -30,7 +24,7 @@ namespace ModelStateError
                 return NotFound();
             }
 
-            var contact =  await _context.Contact.FirstOrDefaultAsync(m => m.Id == id);
+            var contact = await _context.Contact.FirstOrDefaultAsync(m => m.Id == id);
             if (contact == null)
             {
                 return NotFound();
@@ -85,7 +79,7 @@ namespace ModelStateError
 
         private bool ContactExists(int id)
         {
-          return (_context.Contact?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Contact?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
