@@ -25,25 +25,11 @@ namespace ModelStateError
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            // Attach Validation Error Message to the Model on validation failure.
-            
             if (id == null || _context.Contact == null)
             {
                 return NotFound();
             }
 
-            if (_context.Contact.Any(i => i.PhoneNumber == Contact.PhoneNumber))
-            {
-                ModelState.AddModelError(nameof(Contact.PhoneNumber), "The Phone number is already in use.");
-            }
-            if (_context.Contact.Any(i => i.Email == Contact.Email))
-            {
-                ModelState.AddModelError(nameof(Contact.Email), "The Email is already in use.");
-            }
-            if (Contact.Name == Contact.ShortName)
-            {
-                ModelState.AddModelError(nameof(Contact.ShortName), "Short name can't be the same as Name.");
-            }
             var contact =  await _context.Contact.FirstOrDefaultAsync(m => m.Id == id);
             if (contact == null)
             {
@@ -57,6 +43,20 @@ namespace ModelStateError
         // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
+            // Attach Validation Error Message to the Model on validation failure.
+            if (_context.Contact.Any(i => i.PhoneNumber == Contact.PhoneNumber))
+            {
+                ModelState.AddModelError("Contact.PhoneNumber", "The Phone number is already in use.");
+            }
+            if (_context.Contact.Any(i => i.Email == Contact.Email))
+            {
+                ModelState.AddModelError("Contact.Email", "The Email is already in use.");
+            }
+            if (Contact.Name == Contact.ShortName)
+            {
+                ModelState.AddModelError("Contact.ShortName", "Short name can't be the same as Name.");
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();

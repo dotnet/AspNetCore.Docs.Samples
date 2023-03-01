@@ -43,7 +43,7 @@ namespace ModelStateError
             }
             if (Contact.Name == Contact.ShortName)
             {
-                ModelState.AddModelError(nameof(Contact.ShortName), "Short name can't be the same as Name.");
+                ModelState.AddModelError("Contact.ShortName", "Short name can't be the same as Name.");
             }
             if (!ModelState.IsValid || _context.Contact == null || Contact == null)
             {

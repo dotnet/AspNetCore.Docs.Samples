@@ -14,14 +14,14 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="@Model.Contact.Name" class="control-label"></label>
+                <label asp-for="Contact.Name" class="control-label"></label>
                 <input asp-for="Contact.Name" class="form-control" />
                 <span asp-validation-for="Contact.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="@Model.Contact.ShortName" class="control-label"></label>
+                <label asp-for="Contact.ShortName" class="control-label"></label>
                 <input asp-for="Contact.ShortName" class="form-control" />
-                <span asp-validation-for="@Model.Contact.ShortName" class="text-danger"></span>
+                <span asp-validation-for="Contact.ShortName" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Contact.Email" class="control-label"></label>
