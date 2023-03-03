@@ -23,6 +23,7 @@ namespace ModelStateError
 
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
+        // <snippet_1>
         public async Task<IActionResult> OnPostAsync()
         {
             // Attach Validation Error Message to the Model on validation failure.          
@@ -49,5 +50,6 @@ namespace ModelStateError
 
             return RedirectToPage("./Index");
         }
+        // </snippet_1>
     }
 }
