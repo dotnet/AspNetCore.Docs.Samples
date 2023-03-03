@@ -28,18 +28,24 @@ namespace ModelStateError
         {
             // Attach Validation Error Message to the Model on validation failure.          
 
+            // <snippet_5>
+            if (Contact.Name == Contact.ShortName)
+            {
+                ModelState.AddModelError("Contact.ShortName", 
+                                         "Short name can't be the same as Name.");
+            }
+            // </snippet_5>
+
             if (_context.Contact.Any(i => i.PhoneNumber == Contact.PhoneNumber))
             {
-                ModelState.AddModelError("Contact.PhoneNumber", "The Phone number is already in use.");
+                ModelState.AddModelError("Contact.PhoneNumber",
+                                          "The Phone number is already in use.");
             }
             if (_context.Contact.Any(i => i.Email == Contact.Email))
             {
                 ModelState.AddModelError("Contact.Email", "The Email is already in use.");
             }
-            if (Contact.Name == Contact.ShortName)
-            {
-                ModelState.AddModelError("Contact.ShortName", "Short name can't be the same as Name.");
-            }
+
             if (!ModelState.IsValid || _context.Contact == null || Contact == null)
             {
                 // if model is invalid, return the page with the model state errors.

@@ -55,19 +55,24 @@ public class ContactsController : Controller
     public async Task<IActionResult> Create([Bind("Id,Name,ShortName,Email,PhoneNumber")] Contact contact)
     {
         // Attach Validation Error Message to the Model on validation failure.
+        // <snippet_5>
+        if (contact.Name == contact.ShortName)
+        {
+            ModelState.AddModelError(nameof(contact.ShortName),
+                                     "Short name can't be the same as Name.");
+        }
+        // </snippet_5>
 
         if (_context.Contact.Any(i => i.PhoneNumber == contact.PhoneNumber))
         {
-            ModelState.AddModelError(nameof(contact.PhoneNumber), "The Phone number is already in use.");
+            ModelState.AddModelError(nameof(contact.PhoneNumber),
+                                      "The Phone number is already in use.");
         }
         if (_context.Contact.Any(i => i.Email == contact.Email))
         {
             ModelState.AddModelError(nameof(contact.Email), "The Email is already in use.");
         }
-        if (contact.Name == contact.ShortName)
-        {
-            ModelState.AddModelError(nameof(contact.ShortName), "Short name can't be the same as Name.");
-        }
+
         if (ModelState.IsValid)
         {
             _context.Add(contact);
