@@ -3,11 +3,6 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SignalRHubsSample.Hubs;
 // <snippet_HubClientResultsStronglyTyped>
-public interface IClient
-{
-    Task<string> GetMessage();
-}
-
 public class ChatHubClientResultsStronglyTyped : Hub
 {
     public interface IClient
