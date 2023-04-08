@@ -18,10 +18,14 @@ public class TodoMoqTests
             .ReturnsAsync((Todo?)null);
 
         // Act
-        var notFoundResult = (NotFound)await TodoEndpointsV2.GetTodo(1, mock.Object);
+        var result = await TodoEndpointsV2.GetTodo(1, mock.Object);
 
         //Assert
-        Assert.Equal(404, notFoundResult.StatusCode);
+        Assert.IsType<Results<Ok<Todo>, NotFound>>(result);
+
+        var notFoundResult = (NotFound) result.Result;
+
+        Assert.NotNull(notFoundResult);
     }
 
     [Fact]
@@ -47,14 +51,16 @@ public class TodoMoqTests
             });
 
         // Act
-        var okResult = (Ok<List<Todo>>)await TodoEndpointsV2.GetAllTodos(mock.Object);
+        var result = await TodoEndpointsV2.GetAllTodos(mock.Object);
 
         //Assert
-        Assert.Equal(200, okResult.StatusCode);
-        var foundTodos = Assert.IsAssignableFrom<List<Todo>>(okResult.Value);
+        Assert.IsType<Ok<List<Todo>>>(result);
 
-        Assert.NotEmpty(foundTodos);
-        Assert.Collection(foundTodos, todo1 =>
+        var okResult = (Ok<List<Todo>>) result;
+
+        Assert.NotNull(okResult.Value);
+        Assert.NotEmpty(okResult.Value);
+        Assert.Collection(okResult.Value, todo1 =>
         {
             Assert.Equal(1, todo1.Id);
             Assert.Equal("Test title 1", todo1.Title);
@@ -90,14 +96,16 @@ public class TodoMoqTests
             });
 
         // Act
-        var okResult = (Ok<List<Todo>>)await TodoEndpointsV2.GetAllIncompletedTodos(mock.Object);
+        var result = await TodoEndpointsV2.GetAllIncompletedTodos(mock.Object);
 
         //Assert
-        Assert.Equal(200, okResult.StatusCode);
-        var foundTodos = Assert.IsAssignableFrom<List<Todo>>(okResult.Value);
+        Assert.IsType<Ok<List<Todo>>>(result);
 
-        Assert.NotEmpty(foundTodos);
-        Assert.Collection(foundTodos, todo1 =>
+        var okResult = (Ok<List<Todo>>) result;
+
+        Assert.NotNull(okResult.Value);
+        Assert.NotEmpty(okResult.Value);
+        Assert.Collection(okResult.Value, todo1 =>
         {
             Assert.Equal(1, todo1.Id);
             Assert.Equal("Test title 1", todo1.Title);
@@ -125,12 +133,15 @@ public class TodoMoqTests
             });
 
         // Act
-        var okResult = (Ok<Todo>)await TodoEndpointsV2.GetTodo(1, mock.Object);
+        var result = await TodoEndpointsV2.GetTodo(1, mock.Object);
 
         //Assert
-        Assert.Equal(200, okResult.StatusCode);
-        var foundTodo = Assert.IsAssignableFrom<Todo>(okResult.Value);
-        Assert.Equal(1, foundTodo.Id);
+        Assert.IsType<Results<Ok<Todo>, NotFound>>(result);
+
+        var okResult = (Ok<Todo>) result.Result;
+
+        Assert.NotNull(okResult.Value);
+        Assert.Equal(1, okResult.Value.Id);
     }
 
     [Fact]
@@ -153,12 +164,15 @@ public class TodoMoqTests
             .Returns(Task.CompletedTask);
 
         //Act
-        var createdResult = (Created<Todo>)await TodoEndpointsV2.CreateTodo(newTodo, mock.Object);
+        var result = await TodoEndpointsV2.CreateTodo(newTodo, mock.Object);
 
         //Assert
-        Assert.Equal(201, createdResult.StatusCode);
+        Assert.IsType<Created<Todo>>(result);
+
+        var createdResult = (Created<Todo>) result;
+
+        Assert.NotNull(createdResult);
         Assert.NotNull(createdResult.Location);
-        Assert.IsAssignableFrom<Todo>(createdResult.Value);
 
         Assert.NotEmpty(todos);
         Assert.Collection(todos, todo =>
@@ -197,12 +211,15 @@ public class TodoMoqTests
             .Returns(Task.CompletedTask);
 
         //Act
-        var createdResult = (Created<Todo>)await TodoEndpointsV2.UpdateTodo(updatedTodo, mock.Object);
+        var result = await TodoEndpointsV2.UpdateTodo(updatedTodo, mock.Object);
 
         //Assert
-        Assert.Equal(201, createdResult.StatusCode);
+        Assert.IsType<Results<Created<Todo>, NotFound>>(result);
+
+        var createdResult = (Created<Todo>) result.Result;
+
+        Assert.NotNull(createdResult);
         Assert.NotNull(createdResult.Location);
-        Assert.IsAssignableFrom<Todo>(createdResult.Value);
 
         Assert.Equal("Updated test title", existingTodo.Title);
         Assert.True(existingTodo.IsDone);
@@ -231,10 +248,14 @@ public class TodoMoqTests
             .Returns(Task.CompletedTask);
 
         //Act
-        var noContentResult = (NoContent)await TodoEndpointsV2.DeleteTodo(existingTodo.Id, mock.Object);
+        var result = await TodoEndpointsV2.DeleteTodo(existingTodo.Id, mock.Object);
 
         //Assert
-        Assert.Equal(204, noContentResult.StatusCode);
+        Assert.IsType<Results<NoContent, NotFound>>(result);
+        
+        var noContentResult = (NoContent) result.Result;
+
+        Assert.NotNull(noContentResult);
         Assert.Empty(todos);
     }
 }

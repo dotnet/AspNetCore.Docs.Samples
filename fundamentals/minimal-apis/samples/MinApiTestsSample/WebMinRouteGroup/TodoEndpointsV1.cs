@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using WebMinRouteGroup.Data;
 
@@ -38,7 +39,7 @@ public static class TodoEndpointsV1
     }
 
     // get todo by id
-    public static async Task<IResult> GetTodo(int id, TodoGroupDbContext database)
+    public static async Task<Results<Ok<Todo>, NotFound>> GetTodo(int id, TodoGroupDbContext database)
     {
         var todo = await database.Todos.FindAsync(id);
 
@@ -67,7 +68,7 @@ public static class TodoEndpointsV1
     }
 
     // update todo
-    public static async Task<IResult> UpdateTodo(Todo todo, TodoGroupDbContext database)
+    public static async Task<Results<Created<Todo>, NotFound>> UpdateTodo(Todo todo, TodoGroupDbContext database)
     {
         var existingTodo = await database.Todos.FindAsync(todo.Id);
 
@@ -86,7 +87,7 @@ public static class TodoEndpointsV1
     }
 
     // delete todo
-    public static async Task<IResult> DeleteTodo(int id, TodoGroupDbContext database)
+    public static async Task<Results<NoContent, NotFound>> DeleteTodo(int id, TodoGroupDbContext database)
     {
         var todo = await database.Todos.FindAsync(id);
 

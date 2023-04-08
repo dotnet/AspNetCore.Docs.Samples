@@ -15,10 +15,14 @@ public class TodoInMemoryTests
         await using var context = new MockDb().CreateDbContext();
 
         // Act
-        var notFoundResult = (NotFound)await TodoEndpointsV1.GetTodo(1, context);
+        var result = await TodoEndpointsV1.GetTodo(1, context);
 
         //Assert
-        Assert.Equal(404, notFoundResult.StatusCode);
+        Assert.IsType<Results<Ok<Todo>, NotFound>>(result);
+
+        var notFoundResult = (NotFound) result.Result;
+
+        Assert.NotNull(notFoundResult);
     }
     // </snippet_>
 
@@ -47,22 +51,24 @@ public class TodoInMemoryTests
         await context.SaveChangesAsync();
 
         // Act
-        var okResult = (Ok<List<Todo>>)await TodoEndpointsV1.GetAllTodos(context);
+        var result = await TodoEndpointsV1.GetAllTodos(context);
 
         //Assert
-        Assert.Equal(200, okResult.StatusCode);
-        var foundTodos = Assert.IsAssignableFrom<List<Todo>>(okResult.Value);
+        Assert.IsType<Ok<List<Todo>>>(result);
 
-        Assert.NotEmpty(foundTodos);
-        Assert.Collection(foundTodos, todo1 =>
+        var okResult = (Ok<List<Todo>>)result;
+
+        Assert.NotNull(okResult.Value);
+        Assert.NotEmpty(okResult.Value);
+        Assert.Collection(okResult.Value, todo1 =>
         {
+            Assert.Equal(1, todo1.Id);
             Assert.Equal("Test title 1", todo1.Title);
-            Assert.Equal("Test description 1", todo1.Description);
             Assert.False(todo1.IsDone);
         }, todo2 =>
         {
+            Assert.Equal(2, todo2.Id);
             Assert.Equal("Test title 2", todo2.Title);
-            Assert.Equal("Test description 2", todo2.Description);
             Assert.True(todo2.IsDone);
         });
     }
@@ -85,12 +91,15 @@ public class TodoInMemoryTests
         await context.SaveChangesAsync();
 
         // Act
-        var okResult = (Ok<Todo>)await TodoEndpointsV1.GetTodo(1, context);
+        var result = await TodoEndpointsV1.GetTodo(1, context);
 
         //Assert
-        Assert.Equal(200, okResult.StatusCode);
-        var foundTodo = Assert.IsAssignableFrom<Todo>(okResult.Value);
-        Assert.Equal(1, foundTodo.Id);
+        Assert.IsType<Results<Ok<Todo>, NotFound>>(result);
+
+        var okResult = (Ok<Todo>)result.Result;
+
+        Assert.NotNull(okResult.Value);
+        Assert.Equal(1, okResult.Value.Id);
     }
     // </snippet_1>
 
@@ -109,12 +118,15 @@ public class TodoInMemoryTests
         };
 
         //Act
-        var createdResult = (Created<Todo>)await TodoEndpointsV1.CreateTodo(newTodo, context);
+        var result = await TodoEndpointsV1.CreateTodo(newTodo, context);
 
         //Assert
-        Assert.Equal(201, createdResult.StatusCode);
+        Assert.IsType<Created<Todo>>(result);
+
+        var createdResult = (Created<Todo>) result;
+
+        Assert.NotNull(createdResult);
         Assert.NotNull(createdResult.Location);
-        Assert.IsAssignableFrom<Todo>(createdResult.Value);
 
         Assert.NotEmpty(context.Todos);
         Assert.Collection(context.Todos, todo =>
@@ -149,12 +161,15 @@ public class TodoInMemoryTests
         };
 
         //Act
-        var createdResult = (Created<Todo>)await TodoEndpointsV1.UpdateTodo(updatedTodo, context);
+        var result = await TodoEndpointsV1.UpdateTodo(updatedTodo, context);
 
         //Assert
-        Assert.Equal(201, createdResult.StatusCode);
+        Assert.IsType<Results<Created<Todo>, NotFound>>(result);
+
+        var createdResult = (Created<Todo>)result.Result;
+
+        Assert.NotNull(createdResult);
         Assert.NotNull(createdResult.Location);
-        Assert.IsAssignableFrom<Todo>(createdResult.Value);
 
         var todoInDb = await context.Todos.FindAsync(1);
 
@@ -181,10 +196,14 @@ public class TodoInMemoryTests
         await context.SaveChangesAsync();
 
         //Act
-        var noContentResult = (NoContent)await TodoEndpointsV1.DeleteTodo(existingTodo.Id, context);
+        var result = await TodoEndpointsV1.DeleteTodo(existingTodo.Id, context);
 
         //Assert
-        Assert.Equal(204, noContentResult.StatusCode);
+        Assert.IsType<Results<NoContent, NotFound>>(result);
+
+        var noContentResult = (NoContent)result.Result;
+
+        Assert.NotNull(noContentResult);
         Assert.Empty(context.Todos);
     }
 }
