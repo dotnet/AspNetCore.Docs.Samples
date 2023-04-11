@@ -26,6 +26,7 @@ public class TodoInMemoryTests
     }
     // </snippet_>
 
+    // <snippet_11>
     [Fact]
     public async Task GetAllReturnsTodosFromDatabase()
     {
@@ -72,6 +73,7 @@ public class TodoInMemoryTests
             Assert.True(todo2.IsDone);
         });
     }
+    // </snippet_11>
 
     // <snippet_1>
     [Fact]
