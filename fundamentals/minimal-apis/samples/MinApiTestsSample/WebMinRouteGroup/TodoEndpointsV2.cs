@@ -34,13 +34,13 @@ public static class TodoEndpointsV2
     }
 
     // get all todos
-    public static async Task<IResult> GetAllTodos(ITodoService todoService)
+    public static async Task<Ok<List<Todo>>> GetAllTodos(ITodoService todoService)
     {
         var todos = await todoService.GetAll();
         return TypedResults.Ok(todos);
     }
 
-    public static async Task<IResult> GetAllIncompletedTodos(ITodoService todoService)
+    public static async Task<Ok<List<Todo>>> GetAllIncompletedTodos(ITodoService todoService)
     {
         var todos = await todoService.GetIncompleteTodos();
         return TypedResults.Ok(todos);
@@ -60,7 +60,7 @@ public static class TodoEndpointsV2
     }
 
     // create todo
-    public static async Task<IResult> CreateTodo(TodoDto todo, ITodoService todoService)
+    public static async Task<Created<Todo>> CreateTodo(TodoDto todo, ITodoService todoService)
     {
         var newTodo = new Todo
         {

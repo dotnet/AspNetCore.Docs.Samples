@@ -33,9 +33,9 @@ public static class TodoEndpointsV1
 
     // get all todos
     // <snippet_1>
-    public static async Task<IResult> GetAllTodos(TodoGroupDbContext database)
+    public static async Task<Ok<Todo[]>> GetAllTodos(TodoGroupDbContext database)
     {
-        var todos = await database.Todos.ToListAsync();
+        var todos = await database.Todos.ToArrayAsync();
         return TypedResults.Ok(todos);
     }
     // </snippet_1>
@@ -54,7 +54,7 @@ public static class TodoEndpointsV1
     }
 
     // create todo
-    public static async Task<IResult> CreateTodo(TodoDto todo, TodoGroupDbContext database)
+    public static async Task<Created<Todo>> CreateTodo(TodoDto todo, TodoGroupDbContext database)
     {
         var newTodo = new Todo
         {
