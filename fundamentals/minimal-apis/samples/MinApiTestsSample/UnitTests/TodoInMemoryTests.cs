@@ -55,13 +55,11 @@ public class TodoInMemoryTests
         var result = await TodoEndpointsV1.GetAllTodos(context);
 
         //Assert
-        Assert.IsType<Ok<List<Todo>>>(result);
-
-        var okResult = (Ok<List<Todo>>)result;
-
-        Assert.NotNull(okResult.Value);
-        Assert.NotEmpty(okResult.Value);
-        Assert.Collection(okResult.Value, todo1 =>
+        Assert.IsType<Ok<Todo[]>>(result);
+        
+        Assert.NotNull(result.Value);
+        Assert.NotEmpty(result.Value);
+        Assert.Collection(result.Value, todo1 =>
         {
             Assert.Equal(1, todo1.Id);
             Assert.Equal("Test title 1", todo1.Title);
@@ -125,10 +123,8 @@ public class TodoInMemoryTests
         //Assert
         Assert.IsType<Created<Todo>>(result);
 
-        var createdResult = (Created<Todo>) result;
-
-        Assert.NotNull(createdResult);
-        Assert.NotNull(createdResult.Location);
+        Assert.NotNull(result);
+        Assert.NotNull(result.Location);
 
         Assert.NotEmpty(context.Todos);
         Assert.Collection(context.Todos, todo =>
