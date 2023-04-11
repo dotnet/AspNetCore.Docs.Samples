@@ -32,11 +32,13 @@ public static class TodoEndpointsV1
     }
 
     // get all todos
+    // <snippet_1>
     public static async Task<IResult> GetAllTodos(TodoGroupDbContext database)
     {
         var todos = await database.Todos.ToListAsync();
         return TypedResults.Ok(todos);
     }
+    // </snippet_1>
 
     // get todo by id
     public static async Task<Results<Ok<Todo>, NotFound>> GetTodo(int id, TodoGroupDbContext database)
