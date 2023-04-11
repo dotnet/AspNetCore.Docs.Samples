@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using WebMinRouteGroup.Data;
 using WebMinRouteGroup.Services;
 
@@ -46,7 +47,7 @@ public static class TodoEndpointsV2
     }
 
     // get todo by id
-    public static async Task<IResult> GetTodo(int id, ITodoService todoService)
+    public static async Task<Results<Ok<Todo>, NotFound>> GetTodo(int id, ITodoService todoService)
     {
         var todo = await todoService.Find(id);
 
@@ -74,7 +75,7 @@ public static class TodoEndpointsV2
     }
 
     // update todo
-    public static async Task<IResult> UpdateTodo(Todo todo, ITodoService todoService)
+    public static async Task<Results<Created<Todo>, NotFound>> UpdateTodo(Todo todo, ITodoService todoService)
     {
         var existingTodo = await todoService.Find(todo.Id);
 
@@ -93,7 +94,7 @@ public static class TodoEndpointsV2
     }
 
     // delete todo
-    public static async Task<IResult> DeleteTodo(int id, ITodoService todoService)
+    public static async Task<Results<NoContent, NotFound>> DeleteTodo(int id, ITodoService todoService)
     {
         var todo = await todoService.Find(id);
 
