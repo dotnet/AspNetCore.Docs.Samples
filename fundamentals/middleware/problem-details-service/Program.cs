@@ -315,4 +315,88 @@ else
 app.MapControllers();
 app.Run();
 // </snippet_lambda>
+
+
+#elif SampleProblemDetailsWriter
+// <snippet_sampleproblemdetailswriter>
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+// addd SampleProblemDetailsWriter to dependency injection
+builder.Services.AddTransient<IProblemDetailsWriter, SampleProblemDetailsWriter>();
+
+var app = builder.Build();
+
+
+
+// Middleware to handle writing problem details to the response.
+app.Use(async (context, next) =>
+{
+    await next(context);
+    var mathErrorFeature = context.Features.Get<MathErrorFeature>();
+    if (mathErrorFeature is not null)
+    {
+        if (context.RequestServices.GetService<IProblemDetailsWriter>() is
+            { } problemDetailsService)
+        {
+
+            if (problemDetailsService.CanWrite(new ProblemDetailsContext() { HttpContext = context }))
+            {
+                (string Detail, string Type) details = mathErrorFeature.MathError switch
+                {
+                    MathErrorType.DivisionByZeroError => ("Divison by zero is not defined.",
+                        "https://en.wikipedia.org/wiki/Division_by_zero"),
+                    _ => ("Negative or complex numbers are not valid input.",
+                        "https://en.wikipedia.org/wiki/Square_root")
+                };
+
+                await problemDetailsService.WriteAsync(new ProblemDetailsContext
+                {
+                    HttpContext = context,
+                    ProblemDetails =
+                    {
+                        Title = "Bad Input",
+                        Detail = details.Detail,
+                        Type = details.Type
+                    }
+                });
+            }
+        }
+    }
+});
+
+// /divide?numerator=2&denominator=4
+app.MapGet("/divide", (HttpContext context, double numerator, double denominator) =>
+{
+    if (denominator == 0)
+    {
+        var errorType = new MathErrorFeature
+        {
+            MathError = MathErrorType.DivisionByZeroError
+        };
+        context.Features.Set(errorType);
+        return Results.BadRequest();
+    }
+
+    return Results.Ok(numerator / denominator);
+});
+
+// /squareroot?radicand=16
+app.MapGet("/squareroot", (HttpContext context, double radicand) =>
+{
+    if (radicand < 0)
+    {
+        var errorType = new MathErrorFeature
+        {
+            MathError = MathErrorType.NegativeRadicandError
+        };
+        context.Features.Set(errorType);
+        return Results.BadRequest();
+    }
+
+    return Results.Ok(Math.Sqrt(radicand));
+});
+
+app.Run();
+// </snippet_sampleproblemdetailswriter>
 #endif
