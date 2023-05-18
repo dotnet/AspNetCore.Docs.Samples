@@ -321,13 +321,9 @@ app.Run();
 // <snippet_sampleproblemdetailswriter>
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// addd SampleProblemDetailsWriter to dependency injection
 builder.Services.AddTransient<IProblemDetailsWriter, SampleProblemDetailsWriter>();
 
 var app = builder.Build();
-
-
 
 // Middleware to handle writing problem details to the response.
 app.Use(async (context, next) =>
