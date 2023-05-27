@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 
@@ -10,15 +10,20 @@ class MinimumAgePolicyProvider : IAuthorizationPolicyProvider
     public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; }
     public MinimumAgePolicyProvider(IOptions<AuthorizationOptions> options)
     {
-    // ASP.NET Core only uses one authorization policy provider, so if the custom implementation
-    // doesn't handle all policies (including default policies, etc.) it should fall back to an
+    // ASP.NET Core only uses one authorization policy provider, so if the custom
+    // implementation
+    // doesn't handle all policies (including default policies, etc.) it should
+    // fall back to an
     // alternate provider.
     //
-    // In this sample, a default authorization policy provider (constructed with options from the 
-    // dependency injection container) is used if this custom provider isn't able to handle a given
+    // In this sample, a default authorization policy provider (constructed with
+    // options from the 
+    // dependency injection container) is used if this custom provider isn't able
+    // to handle a given
     // policy name.
     //
-    // If a custom policy provider is able to handle all expected policy names then, of course, this
+    // If a custom policy provider is able to handle all expected policy names then,
+    // of course, this
     // fallback pattern is unnecessary.
         FallbackPolicyProvider = new DefaultAuthorizationPolicyProvider(options);
     }
@@ -37,7 +42,8 @@ class MinimumAgePolicyProvider : IAuthorizationPolicyProvider
         if (policyName.StartsWith(POLICY_PREFIX, StringComparison.OrdinalIgnoreCase) &&
             int.TryParse(policyName.Substring(POLICY_PREFIX.Length), out var age))
         {
-            var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
+            var policy = new AuthorizationPolicyBuilder(
+                                                 JwtBearerDefaults.AuthenticationScheme);
             policy.AddRequirements(new MinimumAgeRequirement(age));
             return Task.FromResult(policy.Build());
         }
