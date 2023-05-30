@@ -29,7 +29,7 @@ class MinimumAgePolicyProvider : IAuthorizationPolicyProvider
     }
     public Task<AuthorizationPolicy> GetDefaultPolicyAsync() => 
                             FallbackPolicyProvider.GetDefaultPolicyAsync();
-    public Task<AuthorizationPolicy> GetFallbackPolicyAsync() =>
+    public Task<AuthorizationPolicy?> GetFallbackPolicyAsync() =>
                             FallbackPolicyProvider.GetFallbackPolicyAsync();
 
 
@@ -37,7 +37,7 @@ class MinimumAgePolicyProvider : IAuthorizationPolicyProvider
     // to be embedded in the policy names. This is abstracted away from developers
     // by the more strongly-typed attributes derived from AuthorizeAttribute
     // (like [MinimumAgeAuthorize()] in this sample)
-    public Task<AuthorizationPolicy> GetPolicyAsync(string policyName)
+    public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
     {
         if (policyName.StartsWith(POLICY_PREFIX, StringComparison.OrdinalIgnoreCase) &&
             int.TryParse(policyName.Substring(POLICY_PREFIX.Length), out var age))
@@ -48,7 +48,7 @@ class MinimumAgePolicyProvider : IAuthorizationPolicyProvider
             return Task.FromResult(policy.Build());
         }
 
-        return Task.FromResult<AuthorizationPolicy>(null);
+        return Task.FromResult<AuthorizationPolicy?>(null);
     }
 }
 
