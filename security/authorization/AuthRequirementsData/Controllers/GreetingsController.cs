@@ -1,6 +1,5 @@
 using AuthRequirementsData.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
 namespace AuthRequirementsData.Controllers;
 
