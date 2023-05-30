@@ -10,6 +10,6 @@ public class GreetingsController : Controller
 {
     [MinimumAgeAuthorize(16)]
     [HttpGet("hello")]
-    public string Hello(ClaimsPrincipal user) => 
-               $"Hello {(user.Identity?.Name ?? "world")}!";
+    public string Hello() => $"Hello {(HttpContext.User.Identity?.Name ?? "world")}!";
+
 }
