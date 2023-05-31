@@ -43,9 +43,9 @@ class MinimumAgePolicyProvider : IAuthorizationPolicyProvider
             int.TryParse(policyName.Substring(POLICY_PREFIX.Length), out var age))
         {
             var policy = new AuthorizationPolicyBuilder(
-                                                 JwtBearerDefaults.AuthenticationScheme);
+                                                JwtBearerDefaults.AuthenticationScheme);
             policy.AddRequirements(new MinimumAgeRequirement(age));
-            return Task.FromResult(policy.Build());
+            return Task.FromResult<AuthorizationPolicy?>(policy.Build());
         }
 
         return Task.FromResult<AuthorizationPolicy?>(null);
