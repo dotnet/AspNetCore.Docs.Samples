@@ -5,7 +5,8 @@ using TodoApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDbContext<TodoDb>(opt => opt.UseInMemoryDatabase("TodoList"));
+builder.Services.AddDbContext<TodoDb>(opt =>
+    opt.UseInMemoryDatabase("TodoList"));
 var app = builder.Build();
 
 // <snippet_get>
@@ -14,8 +15,7 @@ app.MapGet("/todos", async (TodoDb db) =>
 // </snippet_get>
 
 // <snippet_id>
-app.MapGet("/todos/{id}",
-                             async (int Id, TodoDb Db) =>
+app.MapGet("/todos/{id}", async (int Id, TodoDb Db) =>
     await Db.Todos.FindAsync(Id)
         is Todo todo
             ? Results.Ok(new TodoDto(todo))
@@ -26,12 +26,14 @@ app.MapGet("/todos/{id}",
 
 // </snippet_top>
 
-//Avoid reading the incoming file stream directly into memory all at once.
-//For example, don't copy all of the file's bytes into a System.IO.MemoryStream
-//or read the entire stream into a byte array all at once. These approaches can result in performance and security problems
-//Instead, consider adopting either of the following approaches:
+// Avoid reading the incoming file stream directly into memory all at once.
+// For example, don't copy all of the file's bytes into a System.IO.MemoryStream
+// or read the entire stream into a byte array all at once.
+// Reading the incoming file stream directly into memory can result in 
+// performance and security problems. Rather, consider adopting either of the following approaches:
 
-// * On the server of a server app, copy the stream directly to a file on disk without reading it into memory.
+// * On the server of a server app, copy the stream directly
+//   to a file on disk without reading it into memory.
 // * Upload files from the client directly to an external service.
 
 // <snippet_post_put_delete_as_parameters>
@@ -64,7 +66,8 @@ app.MapPost("/ap/todos", async ([AsParameters] NewTodoRequest request, TodoDb db
 // </snippet_post_put_delete_as_parameters>
 
 // <snippet_post_put_delete>
-app.MapPost("/todos", async ([FromForm] string name, [FromForm] Visibility visibility, IFormFile? attachment, TodoDb db) =>
+app.MapPost("/todos", async ([FromForm] string name,
+    [FromForm] Visibility visibility, IFormFile? attachment, TodoDb db) =>
 {
     var todo = new Todo
     {
@@ -94,5 +97,6 @@ app.UseStaticFiles();
 app.Run();
 
 // <snippet_argumentlist_record>
-public record struct NewTodoRequest([FromForm] string Name, [FromForm] Visibility Visibility, IFormFile? Attachment);
+public record struct NewTodoRequest([FromForm] string Name,
+    [FromForm] Visibility Visibility, IFormFile? Attachment);
 // </snippet_argumentlist_record>
