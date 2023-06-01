@@ -29,8 +29,8 @@ app.MapGet("/todos/{id}", async (int Id, TodoDb Db) =>
 // Avoid reading the incoming file stream directly into memory all at once.
 // For example, don't copy all of the file's bytes into a System.IO.MemoryStream
 // or read the entire stream into a byte array all at once.
-// These approaches can result in performance and security problems.
-// Instead, consider adopting either of the following approaches:
+// Reading the incoming file stream directly into memory can result in 
+// performance and security problems. Rather, consider adopting either of the following approaches:
 
 // * On the server of a server app, copy the stream directly
 //   to a file on disk without reading it into memory.
