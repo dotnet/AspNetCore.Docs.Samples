@@ -4,7 +4,6 @@ using System.Security.Claims;
 
 namespace AuthRequirementsData.Authorization;
 
-
 class MinimumAgeAuthorizationHandler : AuthorizationHandler<MinimumAgeRequirement>
 {
     private readonly ILogger<MinimumAgeAuthorizationHandler> _logger;
