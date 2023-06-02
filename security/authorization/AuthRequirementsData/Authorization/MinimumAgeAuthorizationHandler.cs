@@ -19,28 +19,27 @@ class MinimumAgeAuthorizationHandler : AuthorizationHandler<MinimumAgeAuthorizeA
                                                MinimumAgeAuthorizeAttribute requirement)
     {
         // Log as a warning so that it's very clear in sample output which authorization
-        // policies(and requirements/handlers) are in use
+        // policies(and requirements/handlers) are in use.
         _logger.LogWarning("Evaluating authorization requirement for age >= {age}",
                                                                     requirement.Age);
 
-
-        // Check the user's age
+        // Check the user's age.
         var dateOfBirthClaim = context.User.FindFirst(c => c.Type == 
                                                                  ClaimTypes.DateOfBirth);
         if (dateOfBirthClaim != null)
         {
-            // If the user has a date of birth claim, check their age
+            // If the user has a date of birth claim, check their age.
             var dateOfBirth = Convert.ToDateTime(dateOfBirthClaim.Value,
                                                            CultureInfo.InvariantCulture);
             var age = DateTime.Now.Year - dateOfBirth.Year;
             if (dateOfBirth > DateTime.Now.AddYears(-age))
             {
-                // Adjust age if the user hasn't had a birthday yet this year
+                // Adjust age if the user hasn't had a birthday yet this year.
                 age--;
             }
 
             // If the user meets the age criterion, mark the authorization requirement
-            // succeeded
+            // succeeded.
             if (age >= requirement.Age)
             {
                 _logger.LogInformation(
