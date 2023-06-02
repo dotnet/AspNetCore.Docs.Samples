@@ -45,3 +45,5 @@ class MinimumAgePolicyProvider : IAuthorizationPolicyProvider
         return Task.FromResult<AuthorizationPolicy?>(null);
     }
 }
+
+// dotnet user-jwts create --claim http://schemas.xmlsoap.org/ws/2005/05/identity/claims/dateofbirth=1989-01-01
