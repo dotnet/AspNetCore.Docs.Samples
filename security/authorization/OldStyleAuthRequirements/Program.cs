@@ -8,7 +8,6 @@ builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, MinimumAgePolicyProvider>();
 builder.Services.AddSingleton<IAuthorizationHandler, MinimumAgeAuthorizationHandler>();
-builder.Services.AddControllers();
 
 var app = builder.Build();
 
