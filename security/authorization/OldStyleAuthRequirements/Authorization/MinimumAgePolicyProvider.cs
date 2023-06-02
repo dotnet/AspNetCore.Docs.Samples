@@ -22,7 +22,7 @@ class MinimumAgePolicyProvider : IAuthorizationPolicyProvider
         // fallback pattern is unnecessary.
         FallbackPolicyProvider = new DefaultAuthorizationPolicyProvider(options);
     }
-    public Task<AuthorizationPolicy> GetDefaultPolicyAsync() => 
+    public Task<AuthorizationPolicy> GetDefaultPolicyAsync() =>
                             FallbackPolicyProvider.GetDefaultPolicyAsync();
     public Task<AuthorizationPolicy?> GetFallbackPolicyAsync() =>
                             FallbackPolicyProvider.GetFallbackPolicyAsync();
@@ -37,8 +37,7 @@ class MinimumAgePolicyProvider : IAuthorizationPolicyProvider
         if (policyName.StartsWith(POLICY_PREFIX, StringComparison.OrdinalIgnoreCase) &&
             int.TryParse(policyName.Substring(POLICY_PREFIX.Length), out var age))
         {
-            var policy = new AuthorizationPolicyBuilder(
-                                                JwtBearerDefaults.AuthenticationScheme);
+            var policy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme);
             policy.AddRequirements(new MinimumAgeRequirement(age));
             return Task.FromResult<AuthorizationPolicy?>(policy.Build());
         }
@@ -46,5 +45,3 @@ class MinimumAgePolicyProvider : IAuthorizationPolicyProvider
         return Task.FromResult<AuthorizationPolicy?>(null);
     }
 }
-
-// dotnet user-jwts create --claim http://schemas.xmlsoap.org/ws/2005/05/identity/claims/dateofbirth=1989-01-01
