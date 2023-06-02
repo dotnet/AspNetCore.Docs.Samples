@@ -14,12 +14,12 @@ class MinimumAgeAuthorizationHandler : AuthorizationHandler<MinimumAgeRequiremen
     }
 
     // Check whether a given MinimumAgeRequirement is satisfied or not for a particular
-    // context
+    // context.
     protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
                                                MinimumAgeRequirement requirement)
     {
         // Log as a warning so that it's very clear in sample output which authorization
-        // policies(and requirements/handlers) are in use
+        // policies(and requirements/handlers) are in use.
         _logger.LogWarning("Evaluating authorization requirement for age >= {age}",
                                                                     requirement.Age);
 
@@ -33,12 +33,12 @@ class MinimumAgeAuthorizationHandler : AuthorizationHandler<MinimumAgeRequiremen
             var age = DateTime.Now.Year - dateOfBirth.Year;
             if (dateOfBirth > DateTime.Now.AddYears(-age))
             {
-                // Adjust age if the user hasn't had a birthday yet this year
+                // Adjust age if the user hasn't had a birthday yet this year.
                 age--;
             }
 
             // If the user meets the age criterion, mark the authorization requirement
-            // succeeded
+            // succeeded.
             if (age >= requirement.Age)
             {
                 _logger.LogInformation("Minimum age authorization requirement {age} satisfied",
