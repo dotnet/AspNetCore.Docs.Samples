@@ -14,7 +14,7 @@ class MinimumAgeAuthorizationHandler : AuthorizationHandler<MinimumAgeAuthorizeA
     }
 
     // Check whether a given MinimumAgeRequirement is satisfied or not for a particular
-    // context
+    // context.
     protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
                                                MinimumAgeAuthorizeAttribute requirement)
     {
