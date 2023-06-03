@@ -1,4 +1,4 @@
-// </snippet_all>
+// <snippet_all>
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
