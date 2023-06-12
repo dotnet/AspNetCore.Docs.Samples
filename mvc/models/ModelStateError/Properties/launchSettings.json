@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "ModelStateError": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:61757;http://localhost:61758"
+    }
+  }
+}

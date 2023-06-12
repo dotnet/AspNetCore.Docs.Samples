@@ -1,1 +1,0 @@
-When writing sample for https://github.com/dotnet/AspNetCore.Docs/issues/28424, remove this file
