@@ -45,6 +45,7 @@ jobs:
       name: dev
       url: ${{ steps.deploy.outputs.webapp-url }}
     steps:
+    - uses: actions/checkout@v2
     - uses: ./.github/actions/deploy-to-azure
       with:
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
@@ -57,6 +58,7 @@ jobs:
       name: test
       url: ${{ steps.deploy.outputs.webapp-url }}
     steps:
+    - uses: actions/checkout@v2
     - uses: ./.github/actions/deploy-to-azure
       with:
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
@@ -69,6 +71,7 @@ jobs:
       name: prod
       url: ${{ steps.deploy.outputs.webapp-url }}
     steps:
+    - uses: actions/checkout@v2
     - uses: ./.github/actions/deploy-to-azure
       with:
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
