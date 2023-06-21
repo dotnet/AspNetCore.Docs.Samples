@@ -23,16 +23,16 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         
     - name: Restore dependencies
-      run: dotnet restore ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/contacts.csproj
+      run: dotnet restore ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/Contacts.csproj
 
     - name: Build
-      run: dotnet build ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/contacts.csproj --configuration Release --no-restore
+      run: dotnet build ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/Contacts.csproj --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/contacts.csproj --no-restore --verbosity normal
+      run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/Contacts.csproj --no-restore --verbosity normal
 
     - name: Publish
-      run: dotnet publish ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/contacts.csproj --configuration Release --no-build -o ./build_output
+      run: dotnet publish ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/Contacts.csproj --configuration Release --no-build -o ./build_output
 
     - name: 'Deploy to Azure'
       uses: azure/webapps-deploy@v2
