@@ -7,8 +7,8 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: your-web-app-name # set this to your Azure Web App name
-  AZURE_WEBAPP_PACKAGE_PATH: 'Contacts/Contacts.csproj'
-  DOTNET_VERSION: '7.0.x'
+  AZURE_WEBAPP_PACKAGE_PATH: 'Contacts' # set this to the path to your web app project
+  DOTNET_VERSION: '7.0.x' # set this to the .NET version to use
 
 jobs:
   build-and-deploy:
@@ -23,20 +23,20 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
         
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/contacts.csproj
 
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/contacts.csproj --configuration Release --no-restore
 
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/contacts.csproj --no-restore --verbosity normal
 
     - name: Publish
-      run: dotnet publish --configuration Release --no-build -o ./build_output
+      run: dotnet publish ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/contacts.csproj --configuration Release --no-build -o ./build_output
 
     - name: 'Deploy to Azure'
       uses: azure/webapps-deploy@v2
       with: 
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/build_output
+        package: ./build_output
