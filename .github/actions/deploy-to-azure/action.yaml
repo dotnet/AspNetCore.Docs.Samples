@@ -1,0 +1,24 @@
+# .github/actions/deploy-to-azure/action.yaml
+name: 'Deploy to Azure'
+description: 'Deploys a .NET Core application to Azure'
+inputs:
+  publish-profile: 
+    description: 'Azure publish profile'
+    required: true
+  package-path:
+    description: 'Path to the package to deploy'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/download-artifact@v2
+      with:
+        name: build-output
+        path: ./build_output
+
+    - name: 'Deploy to Azure'
+      id: deploy
+      uses: azure/webapps-deploy@v2
+      with: 
+        publish-profile: ${{ inputs.publish-profile }}
+        package: ${{ inputs.package-path }}
