@@ -7,7 +7,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: your-web-app-name # set this to your Azure Web App name
-  AZURE_WEBAPP_PACKAGE_PATH: 'Contacts'
+  AZURE_WEBAPP_PACKAGE_PATH: 'Contacts/Contacts.csproj'
   DOTNET_VERSION: '7.0.x'
 
 jobs:
