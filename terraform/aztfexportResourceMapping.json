@@ -1,0 +1,72 @@
+{
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev",
+		"resource_type": "azurerm_resource_group",
+		"resource_name": "res-0"
+	},
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.DBforPostgreSQL/flexibleServers/sql-devopsvanillaexample-dev": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.DBforPostgreSQL/flexibleServers/sql-devopsvanillaexample-dev",
+		"resource_type": "azurerm_postgresql_flexible_server",
+		"resource_name": "res-1"
+	},
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/privateDnsZones/privatelink.postgres.database.azure.com": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/privateDnsZones/privatelink.postgres.database.azure.com",
+		"resource_type": "azurerm_private_dns_zone",
+		"resource_name": "res-2"
+	},
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/privateDnsZones/privatelink.postgres.database.azure.com/A/c2b5feaa8e0f": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/privateDnsZones/privatelink.postgres.database.azure.com/A/c2b5feaa8e0f",
+		"resource_type": "azurerm_private_dns_a_record",
+		"resource_name": "res-3"
+	},
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/privateDnsZones/privatelink.postgres.database.azure.com/virtualNetworkLinks/privatelink.postgres.database.azure.com-dblink": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/privateDnsZones/privatelink.postgres.database.azure.com/virtualNetworkLinks/privatelink.postgres.database.azure.com-dblink",
+		"resource_type": "azurerm_private_dns_zone_virtual_network_link",
+		"resource_name": "res-5"
+	},
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/privateDnsZones/privatelink.redis.cache.windows.net": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/privateDnsZones/privatelink.redis.cache.windows.net",
+		"resource_type": "azurerm_private_dns_zone",
+		"resource_name": "res-6"
+	},
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/privateDnsZones/privatelink.redis.cache.windows.net/virtualNetworkLinks/privatelink.redis.cache.windows.net-applink": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/privateDnsZones/privatelink.redis.cache.windows.net/virtualNetworkLinks/privatelink.redis.cache.windows.net-applink",
+		"resource_type": "azurerm_private_dns_zone_virtual_network_link",
+		"resource_name": "res-8"
+	},
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/virtualNetworks/app-devopsvanillaexample-devVnet": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/virtualNetworks/app-devopsvanillaexample-devVnet",
+		"resource_type": "azurerm_virtual_network",
+		"resource_name": "res-9"
+	},
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/virtualNetworks/app-devopsvanillaexample-devVnet/subnets/app-devopsvanillaexample-devAppSubnet": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/virtualNetworks/app-devopsvanillaexample-devVnet/subnets/app-devopsvanillaexample-devAppSubnet",
+		"resource_type": "azurerm_subnet",
+		"resource_name": "res-10"
+	},
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/virtualNetworks/app-devopsvanillaexample-devVnet/subnets/app-devopsvanillaexample-devDbSubnet": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/virtualNetworks/app-devopsvanillaexample-devVnet/subnets/app-devopsvanillaexample-devDbSubnet",
+		"resource_type": "azurerm_subnet",
+		"resource_name": "res-11"
+	},
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/virtualNetworks/app-devopsvanillaexample-devVnet/subnets/app-devopsvanillaexample-devSubnet": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Network/virtualNetworks/app-devopsvanillaexample-devVnet/subnets/app-devopsvanillaexample-devSubnet",
+		"resource_type": "azurerm_subnet",
+		"resource_name": "res-12"
+	},
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Web/serverFarms/ASP-rgdevopsvanillaexampledev-ab67": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Web/serverfarms/ASP-rgdevopsvanillaexampledev-ab67",
+		"resource_type": "azurerm_service_plan",
+		"resource_name": "res-13"
+	},
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Web/sites/app-devopsvanillaexample-dev": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Web/sites/app-devopsvanillaexample-dev",
+		"resource_type": "azurerm_linux_web_app",
+		"resource_name": "res-14"
+	},
+	"/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Web/sites/app-devopsvanillaexample-dev/hostNameBindings/app-devopsvanillaexample-dev.azurewebsites.net": {
+		"resource_id": "/subscriptions/909915d6-75e4-4893-95d4-8378c8ea8cc5/resourceGroups/rg-devopsvanillaexample-dev/providers/Microsoft.Web/sites/app-devopsvanillaexample-dev/hostNameBindings/app-devopsvanillaexample-dev.azurewebsites.net",
+		"resource_type": "azurerm_app_service_custom_hostname_binding",
+		"resource_name": "res-18"
+	}
+}
