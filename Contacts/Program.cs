@@ -1,8 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Contacts.Data;
+using Azure.Security.KeyVault.Secrets;
+using Azure.Identity;
+
+var secretClient = new SecretClient(new Uri("https://kvorldevopsdev.vault.azure.net/"), new DefaultAzureCredential());
+var secret = secretClient.GetSecretAsync("sqlconnectionstring");
+var sqlConnectionString = secret.Result.Value.Value;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ModelStateErrorContext>(options =>
-   options.UseInMemoryDatabase("Contacts"));
+   options.UseSqlServer(sqlConnectionString));
 
 builder.Services.AddControllersWithViews();
 
