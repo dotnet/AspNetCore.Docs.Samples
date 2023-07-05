@@ -3,11 +3,13 @@ using Contacts.Data;
 using Azure.Security.KeyVault.Secrets;
 using Azure.Identity;
 
-var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "dev";
-var secretClient = new SecretClient(new Uri($"https://kvorldevops{env}.vault.azure.net/"),
+const string DEV_ENVIRONMENT = "dev";
+
+var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? DEV_ENVIRONMENT;
+var secretClient = new SecretClient(new Uri($"https://kv-orldevops-{env}.vault.azure.net/"),
     new DefaultAzureCredential());
-var secret = secretClient.GetSecretAsync("sqlconnectionstring");
-var sqlConnectionString = secret.Result.Value.Value;
+var secret = await secretClient.GetSecretAsync("sqlconnectionstring");
+var sqlConnectionString = secret.Value.Value;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ModelStateErrorContext>(options =>
@@ -17,7 +19,11 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-if (!app.Environment.IsDevelopment())
+if (app.Environment.EnvironmentName == DEV_ENVIRONMENT)
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();

@@ -13,3 +13,19 @@ terraform {
     }
   }
 }
+
+provider "azurerm" {
+  features {}
+}
+
+data "azurerm_client_config" "current" {}
+
+locals {
+  suffix     = "orldevops-${terraform.workspace}"
+  mssql_user = "sqladmin"
+}
+
+resource "azurerm_resource_group" "main" {
+  location = "eastus"
+  name     = "rg-${local.suffix}"
+}
