@@ -3,7 +3,9 @@ using Contacts.Data;
 using Azure.Security.KeyVault.Secrets;
 using Azure.Identity;
 
-var secretClient = new SecretClient(new Uri("https://kvorldevopsdev.vault.azure.net/"), new DefaultAzureCredential());
+var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "dev";
+var secretClient = new SecretClient(new Uri($"https://kvorldevops{env}.vault.azure.net/"),
+    new DefaultAzureCredential());
 var secret = secretClient.GetSecretAsync("sqlconnectionstring");
 var sqlConnectionString = secret.Result.Value.Value;
 
