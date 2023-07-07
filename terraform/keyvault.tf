@@ -10,7 +10,7 @@ resource "azurerm_key_vault" "main" {
       application_id          = ""
       tenant_id               = data.azurerm_client_config.current.tenant_id
       object_id               = data.azurerm_client_config.current.object_id
-      secret_permissions      = ["Set", "Get", "Delete"]
+      secret_permissions      = ["Set", "Get", "List", "Delete"]
       certificate_permissions = []
       key_permissions         = []
       storage_permissions     = []

@@ -16,6 +16,10 @@ resource "azurerm_windows_web_app" "main" {
     always_on = true
   }
 
+  app_settings = {
+    "ASPNETCORE_ENVIRONMENT" = terraform.workspace
+  }
+
   identity {
     type = "SystemAssigned"
   }
