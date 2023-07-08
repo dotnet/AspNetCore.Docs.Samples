@@ -460,3 +460,4 @@ $RECYCLE.BIN/
 !.vscode/extensions.json
 terraform/.terraform
 terraform/.terraform.lock.hcl
+migrate.sql

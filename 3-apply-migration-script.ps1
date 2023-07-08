@@ -22,7 +22,7 @@ $publicIp = Invoke-RestMethod http://ifconfig.me/ip
 Write-Output "Public IP: $publicIp"
 
 # Create a unique firewall rule name
-$firewallRuleName = "AllowMyIP_" + (Get-Date -Format FileDateTimeUniversal)
+$firewallRuleName = "ApplyMigrationScript"
 
 # Add firewall rule to allow current public IP
 az sql server firewall-rule create --name $firewallRuleName --resource-group $resourceGroup --server $serverName --start-ip-address $publicIp --end-ip-address $publicIp
