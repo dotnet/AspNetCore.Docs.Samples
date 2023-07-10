@@ -1,9 +1,10 @@
 name: Build and deploy .NET Core app to Azure
 
 on:
+  pull_request:
+    branches: [ main ]
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 env:
   AZURE_WEBAPP_PACKAGE_PATH: 'Contacts' # set this to the path to your web app project
@@ -40,6 +41,7 @@ jobs:
 
   deploy-dev:
     needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: dev
@@ -53,6 +55,7 @@ jobs:
 
   deploy-test:
     needs: deploy-dev
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: test
@@ -66,6 +69,7 @@ jobs:
 
   deploy-prod:
     needs: deploy-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: prod
