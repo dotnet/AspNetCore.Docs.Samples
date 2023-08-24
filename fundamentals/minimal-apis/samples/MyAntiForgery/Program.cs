@@ -7,33 +7,25 @@ builder.Services.AddAntiforgery();
 
 var app = builder.Build();
 
+// Pass token
 app.MapGet("/", (HttpContext context, IAntiforgery antiforgery) =>
 {
     var token = antiforgery.GetAndStoreTokens(context);
-    var html = $"""
-        <html><body>
-            <form action="/todo" method="POST" enctype="multipart/form-data">
-                <input name="{token.FormFieldName}" 
-                              type="hidden" value="{token.RequestToken}" />
-                <input type="text" name="name" />
-                <input type="date" name="dueDate" />
-                <input type="checkbox" name="isCompleted" />
-                <input type="submit" />
-            </form>
-         </body></html>
-    """;
-    return Results.Content(html, "text/html");
+    return Results.Content(MyHtml.GenerateForm("/todo", token), "text/html");
 });
 
-
-app.MapGet("/DisableAntiforgery", () =>
+// Don't pass a token, fails
+app.MapGet("/SkipToken", (HttpContext context, IAntiforgery antiforgery) =>
 {
-    return Results.Content(MyHtml.html("/todo"), "text/html");
+    var token = antiforgery.GetAndStoreTokens(context);
+    return Results.Content(MyHtml.GenerateForm("/todo",token, false ), "text/html");
 });
 
-app.MapGet("/post2", () =>
+// Call DisableAntiforgery, no token needed.
+app.MapGet("/DisableAntiforgery", (HttpContext context, IAntiforgery antiforgery) =>
 {
-    return Results.Content(MyHtml.html("/todo2"), "text/html");
+    var token = antiforgery.GetAndStoreTokens(context);
+    return Results.Content(MyHtml.GenerateForm("/todo2", token, false), "text/html");
 });
 
 app.MapPost("/todo", ([FromForm] Todo todo) => Results.Ok(todo));
@@ -52,14 +44,27 @@ class Todo
 
 public static class MyHtml
 {
-    public static string html(string action) => $"""
+    public static string GenerateForm(string action, 
+        AntiforgeryTokenSet token, bool UseToken=true)
+    {
+        string tokenInput = "";
+        if (UseToken)
+        {
+            tokenInput = $@"<input name=""{token.FormFieldName}""
+                             type=""hidden"" value=""{token.RequestToken}"" />";
+        }
+
+        return $@"
         <html><body>
-            <form action="{action}" method="POST" enctype="multipart/form-data">
-                <input type="text" name="name" />
-                <input type="date" name="dueDate" />
-                <input type="checkbox" name="isCompleted" />
-                <input type="submit" />
+            <form action=""{action}"" method=""POST"" enctype=""multipart/form-data"">
+                {tokenInput}
+                <input type=""text"" name=""name"" />
+                <input type=""date"" name=""dueDate"" />
+                <input type=""checkbox"" name=""isCompleted"" />
+                <input type=""submit"" />
             </form>
         </body></html>
-    """;
+    ";
+    }
+
 }
