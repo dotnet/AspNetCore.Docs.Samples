@@ -292,9 +292,9 @@ else
                 if (exceptionType != null &&
                    exceptionType.Message.Contains("infinity"))
                 {
-                    title = "Arguement exception";
+                    title = "Argument exception";
                     detail = "Invalid input";
-                    type = "https://errors.example.com/arguementException";
+                    type = "https://errors.example.com/argumentException";
                 }
 
                 await problemDetailsService.WriteAsync(new ProblemDetailsContext
