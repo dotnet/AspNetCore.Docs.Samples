@@ -53,11 +53,11 @@ class Todo
 public static class MyHtml
 {
     // <snippet_html>
-    public static string GenerateForm(string action, 
-        AntiforgeryTokenSet token, bool UseToken=true)
+    public static string GenerateForm(string action, AntiforgeryTokenSet token,
+                                                     bool useToken=true)
     {
         string tokenInput = "";
-        if (UseToken)
+        if (useToken)
         {
             tokenInput = $@"<input name=""{token.FormFieldName}""
                              type=""hidden"" value=""{token.RequestToken}"" />";
