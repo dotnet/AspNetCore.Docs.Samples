@@ -1,3 +1,6 @@
+#define SHORT // FIRST SHORT
+#if NEVER
+#elif FIRST
 // <snippet_all>
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
@@ -71,3 +74,20 @@ public static class MyHtml
     // </snippet_html>
 }
 // </snippet_all>
+#elif SHORT
+// <snippet_short>
+using Microsoft.AspNetCore.Antiforgery;
+
+var builder = WebApplication.CreateBuilder();
+
+builder.Services.AddAntiforgery();
+
+var app = builder.Build();
+
+// Implicitly added by WebApplicationBuilder
+// app.UseAntiforgery();
+
+app.Run();
+app.MapGet("/", () => "Hello World!");
+// </snippet_short>
+#endif
