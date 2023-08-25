@@ -1,3 +1,4 @@
+// <snippet_all>
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 
@@ -44,6 +45,7 @@ class Todo
 
 public static class MyHtml
 {
+    // <snippet_html>
     public static string GenerateForm(string action, 
         AntiforgeryTokenSet token, bool UseToken=true)
     {
@@ -66,5 +68,6 @@ public static class MyHtml
         </body></html>
     ";
     }
-
+    // </snippet_html>
 }
+// </snippet_all>
