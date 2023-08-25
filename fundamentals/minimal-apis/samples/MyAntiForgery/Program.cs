@@ -11,6 +11,7 @@ builder.Services.AddAntiforgery();
 
 var app = builder.Build();
 
+// <snippet_get>
 // Pass token
 app.MapGet("/", (HttpContext context, IAntiforgery antiforgery) =>
 {
@@ -25,17 +26,20 @@ app.MapGet("/SkipToken", (HttpContext context, IAntiforgery antiforgery) =>
     return Results.Content(MyHtml.GenerateForm("/todo",token, false ), "text/html");
 });
 
-// Call DisableAntiforgery, no token needed.
+// Post to /todo2. DisableAntiforgery on that endpoint so no token needed.
 app.MapGet("/DisableAntiforgery", (HttpContext context, IAntiforgery antiforgery) =>
 {
     var token = antiforgery.GetAndStoreTokens(context);
     return Results.Content(MyHtml.GenerateForm("/todo2", token, false), "text/html");
 });
 
+// <snippet_post>
 app.MapPost("/todo", ([FromForm] Todo todo) => Results.Ok(todo));
 
 app.MapPost("/todo2", ([FromForm] Todo todo) => Results.Ok(todo))
                                                 .DisableAntiforgery();
+// </snippet_post>
+// </snippet_get>
 
 app.Run();
 
