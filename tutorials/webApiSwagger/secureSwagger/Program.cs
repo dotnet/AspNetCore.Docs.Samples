@@ -23,6 +23,8 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
+app.MapSwagger().RequireAuthorization();
+
 app.MapGet("/", () => "Hello, World!");
 app.MapGet("/secret", (ClaimsPrincipal user) => $"Hello {user.Identity?.Name}. My secret")
     .RequireAuthorization();
@@ -40,8 +42,7 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 })
 .WithName("GetWeatherForecast")
-.WithOpenApi()
-.RequireAuthorization();
+.WithOpenApi();
 
 app.Run();
 
