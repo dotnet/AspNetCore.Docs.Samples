@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 
-namespace WebKeyedService;
+namespace WebKeyedService.Controllers;
 
 [ApiController]
 [Route("/cache")]
