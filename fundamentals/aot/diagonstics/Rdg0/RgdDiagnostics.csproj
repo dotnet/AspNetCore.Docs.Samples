@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-	  <LangVersion>preview</LangVersion>
+	  <!--<LangVersion>preview</LangVersion>-->
 	  <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 	  <PublishAot>true</PublishAot>
+    <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
   </PropertyGroup>
 
 </Project>
