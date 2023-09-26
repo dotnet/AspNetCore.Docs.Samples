@@ -1,14 +1,14 @@
-#define RGG1 // RGG0 RGG0F RGG1
+#define RGG1 // RGG1 RGG1F RGG11
 #if NEVER
-#elif RGG0
-// <snippet_0>
+#elif RGG1
+// <snippet_1>
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
-    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+    options.SerializerOptions.TypeInfoResolverChain.Insert(1, AppJsonSerializerContext.Default);
 });
 
 var app = builder.Build();
@@ -26,16 +26,16 @@ internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
 
 }
-// </snippet_0>
-#elif RGG0F
-// <snippet_0f>
+// </snippet_1>
+#elif RGG1F
+// <snippet_1f>
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
-    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+    options.SerializerOptions.TypeInfoResolverChain.Insert(1, AppJsonSerializerContext.Default);
 });
 
 var app = builder.Build();
@@ -50,9 +50,9 @@ internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
 
 }
-// </snippet_0f>
-#elif RGG1
-// <snippet_1>
+// </snippet_1f>
+#elif RGG11
+// <snippet_11>
 var app = WebApplication.Create();
 
 var del = Wrapper.GetTodos;
@@ -67,5 +67,5 @@ class Wrapper
     public static Func<IResult> GetTodos = ()
     	=> Results.Ok(new Todo(1, "Write test fix")));
 }
-// </snippet_1>
+// </snippet_11>
 #endif
