@@ -1,4 +1,4 @@
-#define RGG2F //   RGG2 RGG2F
+#define RGG2 //   RGG2 RGG2F
 #if NEVER
 #elif RGG2
 // <snippet_1>
