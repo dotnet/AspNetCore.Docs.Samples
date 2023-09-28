@@ -46,7 +46,8 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 var app = builder.Build();
 
-app.MapPut("/v1/todos/{id}", ([AsParameters] TodoRequest todoRequest) => Results.Ok(todoRequest.Todo));
+app.MapPut("/v1/todos/{id}",
+           ([AsParameters] TodoRequest todoRequest) => Results.Ok(todoRequest.Todo));
 
 app.Run();
 
