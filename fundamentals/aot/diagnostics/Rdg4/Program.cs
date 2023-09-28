@@ -1,6 +1,6 @@
-#define RGG2 //   RGG2 RGG2F
+#define RGG4F //   RGG4 RGG4F
 #if NEVER
-#elif RGG2
+#elif RGG4
 // <snippet_1>
 using System.Text.Json.Serialization;
 
@@ -8,14 +8,13 @@ var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {
-    options.SerializerOptions.TypeInfoResolverChain.Insert(0, 
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0,
                                        AppJsonSerializerContext.Default);
 });
 
 var app = builder.Build();
 
-var del = Wrapper.GetTodos;
-app.MapGet("/v1/todos", del);
+app.MapGet("/v1/todos", () => new { Id = 1, Task = "Write tests" });
 
 app.Run();
 
@@ -25,15 +24,8 @@ internal partial class AppJsonSerializerContext : JsonSerializerContext
 {
 
 }
-
-class Wrapper
-{
-    public static Func<IResult> GetTodos = () =>
-        Results.Ok(new Todo(1, "Write test fix"));
-}
-
 // </snippet_1>
-#elif RGG2F
+#elif RGG4F
 // <snippet_1f>
 using System.Text.Json.Serialization;
 
@@ -47,7 +39,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 var app = builder.Build();
 
-app.MapGet("/v1/todos", () => Results.Ok(new Todo(1, "Write tests")));
+app.MapGet("/v1/todos", () => new Todo(1, "Write tests fix"));
 
 app.Run();
 
