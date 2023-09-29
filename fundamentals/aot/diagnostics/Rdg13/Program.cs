@@ -51,13 +51,13 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 var app = builder.Build();
 
-//app.MapGet("/v1/todos",
-//    ([FromKeyedServices("primary")] ITodoService todoService)
-//   => Results.Ok(todoService.GetTodos()));
-// OR
-app.MapGet("/v2/todos",
-    ([FromServices] ITodoService todoService)
+app.MapGet("/v1/todos",
+    ([FromKeyedServices("primary")] ITodoService todoService)
    => Results.Ok(todoService.GetTodos()));
+// OR
+//app.MapGet("/v2/todos",
+//    ([FromServices] ITodoService todoService)
+//   => Results.Ok(todoService.GetTodos()));
 
 app.Run();
 
