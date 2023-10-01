@@ -13,29 +13,29 @@ var app = builder.Build();
 
 app.MapGet("/fizz", ([FromKeyedServices("fizz")][FromServices] IService service) =>
 {
-    return Results.Ok(service.Eco());
+    return Results.Ok(service.Echo());
 });
 
 app.MapGet("/buzz", ([FromKeyedServices("buzz")] IService service) =>
 {
-    return Results.Ok(service.Eco());
+    return Results.Ok(service.Echo());
 });
 
 app.MapGet("/fizzbuzz", ([FromServices] IService service) =>
 {
-    return Results.Ok(service.Eco());
+    return Results.Ok(service.Echo());
 });
 
 app.Run();
 
 public interface IService
 {
-    string Eco();
+    string Echo();
 }
 
 public class FizzService : IService
 {
-    public string Eco()
+    public string Echo()
     {
         return "Fizz";
     }
@@ -43,7 +43,7 @@ public class FizzService : IService
 
 public class BuzzService : IService
 {
-    public string Eco()
+    public string Echo()
     {
         return "Buzz";
     }
@@ -51,7 +51,7 @@ public class BuzzService : IService
 
 public class FizzBuzzService : IService
 {
-    public string Eco()
+    public string Echo()
     {
         return "FizzBuzz";
     }
@@ -70,45 +70,39 @@ var app = builder.Build();
 
 app.MapGet("/fizz", ([FromKeyedServices("fizz")] IService service) =>
 {
-    return Results.Ok(service.Eco());
+    return Results.Ok(service.Echo());
 }); 
 
 app.MapGet("/buzz", ([FromKeyedServices("buzz")] IService service) =>
 {
-    return Results.Ok(service.Eco());
+    return Results.Ok(service.Echo());
 }); 
 
 app.MapGet("/fizzbuzz", ([FromServices] IService service) =>
 {
-    return Results.Ok(service.Eco());
+    return Results.Ok(service.Echo());
 });
 
 app.Run();
 
 public interface IService
 {
-    string Eco();
+    string Echo();
 }
 
 public class FizzService : IService
 {
-    public string Eco()
-    {
-        return "Fizz";
-    }
+    public string Echo() => "Fizz";
 }
 
 public class BuzzService : IService
 {
-    public string Eco()
-    {
-        return "Buzz";
-    }
+    public string Echo() => "Buzz";
 }
 
 public class FizzBuzzService : IService
 {
-    public string Eco()
+    public string Echo()
     {
         return "FizzBuzz";
     }
