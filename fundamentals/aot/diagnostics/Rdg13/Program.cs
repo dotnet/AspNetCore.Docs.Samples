@@ -1,4 +1,4 @@
-#define RDG13F //   RDG13 RDG13F
+#define RDG13 //   RDG13 RDG13F
 #if NEVER
 #elif RDG13
 // <snippet_1>
@@ -40,6 +40,7 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
+builder.Services.AddKeyedSingleton<ITodoService, TodoService>("primary");
 builder.Services.AddScoped<ITodoService, TodoService>();
 
 builder.Services.ConfigureHttpJsonOptions(options =>
@@ -51,9 +52,9 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 var app = builder.Build();
 
-//app.MapGet("/v1/todos",
-//    ([FromKeyedServices("primary")] ITodoService todoService)
-//   => Results.Ok(todoService.GetTodos()));
+app.MapGet("/v1/todos",
+    ([FromKeyedServices("primary")] ITodoService todoService)
+   => Results.Ok(todoService.GetTodos()));
 // OR
 app.MapGet("/v2/todos",
     ([FromServices] ITodoService todoService)
