@@ -1,0 +1,11 @@
+@Rdg9_HostAddress = http://localhost:5052
+
+GET {{Rdg9_HostAddress}}/todos/
+Accept: application/json
+
+###
+
+GET {{Rdg9_HostAddress}}/todos/1
+Accept: application/json
+
+###
