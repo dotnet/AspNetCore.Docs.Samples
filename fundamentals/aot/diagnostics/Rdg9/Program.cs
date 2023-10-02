@@ -21,11 +21,10 @@ var app = builder.Build();
 
 app.MapGet("/v1/todos/{id}", ([AsParameters] TodoItemRequest request) =>
 {
-    var t = request.todos.ToList().Find(todoItem => todoItem.Id == request.Id);
-    return t
-   is Todo todo
-       ? Results.Ok(todo)
-       : Results.NotFound();
+    return request.todos.ToList().Find(todoItem => todoItem.Id == request.Id)
+is Todo todo
+    ? Results.Ok(todo)
+    : Results.NotFound();
 });
 
 app.Run();
@@ -70,11 +69,10 @@ var app = builder.Build();
 
 app.MapGet("/v1/todos/{id}", ([AsParameters] TodoItemRequest request) =>
 {
-    var t = request.todos.ToList().Find(todoItem => todoItem.Id == request.Id);
-    return t
-   is Todo todo
-       ? Results.Ok(todo)
-       : Results.NotFound();
+     return request.todos.ToList().Find(todoItem => todoItem.Id == request.Id)
+is Todo todo
+    ? Results.Ok(todo)
+    : Results.NotFound();
 });
 
 app.Run();
