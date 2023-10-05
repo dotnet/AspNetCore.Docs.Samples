@@ -2,7 +2,7 @@
 #if NEVER
 #elif RDG12
 // <snippet_1>
-var builder = WebApplication.CreateSlimBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 app.MapEndpoints();
@@ -30,7 +30,7 @@ record Wrapper<T> { }
 // </snippet_1>
 #elif RDG12F
 // <snippet_1f>
-var builder = WebApplication.CreateSlimBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
 var app = builder.Build();
 app.MapEndpoints();
