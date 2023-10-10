@@ -1,6 +1,7 @@
-#define RDG008F //RDG008F
+#define RDG008 //RDG008 RDG008F
 #if NEVER
 #elif RDG008
+// Sample code requires removing https from properties/launchsettings.json
 // <snippet_1>
 using System.Text.Json.Serialization;
 
