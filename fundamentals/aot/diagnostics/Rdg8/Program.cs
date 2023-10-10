@@ -116,7 +116,6 @@ public class Todo
     public string Task { get; private set; }
 
     public Todo(int id, string task, DateTime dueDate)
-
     {
         Id = id;
         Task = task;
