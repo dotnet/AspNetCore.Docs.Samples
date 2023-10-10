@@ -64,8 +64,7 @@ var app = builder.Build();
 
 app.MapGet("/v1/todos/{id}", ([AsParameters] TodoItemRequest request) =>
 {
-     return request.todos.ToList().Find(todoItem => todoItem.Id == request.Id)
-is Todo todo
+     return request.todos.ToList().Find(todoItem => todoItem.Id == request.Id) is Todo todo
     ? Results.Ok(todo)
     : Results.NotFound();
 });
@@ -75,6 +74,7 @@ app.Run();
 struct TodoItemRequest
 {
     public int Id { get; set; }
+    [AsParameters]
     public Todo[] todos { get; set; }
 }
 
