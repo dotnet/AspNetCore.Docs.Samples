@@ -10,8 +10,8 @@ builder.Services.AddControllers();
 var app = builder.Build();
 
 app.MapGet("/big", ([FromKeyedServices("big")] ICache bigCache) => bigCache.Get("date"));
-
-app.MapGet("/small", ([FromKeyedServices("small")] ICache smallCache) => smallCache.Get("date"));
+app.MapGet("/small", ([FromKeyedServices("small")] ICache smallCache) =>
+                                                               smallCache.Get("date"));
 
 app.MapControllers();
 
