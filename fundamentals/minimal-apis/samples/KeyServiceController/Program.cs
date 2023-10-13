@@ -30,20 +30,15 @@ public class SmallCache : ICache
 [Route("/cache")]
 public class CustomServicesApiController : Controller
 {
-    public ActionResult<object> GetOk(ICache cache)
-    {
-        return cache.Get("data-mvc");
-    }
-
     [HttpGet("big")]
     public ActionResult<object> GetBigCache([FromKeyedServices("big")] ICache cache)
     {
-        return GetOk(cache);
+        return cache.Get("data-mvc");
     }
 
     [HttpGet("small")]
     public ActionResult<object> GetSmallCache([FromKeyedServices("small")] ICache cache)
     {
-        return GetOk(cache);
+        return cache.Get("data-mvc");
     }
 }
