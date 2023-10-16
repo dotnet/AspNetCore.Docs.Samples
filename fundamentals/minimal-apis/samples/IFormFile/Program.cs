@@ -25,7 +25,39 @@ async Task UploadFileWithName(IFormFile file, string fileSaveName)
 app.MapGet("/", (HttpContext context, IAntiforgery antiforgery) =>
 {
     var token = antiforgery.GetAndStoreTokens(context);
-    var html = $"""
+    var html = MyHtml.GenerateHtmlForm(token);
+    return Results.Content(html, "text/html");
+});
+
+app.MapPost("/upload", async Task<Results<Ok<string>,
+   BadRequest<string>>> ([FromForm] FileUpload file, HttpContext context, IAntiforgery antiforgery) =>
+{
+    try
+    {
+        await antiforgery.ValidateRequestAsync(context);
+        await UploadFileWithName(file.FileDocument!, file.Name!);
+        return TypedResults.Ok($"Your file with the description: {file.Description} has been uploaded successfully");
+    }
+    catch (AntiforgeryValidationException e)
+    {
+        return TypedResults.BadRequest("Invalid anti-forgery token" + e.HResult);
+    }
+});
+
+app.Run();
+
+public class FileUpload
+{
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+    public IFormFile? FileDocument { get; set; }
+}
+
+public static class MyHtml
+{
+    public static string GenerateHtmlForm(AntiforgeryTokenSet token)
+    {
+        return $"""
       <html>
         <body>
           <form action="/upload" method="POST" enctype="multipart/form-data">
@@ -42,30 +74,5 @@ app.MapGet("/", (HttpContext context, IAntiforgery antiforgery) =>
         </body>
       </html>
     """;
-
-    return Results.Content(html, "text/html");
-});
-
-app.MapPost("/upload", async Task<Results<Ok<string>,
-   BadRequest<string>>> ([FromForm] FileUpload file, HttpContext context, IAntiforgery antiforgery) =>
-{
-    try
-    {
-        await antiforgery.ValidateRequestAsync(context);
-        await UploadFileWithName(file.FileDocument, file.Name);
-        return TypedResults.Ok($"Your file with the description: {file.Description} has been uploaded successfully");
     }
-    catch (AntiforgeryValidationException e)
-    {
-        return TypedResults.BadRequest("Invalid anti-forgery token");
-    }
-});
-
-app.Run();
-
-public class FileUpload
-{
-    public string? Name { get; set; }
-    public string? Description { get; set; }
-    public IFormFile? FileDocument { get; set; }
 }
