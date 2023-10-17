@@ -31,7 +31,12 @@ public class SmallCache : ICache
 
 public class MyHub : Hub
 {
-    public void Method([FromKeyedServices("small")] ICache cache)
+    public void SmallCacheMethod([FromKeyedServices("small")] ICache cache)
+    {
+        Console.WriteLine(cache.Get("signalr"));
+    }
+
+    public void BigCacheMethod([FromKeyedServices("big")] ICache cache)
     {
         Console.WriteLine(cache.Get("signalr"));
     }
