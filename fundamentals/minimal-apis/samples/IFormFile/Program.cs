@@ -19,13 +19,14 @@ app.MapGet("/", (HttpContext context, IAntiforgery antiforgery) =>
 });
 
 app.MapPost("/upload", async Task<Results<Ok<string>,BadRequest<string>>>
-    ([FromForm] FileUploadForm fileUploadForm, HttpContext context, IAntiforgery antiforgery) =>
+    ([FromForm] FileUploadForm fileUploadForm, HttpContext context,
+                                                IAntiforgery antiforgery) =>
 {
     try
     {
         await antiforgery.ValidateRequestAsync(context);
-        await MyUtils.SaveFileWithName(fileUploadForm.FileDocument!, fileUploadForm.Name!,
-                                       app.Environment.ContentRootPath);
+        await MyUtils.SaveFileWithName(fileUploadForm.FileDocument!,
+                  fileUploadForm.Name!, app.Environment.ContentRootPath);
         return TypedResults.Ok($"Your file with the description:" +
             $" {fileUploadForm.Description} has been uploaded successfully");
     }
