@@ -1,4 +1,4 @@
-#define RDG009F //RDG009F
+#define RDG009 // RDG009 RDG009F
 #if NEVER
 #elif RDG009
 // <snippet_1>
