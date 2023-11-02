@@ -31,7 +31,7 @@ app.Run();
 struct TodoItemRequest
 {
     public int Id { get; set; }
-
+    //[AsParameters]
     public Todo[] todos { get; set; }
 }
 
