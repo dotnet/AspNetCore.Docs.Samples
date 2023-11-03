@@ -13,14 +13,16 @@ export class AppComponent implements OnInit {
   constructor(private auth: AuthService, private router: Router) { }
 
   ngOnInit() {
-    this.auth.isSignedIn().forEach((signedIn: boolean) => this.isSignedIn = signedIn);
+    this.auth.onStateChanged().forEach((state: any) => {
+      this.auth.isSignedIn().forEach((signedIn: boolean) => this.isSignedIn = signedIn);
+    });
   }
 
   signOut() {
     if (this.isSignedIn) {
       this.auth.signOut().forEach(response => {
         if (response) {
-          window.location.reload();
+          this.router.navigateByUrl('');
         }
       });
     }

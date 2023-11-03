@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { UserInfo } from "./dto";
-import { Observable, catchError, map, of } from "rxjs";
+import { BehaviorSubject, Observable, Subject, catchError, map, of } from "rxjs";
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +9,12 @@ import { Observable, catchError, map, of } from "rxjs";
 export class AuthService {
 
   constructor(private http: HttpClient) { }
+
+  private _authStateChanged: Subject<boolean> = new BehaviorSubject<boolean>(false);
+
+  public onStateChanged() {
+    return this._authStateChanged.asObservable();
+  }
 
   // cookie-based login
   public signIn(email: string, password: string) {
@@ -20,6 +26,7 @@ export class AuthService {
       responseType: 'text'
     })
       .pipe<boolean>(map((res: HttpResponse<string>) => {
+        this._authStateChanged.next(res.ok);
         return res.ok;
       }));
   }
@@ -45,6 +52,9 @@ export class AuthService {
       observe: 'response',
       responseType: 'text'
     }).pipe<boolean>(map((res: HttpResponse<string>) => {
+      if (res.ok) {
+        this._authStateChanged.next(false);
+      }
       return res.ok;
     }));    
   }

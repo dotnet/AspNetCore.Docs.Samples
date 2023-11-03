@@ -39,7 +39,7 @@ export class SignInComponent implements OnInit {
     this.authService.signIn(userName, password).forEach(
       response => {
         if (response) {
-          window.location.href = "forecast";
+          this.router.navigateByUrl("forecast");
         }
       }).catch(
         _ => {
