@@ -1,6 +1,9 @@
 #define FIRST // FIRST SECOND ValidateOnBuild
 #if NEVER
 #elif FIRST
+/* An easy way to test Dev vs release is to set 
+ *  "ASPNETCORE_ENVIRONMENT": "Release" in one profile in launchSettings.json
+ */
 // <snippet_1>
 var builder = WebApplication.CreateBuilder(args);
 
