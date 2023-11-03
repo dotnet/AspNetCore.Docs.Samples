@@ -46,6 +46,7 @@ if (builder.Environment.IsDevelopment())
         options.ValidateOnBuild = false;
     });
 }
+// </snippet_2>
 else
 {
     Console.WriteLine("Release environment");
@@ -69,7 +70,7 @@ app.MapGet("/", context =>
 app.Run();
 
 public class MyScopedService { }
-// </snippet_2>
+
 #elif ValidateOnBuild
 // <snippet_vob>
 var builder = WebApplication.CreateBuilder(args);
