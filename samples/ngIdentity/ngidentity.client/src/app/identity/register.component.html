@@ -1,0 +1,40 @@
+<div class="d-flex flex-column align-items-center justify-content-center" *ngIf="!signedIn && !registerSucceeded">
+    <div>Please create your user account to continue.</div>
+    <form class="form w-50" [formGroup]="registerForm" (submit)="register($event)">
+        <div class="row m-3">
+            <label for="name">Email*</label>
+            <input class="col form-field" name="email" formControlName="email" />
+        </div>
+        <div class="row m-3">
+            <label for="password">Password*</label>
+            <input class="col form-field" type="password" name="password" formControlName="password" autocomplete="on" />
+        </div>
+        <div class="row m-3">
+            <label for="confirmPassword">Confirm password*</label>
+            <input class="col form-field" type="password" name="confirmPassword" formControlName="confirmPassword" autocomplete="on" />
+        </div>
+        <div class="row m-3" *ngIf="registerFailed">
+            <label style="color: red">Registration failed.</label>
+        </div>
+        <div class="row m-3" *ngFor="let error of errors">
+            <label style="color: red">{{error}}</label>
+        </div>
+        <div class="row m-3">
+            <button class="col btn btn-primary" [disabled]="!registerForm.valid" type="submit">Register</button>
+        </div>
+    </form>
+</div>
+
+<div *ngIf="registerSucceeded">
+    <h4>Registration succeeded</h4>
+    <div>
+        Please <a href="signin">sign in</a> to continue.
+    </div>
+</div>
+
+<div *ngIf="signedIn">
+    <h4>Signed in</h4>
+    <div>
+        Please log out of your current session to create a new user account.
+    </div>
+</div>

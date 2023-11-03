@@ -1,0 +1,6 @@
+@ngIdentity.Server_HostAddress = http://localhost:5042
+
+GET {{ngIdentity.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
