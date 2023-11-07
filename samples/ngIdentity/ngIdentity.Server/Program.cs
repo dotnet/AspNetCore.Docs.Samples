@@ -1,8 +1,7 @@
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,13 +45,20 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// protection from cross-site request forgery (CSRF/XSRF) attacks with empty body
+// form can't post anything useful so the body is null, the JSON call can pass
+// an empty object {} but doesn't allow cross-site due to CORS.
 app.MapPost("/logout", async (
-    ClaimsPrincipal user,
-    SignInManager<MyUser> signInManager) =>
+    SignInManager<MyUser> signInManager,
+    [FromBody]object empty) =>
 {
-    await signInManager.SignOutAsync();
-    return TypedResults.Ok();
-});
+    if (empty is not null)
+    {
+        await signInManager.SignOutAsync();
+        return Results.Ok();
+    }
+    return Results.NotFound();
+}).RequireAuthorization();
 
 var summaries = new[]
 {
