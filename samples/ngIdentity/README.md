@@ -1,16 +1,14 @@
 # Angular client with ASP.NET Core identity APIs
 
-This sample project demonstrates how to use ASP.NET Core Identity APIs with an Angular client. The project was generated using
-the latest (.NET 8) Angular hosted on ASP.NET Core template, then modified to add identity.
+This sample project demonstrates how to use ASP.NET Core Identity APIs with an Angular client. The project was generated using Angular hosted on an ASP.NET Core 8 template, then modified to add identity.
 
 ## Run the sample
 
-Either run or inspect the launch settings for your projects. "Client" refers to the `ngIdentity.client` project and "server"
-refers to the `ngIdentity.server` host project. 
+Either run or inspect the launch settings for your projects. "Client" refers to the `ngIdentity.client` project and "server" refers to the `ngIdentity.server` host project. 
 
-1. Modify `proxy.conf.js` and ensure the URL and port are correct for your server project. 
-1. Modify `home.component.html` to post to the server URL.
-1. Run the project.
+* Modify `proxy.conf.js` and ensure the URL and port are correct for your server project. 
+* Modify `home.component.html` to post to the server URL.
+* Run the project
 
 > Sometimes a race condition can occur where the Angular build lags behind the server. The server will automatically kick off an Angular build if it can't connect to the client, so this results in two instances of the Angular build and the second will fail with a port conflict. When this happens, simply close the _first_ Angular client to launch and the second will succeed. If you close the second, it will end the debug session.
 
