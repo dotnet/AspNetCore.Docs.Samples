@@ -1,0 +1,8 @@
+<h1>Angular Identity Example</h1>
+<div>
+    <a href="home">Home</a>
+    | <a href="forecast">Weather Forecast</a>
+    <span *ngIf="isSignedIn"> | <button (click)="signOut()">Sign out</button></span>
+    <span *ngIf="!isSignedIn"> | <a href="signin">Sign in</a></span>
+</div>
+<router-outlet></router-outlet>

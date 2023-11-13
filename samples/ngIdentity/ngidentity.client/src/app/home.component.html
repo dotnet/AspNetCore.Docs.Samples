@@ -1,0 +1,5 @@
+<p>Welcome to the ngIdentity sample for Angular authentication and authorization with ASP.NET Core identity APIs.</p>
+
+<form *ngIf="isSignedIn" method="post" action="https://localhost:7046/logout">
+    <input type="submit" value="Logout via cross-site forms post"/>
+</form>
