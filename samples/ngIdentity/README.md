@@ -76,7 +76,7 @@ app.MapPost("/logout", async (
 
 Minimal APIs can bind to forms. When binding to forms, the site is at risk of cross-site request forgery (CSRF) attacks. To prevent CSRF attacks, use the [anti-forgery services](https://learn.microsoft.com/aspnet/core/security/anti-request-forgery). This logout doesn't bind to a form, but it also takes no parameters. Without parameters, an empty forms post from a malicious site could invoke the API. To avoid this, the client posts with an empty body: `{}`. The server checks for the parameter. If the empty body is included, the `empty` parameter is not `null` and the method succeeds. The `empty` parameter is deserialized as a `JObject`.
 
-A forms post cannot produce the empty JSON body, so will either render a null parameter or throw a `415` (media type not supported). There is an option on the home page of the client app to try to log out using the cross-site forms post. 
+A forms post can't produce the empty JSON body, so will either render a null parameter or throw a `415` (media type not supported). There is an option on the home page of the client app to try to sign out using the cross-site forms post. 
 
 ### Client
 
