@@ -56,7 +56,7 @@ The following changes were made to the server project to support authentication 
    ```
 1. Mapped the identity API endpoints: `app.MapIdentityApi<MyUser>();`
 1. Added a `logout` method. The `logout` method isn't included in the endpoints because it may change based on the configuration, i.e. cookies, tokens, or both. <!--More on this method below. We typically don't use below in the docs. In the following if that's appropriate, or later in the article, but I'm guessing we really don't need it.-->
-1. Locked down the weather forecast API to only respond to authenticated users by adding the extension: `.RequireAuthorization();`
+1. Locked down the weather forecast API to only respond to authenticated users by adding the extension [RequireAuthorization](https://learn.microsoft.com/dotnet/api/microsoft.aspnetcore.builder.authorizationendpointconventionbuilderextensions.requireauthorization).
 
 The `logout` endpoint is defined like this:
 
