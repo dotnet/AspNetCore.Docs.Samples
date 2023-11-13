@@ -94,7 +94,7 @@ The components to manage authentication are in the `identity` folder.
 * **interceptor** is a convenience feature that responds to any `401` unauthorized by redirecting to the login page. Note that when using roles or claims for authorization, a user could be logged in and receive a `401` when accessing a resource they don't have permissions for. This interceptor shouldn't be used in that scenario.
 * **service** is the main service responsible for logging the user in and out and verifying whether the user is authenticated.
 
-The other components use these services to restrict access. The common pattern is to inject `AuthService` and check if the is logged in. The client should also subscribe to `onStateChanged` to refresh anytime the user logs out or signs back in.
+The other components use these services to restrict access. The common pattern is to inject `AuthService` and check if the user is logged in. The client should also subscribe to `onStateChanged` to refresh anytime the user logs out or signs back in.
 
 ```typescript
 public isSignedIn: boolean = false;
