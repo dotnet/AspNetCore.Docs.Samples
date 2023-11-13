@@ -10,7 +10,7 @@ Either run or inspect the launch settings for your projects. "Client" refers to 
 * Modify `home.component.html` to post to the server URL.
 * Run the project
 
-> Sometimes a race condition can occur where the Angular build lags behind the server. The server will automatically kick off an Angular build if it can't connect to the client, so this results in two instances of the Angular build and the second will fail with a port conflict. When this happens, simply close the _first_ Angular client to launch and the second will succeed. If you close the second, it will end the debug session.
+> Sometimes a race condition can occur where the Angular build lags behind the server. The server  automatically kicks off an Angular build if it can't connect to the client, so this results in two instances of the Angular build. The second Angular build then fails with a port conflict. When this happens, close the _first_ Angular client to launch and the second will succeed. If you close the second, it will end the debug session.
 
 ## Understand the sample
 
