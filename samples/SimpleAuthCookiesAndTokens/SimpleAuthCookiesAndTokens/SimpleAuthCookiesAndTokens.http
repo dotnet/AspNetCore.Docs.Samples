@@ -1,0 +1,82 @@
+@SimpleAuthCookiesAndTokens_HostAddress = https://localhost:7089
+@email = test@x.z
+@badPassword = password
+@password = P455w0rd!
+
+# This should return 401 - unauthorized
+GET {{SimpleAuthCookiesAndTokens_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
+# Let's register with a bad password
+# Notice the validation details that are returned
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/register
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{badPassword}}",
+  "confirmPassword": "{{badPassword}}"
+}
+
+###
+
+# Now a valid one
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/register
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}",
+  "confirmPassword": "{{password}}"
+}
+
+###
+
+# Let's login with a bad password
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{badPassword}}"
+}
+
+###
+
+# And the right one. Be sure to copy and paste the tokens from the response.
+# Notice you get when the current token will expire in the response.
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+
+# these come from the previous response
+@accessToken = <paste without quotes>
+@refreshToken = <paste without quotes>
+
+# Let's try the weather again, this time with a token
+# This should return the "weather"
+GET {{SimpleAuthCookiesAndTokens_HostAddress}}/weatherforecast/
+Authorization: Bearer {{accessToken}}
+Accept: application/json
+
+###
+
+# Now assume the session is about to expire and you want to extend the session without forcing the user to login again.
+POST {{SimpleAuthCookiesAndTokens_HostAddress}}/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshToken}}" 
+}
+
+###
+
+# You should get a new set of credentials, including the refresh token
