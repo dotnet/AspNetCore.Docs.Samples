@@ -11,6 +11,8 @@ builder.Services.AddAntiforgery();
 
 var app = builder.Build();
 
+app.UseAntiforgery();
+
 // <snippet_get>
 // Pass token
 app.MapGet("/", (HttpContext context, IAntiforgery antiforgery) =>
