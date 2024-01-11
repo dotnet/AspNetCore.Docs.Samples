@@ -5,7 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <InvariantGlobalization>true</InvariantGlobalization>
-    <PublishAot>true</PublishAot>
+    <EnableRequestDelegateGenerator>true</EnableRequestDelegateGenerator>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
 
 </Project>
