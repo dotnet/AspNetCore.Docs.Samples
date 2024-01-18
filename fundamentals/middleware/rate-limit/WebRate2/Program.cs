@@ -109,7 +109,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.MapRazorPages();
-app.MapDefaultControllerRoute();
+app.MapDefaultControllerRoute();  // RequireRateLimiting not called
 
 app.Run();
 // </snippet_2>
