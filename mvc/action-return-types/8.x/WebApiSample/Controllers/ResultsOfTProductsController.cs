@@ -36,7 +36,7 @@ public class ResultsOfTProductsController : ControllerBase
         _productContext.Products.Add(product);
         await _productContext.SaveChangesAsync();
 
-        var location = Url.Action(nameof(GetById), new { id = product.Id }) ?? $"/{product.Id}";
+        var location = Url.Action(nameof(CreateAsync), new { id = product.Id }) ?? $"/{product.Id}";
         return TypedResults.Created(location, product);
     }
     // </snippet_CreateAsyncResultsOfT>
