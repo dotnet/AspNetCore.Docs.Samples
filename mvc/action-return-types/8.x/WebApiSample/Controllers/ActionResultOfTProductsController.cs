@@ -41,7 +41,7 @@ public class ActionResultOfTProductsController : ControllerBase
         _productContext.Products.Add(product);
         await _productContext.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetById_ActionResultOfT), new { id = product.Id }, product);
+        return CreatedAtAction(nameof(CreateAsync_ActionResultOfT), new { id = product.Id }, product);
     }
     // </snippet_CreateAsyncActionResultOfT>
 }
