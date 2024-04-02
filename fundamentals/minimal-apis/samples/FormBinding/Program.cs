@@ -23,7 +23,6 @@ app.MapGet("/todos/{id}", async (int Id, TodoDb Db) =>
 // </snippet_id>
 
 // Remaining code removed for brevity.
-
 // </snippet_top>
 
 // Avoid reading the incoming file stream directly into memory all at once.
@@ -62,7 +61,6 @@ app.MapPost("/ap/todos", async ([AsParameters] NewTodoRequest request, TodoDb db
 });
 
 // Remaining code removed for brevity.
-
 // </snippet_post_put_delete_as_parameters>
 
 // <snippet_post_put_delete>
@@ -90,7 +88,6 @@ app.MapPost("/todos", async ([FromForm] string name,
 });
 
 // Remaining code removed for brevity.
-
 // </snippet_post_put_delete>
 
 app.UseStaticFiles();
