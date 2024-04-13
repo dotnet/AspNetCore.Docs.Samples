@@ -2,11 +2,17 @@
 #if NEVER
 #elif RDG13
 // <snippet_1>
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 
-var builder = WebApplication.CreateBuilder(args);
-
+var builder = WebApplication.CreateSlimBuilder(args);
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0,
+                                 AppJsonSerializerContext.Default);
+});
 builder.Services.AddKeyedSingleton<IService, FizzService>("fizz");
+
 var app = builder.Build();
 
 app.MapGet("/fizz", ([FromKeyedServices("fizz")][FromServices] IService service) =>
@@ -28,11 +34,22 @@ public class FizzService : IService
         return "Fizz";
     }
 }
+[JsonSerializable(typeof(string[]))]
+internal partial class AppJsonSerializerContext : JsonSerializerContext
+{
+
+}
 #elif RDG13F
 // <snippet_1f>
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateSlimBuilder(args);
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0,
+                                 AppJsonSerializerContext.Default);
+});
 
 builder.Services.AddKeyedSingleton<IService, FizzService>("fizz");
 builder.Services.AddKeyedSingleton<IService, BuzzService>("buzz");
@@ -77,6 +94,11 @@ public class FizzBuzzService : IService
     {
         return "FizzBuzz";
     }
+}
+[JsonSerializable(typeof(string[]))]
+internal partial class AppJsonSerializerContext : JsonSerializerContext
+{
+
 }
 // </snippet_1f>
 #endif
