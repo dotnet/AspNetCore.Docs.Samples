@@ -2,7 +2,14 @@
 #if NEVER
 #elif RDG11
 // <snippet_1>
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateSlimBuilder(args);
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0,
+                                 AppJsonSerializerContext.Default);
+});
 
 var app = builder.Build();
 app.MapEndpoints<Todo>();
@@ -24,12 +31,28 @@ public static class RouteBuilderExtensions
     }
 }
 
-record Todo();
-record Wrapper<T> { }
+record Wrapper<T>(T Value);
+class Todo
+{
+    public int Id { get; set; }
+    public string Task { get; set; }
+}
+[JsonSerializable(typeof(Wrapper<Todo>[]))]
+internal partial class AppJsonSerializerContext : JsonSerializerContext
+{
+
+}
 // </snippet_1>
 #elif RDG11F
 // <snippet_1f>
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateSlimBuilder(args);
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0,
+                                 AppJsonSerializerContext.Default);
+});
 
 var app = builder.Build();
 app.MapTodoEndpoints();
@@ -40,18 +63,23 @@ public static class TodoRouteBuilderExtensions
     public static IEndpointRouteBuilder MapTodoEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapPost("/input", (Todo value) => value);
-        app.MapGet("/result", () => new Todo());
+        app.MapGet("/result", () => new Todo(1, "Walk the dog"));
         app.MapPost("/input-with-wrapper", (Wrapper<Todo> value) => value);
         app.MapGet("/async", async () =>
         {
             await Task.CompletedTask;
-            return new Todo();
+            return new Todo(1, "Walk the dog");
         });
         return app;
     }
 }
 
-record Todo();
-record Wrapper<T> { }
+record Wrapper<T>(T Value);
+record Todo(int Id, string Task);
+[JsonSerializable(typeof(Wrapper<Todo>[]))]
+internal partial class AppJsonSerializerContext : JsonSerializerContext
+{
+
+}
 // </snippet_1f>
 #endif
