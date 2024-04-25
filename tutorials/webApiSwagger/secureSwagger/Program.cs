@@ -10,11 +10,11 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer();
 
 var app = builder.Build();
 
-//if (app.Environment.IsDevelopment())
-//{
+  if (app.Environment.IsDevelopment())
+  {
     app.UseSwagger();
     app.UseSwaggerUI();
-//}
+  }
 
 app.UseHttpsRedirection();
 
