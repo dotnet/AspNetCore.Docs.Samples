@@ -30,7 +30,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // <snippet_multiple_result_types>
-app.MapGet("/book{id}", Results<Ok<Book>, NotFound> (int id, List<Book> bookList) =>
+app.MapGet("/book/{id}", Results<Ok<Book>, NotFound> (int id, List<Book> bookList) =>
 {
     return bookList.FirstOrDefault((i) => i.Id == id) is Book book
      ? TypedResults.Ok(book)
