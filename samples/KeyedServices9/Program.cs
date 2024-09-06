@@ -55,7 +55,7 @@ public class MyHub : Hub
 // </snippet_1>
 #endif
 #if SECONDARY
-// </snippet_1>
+// </snippet_2>
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddKeyedSingleton<MySingletonClass>("test");
 builder.Services.AddKeyedScoped<MyScopedClass>("test2");
@@ -78,5 +78,5 @@ internal class MyMiddleware
         [FromKeyedServices("test2")]
             MyScopedClass scopedService) => _next(context);
 }
-// </snippet_1>
+// </snippet_2>
 #endif
