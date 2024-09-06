@@ -55,7 +55,7 @@ public class MyHub : Hub
 // </snippet_1>
 #endif
 #if SECONDARY
-// </snippet_2>
+// <snippet_2>
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddKeyedSingleton<MySingletonClass>("test");
 builder.Services.AddKeyedScoped<MyScopedClass>("test2");
