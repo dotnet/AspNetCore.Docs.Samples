@@ -1,4 +1,4 @@
-#define PRIMARY
+#define SECONDARY// PRIMARY
 #if PRIMARY
 // <snippet_1>
 using Microsoft.AspNetCore.Mvc;
@@ -51,6 +51,32 @@ public class MyHub : Hub
     {
         Console.WriteLine(cache.Get("signalr"));
     }
+}
+// </snippet_1>
+#endif
+#if SECONDARY
+// </snippet_1>
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddKeyedSingleton<MySingletonClass>("test");
+builder.Services.AddKeyedScoped<MyScopedClass>("test2");
+
+var app = builder.Build();
+app.UseMiddleware<MyMiddleware>();
+app.Run();
+
+internal class MyMiddleware
+{
+    private readonly RequestDelegate _next;
+
+    public MyMiddleware(RequestDelegate next,
+        [FromKeyedServices("test")] MySingletonClass service)
+    {
+        _next = next;
+    }
+
+    public Task Invoke(HttpContext context,
+        [FromKeyedServices("test2")]
+            MyScopedClass scopedService) => _next(context);
 }
 // </snippet_1>
 #endif
