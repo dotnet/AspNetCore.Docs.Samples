@@ -7,11 +7,13 @@ public class TodoService : ITodoService
 {
     private readonly TodoGroupDbContext _dbContext;
     private readonly IEmailService _emailService;
+    private readonly IConfiguration _configuration;
 
-    public TodoService(TodoGroupDbContext dbContext, IEmailService emailService)
+    public TodoService(TodoGroupDbContext dbContext, IEmailService emailService, IConfiguration configuration)
     {
         _dbContext = dbContext;
         _emailService = emailService;
+        _configuration = configuration;
     }
 
     public async ValueTask<Todo?> Find(int id)
@@ -29,7 +31,7 @@ public class TodoService : ITodoService
         await _dbContext.Todos.AddAsync(todo);
 
         if (await _dbContext.SaveChangesAsync() > 0)
-            await _emailService.Send("hello@microsoft.com", $"New todo has been added: {todo.Title}");
+            await _emailService.Send(_configuration["EmailAddress"]!, $"New todo has been added: {todo.Title}");
     }
 
     public async Task Update(Todo todo)
