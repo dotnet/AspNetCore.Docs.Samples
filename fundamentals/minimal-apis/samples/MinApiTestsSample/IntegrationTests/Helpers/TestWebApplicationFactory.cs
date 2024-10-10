@@ -14,7 +14,7 @@ public class TestWebApplicationFactory<TProgram>
     {
         builder.ConfigureHostConfiguration(config =>
         {
-            config.AddInMemoryCollection(new Dictionary<string, string?> { { "EmailAddress", "testhello@microsoft.com" } });
+            config.AddInMemoryCollection(new Dictionary<string, string?> { { "EmailAddress", "test1@Contoso.com" } });
         });
 
         builder.ConfigureServices(services =>
