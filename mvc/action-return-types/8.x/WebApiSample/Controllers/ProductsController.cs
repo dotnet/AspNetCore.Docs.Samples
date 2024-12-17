@@ -52,17 +52,4 @@ public partial class ProductsController : ControllerBase
         }
     }
     // </snippet_GetOnSaleProductsAsync>
-
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Product>> GetByIdAsync(int id)
-    {
-        var product = await _productContext.Products.FindAsync(id);
-
-        if (product == null)
-        {
-            return NotFound();
-        }
-
-        return product;
-    }
 }
