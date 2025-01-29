@@ -168,7 +168,6 @@ app.Run();
 #elif FIRST
 // <snippet_1>
 // <snippet>
-// Preceding code removed for brevity.
 using System.Globalization;
 using System.Net;
 using System.Threading.RateLimiting;
