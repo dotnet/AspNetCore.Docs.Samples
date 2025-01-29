@@ -122,7 +122,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRateLimiter(_ =>
 {
-    _.OnRejected = (context, _) =>
+    _.OnRejected = async (context, cancellationToken) =>
     {
         if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
         {
@@ -131,9 +131,7 @@ builder.Services.AddRateLimiter(_ =>
         }
 
         context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-        context.HttpContext.Response.WriteAsync("Too many requests. Please try again later.");
-
-        return new ValueTask();
+        await context.HttpContext.Response.WriteAsync("Too many requests. Please try again later.", cancellationToken);
     };
     _.GlobalLimiter = PartitionedRateLimiter.CreateChained(
         PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
