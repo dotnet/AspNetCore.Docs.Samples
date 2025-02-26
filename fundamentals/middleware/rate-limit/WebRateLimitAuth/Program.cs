@@ -223,7 +223,7 @@ builder.Services.AddRateLimiter(limiterOptions =>
         var username = "anonymous user";
         if (context.User.Identity?.IsAuthenticated is true)
         {
-            username = context.User.ToString()!;
+            username = context.User.Identity.Name;
         }
 
         return RateLimitPartition.GetSlidingWindowLimiter(username,
@@ -277,9 +277,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseRateLimiter();
 
 app.UseAuthentication();
+app.UseRateLimiter(); // important to add after UseAuthentication because the limiter uses auth info
 app.UseAuthorization();
 
 app.MapRazorPages().RequireRateLimiting(userPolicyName);
@@ -386,9 +386,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseRateLimiter();
 
 app.UseAuthentication();
+app.UseRateLimiter(); // important to add after UseAuthentication because the limiter uses auth info
 app.UseAuthorization();
 
 static string GetUserEndPointMethod(HttpContext context) =>
