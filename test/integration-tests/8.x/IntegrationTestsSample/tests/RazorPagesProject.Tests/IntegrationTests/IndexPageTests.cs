@@ -26,6 +26,7 @@ public class IndexPageTests :
             AllowAutoRedirect = false
         });
     }
+}
 // </snippet1>
 
 // <snippet2>
