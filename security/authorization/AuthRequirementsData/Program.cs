@@ -7,6 +7,7 @@ builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IAuthorizationHandler, MinimumAgeAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, MinimumAgePolicyProvider>();
 
 var app = builder.Build();
 
