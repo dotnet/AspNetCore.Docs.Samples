@@ -15,15 +15,15 @@ public class TimedHostedService : BackgroundService
         _logger.LogInformation("Timed Hosted Service running.");
 
         // When the timer should have no due-time, then do the work once now.
-        DoWork();
+        await DoWork();
 
-        using PeriodicTimer timer = new(TimeSpan.FromSeconds(1));
+        using PeriodicTimer timer = new(TimeSpan.FromSeconds(30));
 
         try
         {
             while (await timer.WaitForNextTickAsync(stoppingToken))
             {
-                DoWork();
+                await DoWork();
             }
         }
         catch (OperationCanceledException)
@@ -32,10 +32,12 @@ public class TimedHostedService : BackgroundService
         }
     }
 
-    // Could also be a async method, that can be awaited in ExecuteAsync above
-    private void DoWork()
+    private async Task DoWork()
     {
         int count = Interlocked.Increment(ref _executionCount);
+
+        // Simulate work
+        await Task.Delay(TimeSpan.FromSeconds(2));
 
         _logger.LogInformation("Timed Hosted Service is working. Count: {Count}", count);
     }
