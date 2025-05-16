@@ -1,5 +1,5 @@
-using AuthRequirementsData.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AuthRequirementsData.Authorization;
 
 namespace AuthRequirementsData.Controllers;
 
@@ -7,7 +7,8 @@ namespace AuthRequirementsData.Controllers;
 [Route("api/[controller]")]
 public class GreetingsController : Controller
 {
-    [MinimumAgeAuthorize(16)]
+    [MinimumAgeAuthorize(21)]
     [HttpGet("hello")]
-    public string Hello() => $"Hello {(HttpContext.User.Identity?.Name ?? "world")}!";
+    public string Hello() => 
+        $"Hello {HttpContext.User.Identity?.Name}!";
 }

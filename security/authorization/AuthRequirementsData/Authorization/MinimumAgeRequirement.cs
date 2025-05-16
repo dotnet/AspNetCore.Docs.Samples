@@ -1,10 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AuthRequirementsData.Authorization;
 
-class MinimumAgeRequirement : IAuthorizationRequirement
+class MinimumAgeRequirement(int age) : IAuthorizationRequirement
 {
-    public int Age { get; private set; }
-
-    public MinimumAgeRequirement(int age) { Age = age; }
+    public int Age { get; private set; } = age;
 }
