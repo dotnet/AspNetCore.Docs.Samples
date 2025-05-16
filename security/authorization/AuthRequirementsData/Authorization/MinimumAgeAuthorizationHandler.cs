@@ -1,63 +1,60 @@
-using Microsoft.AspNetCore.Authorization;
 using System.Globalization;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AuthRequirementsData.Authorization;
 
-class MinimumAgeAuthorizationHandler : AuthorizationHandler<MinimumAgeAuthorizeAttribute>
+class MinimumAgeAuthorizationHandler(ILogger<MinimumAgeAuthorizationHandler> logger) 
+    : AuthorizationHandler<MinimumAgeAuthorizeAttribute>
 {
-    private readonly ILogger<MinimumAgeAuthorizationHandler> _logger;
-
-    public MinimumAgeAuthorizationHandler(ILogger<MinimumAgeAuthorizationHandler> logger)
-    {
-        _logger = logger;
-    }
-
-    // Check whether a given MinimumAgeRequirement is satisfied or not for a particular
+    // Check whether a given MinimumAgeRequirement is satisfied for a particular
     // context.
-    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
-                                               MinimumAgeAuthorizeAttribute requirement)
+    protected override Task HandleRequirementAsync(
+        AuthorizationHandlerContext context, 
+        MinimumAgeAuthorizeAttribute requirement)
     {
-        // Log as a warning so that it's very clear in sample output which authorization
-        // policies(and requirements/handlers) are in use.
-        _logger.LogWarning("Evaluating authorization requirement for age >= {age}",
-                                                                    requirement.Age);
+        logger.LogInformation(
+            "Evaluating authorization requirement for age >= {age}", 
+            requirement.Age);
 
-        // Check the user's age.
-        var dateOfBirthClaim = context.User.FindFirst(c => c.Type == 
-                                                                 ClaimTypes.DateOfBirth);
+        // Get the user's birth date claim.
+        var dateOfBirthClaim = 
+            context.User.FindFirst(c => c.Type == ClaimTypes.DateOfBirth);
+
         if (dateOfBirthClaim != null)
         {
-            // If the user has a date of birth claim, check their age.
-            var dateOfBirth = Convert.ToDateTime(dateOfBirthClaim.Value,
-                                                           CultureInfo.InvariantCulture);
+            // If the user has a date of birth claim, obtain their age.
+            var dateOfBirth = Convert.ToDateTime(dateOfBirthClaim.Value, 
+                CultureInfo.InvariantCulture);
             var age = DateTime.Now.Year - dateOfBirth.Year;
+
+            // Adjust age if the user hasn't had a birthday yet this year.
             if (dateOfBirth > DateTime.Now.AddYears(-age))
             {
-                // Adjust age if the user hasn't had a birthday yet this year.
                 age--;
             }
 
-            // If the user meets the age criterion, mark the authorization requirement
-            // succeeded.
+            // If the user meets the age requirement, mark the authorization
+            // requirement succeeded.
             if (age >= requirement.Age)
             {
-                _logger.LogInformation(
+                logger.LogInformation(
                     "Minimum age authorization requirement {age} satisfied", 
-                      requirement.Age);
+                    requirement.Age);
                 context.Succeed(requirement);
             }
             else
             {
-                _logger.LogInformation("Current user's DateOfBirth claim ({dateOfBirth})"
-                   + " does not satisfy the minimum age authorization requirement {age}",
+                logger.LogInformation(
+                    "Current user's DateOfBirth claim ({dateOfBirth}) doesn't " +
+                    "satisfy the minimum age authorization requirement {age}",
                     dateOfBirthClaim.Value,
                     requirement.Age);
             }
         }
         else
         {
-            _logger.LogInformation("No DateOfBirth claim present");
+            logger.LogInformation("No DateOfBirth claim present");
         }
 
         return Task.CompletedTask;
