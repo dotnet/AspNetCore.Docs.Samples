@@ -7,8 +7,7 @@ namespace AuthRequirementsData.Authorization;
 class MinimumAgeAuthorizationHandler(ILogger<MinimumAgeAuthorizationHandler> logger) 
     : AuthorizationHandler<MinimumAgeAuthorizeAttribute>
 {
-    // Check whether a given MinimumAgeRequirement is satisfied for a particular
-    // context.
+    // Check whether a given minimum age requirement is satisfied.
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context, 
         MinimumAgeAuthorizeAttribute requirement)
