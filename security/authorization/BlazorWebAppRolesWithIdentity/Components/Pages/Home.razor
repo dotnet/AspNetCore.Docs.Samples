@@ -1,0 +1,48 @@
+@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<h1>Roles Sample App</h1>
+
+<AuthorizeView>
+    <Authorized>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="role-checks-with-authorizeview">
+                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Role Checks with AuthorizeView
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="require-admin-role-with-authorize-attribute">
+                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Require 'Admin' role with [Authorize] attribute
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="require-admin-or-superuser-role-with-authorize-attribute">
+                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Require 'Admin' or 'SuperUser' role with [Authorize] attribute
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="require-admin-and-superuser-roles-with-authorize-attributes">
+                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Require 'Admin' and 'SuperUser' roles with [Authorize] attributes
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="pass-requireadminrole-policy-with-authorizeview">
+                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Pass 'RequireAdminRole' policy with AuthorizeView
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="pass-requireadminrole-and-requiresuperuserrole-policies-with-authorizeviews">
+                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Pass 'RequireAdminRole' and `RequireSuperUserRole' policies with AuthorizeViews
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="pass-requireadminrole-policy-with-authorize-attribute">
+                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Pass 'RequireAdminRole' policy with [Authorize] attribute
+            </NavLink>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <p>Please sign into the app with one of the seeded accounts. See the README file for accounts and credentials.</p>
+    </NotAuthorized>
+</AuthorizeView>
