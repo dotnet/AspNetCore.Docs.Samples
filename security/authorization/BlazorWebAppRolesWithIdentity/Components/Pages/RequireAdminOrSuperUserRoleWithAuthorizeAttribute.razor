@@ -1,0 +1,9 @@
+@page "/require-admin-or-superuser-role-with-authorize-attribute"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin, SuperUser")]
+
+<h1>Require 'Admin' or 'SuperUser' role with [Authorize] attribute</h1>
+
+<p>
+    You can only see this if you're in the 'Admin' role or the 'SuperUser' role.
+</p>
