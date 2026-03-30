@@ -1,0 +1,17 @@
+@page "/role-checks-with-authorizeview"
+
+<h3>Role Checks with AuthorizeView</h3>
+
+<AuthorizeView Roles="Admin, SuperUser">
+    <p>User: @context.User.Identity?.Name</p>
+    <p>You have an 'Admin' or 'SuperUser' role claim.</p>
+</AuthorizeView>
+
+<AuthorizeView Roles="Admin">
+    <p>User: @context.User.Identity?.Name</p>
+    <p>You have the 'Admin' role claim.</p>
+    <AuthorizeView Roles="SuperUser" Context="innerContext">
+        <p>User: @innerContext.User.Identity?.Name</p>
+        <p>You have both 'Admin' and 'SuperUser' role claims.</p>
+    </AuthorizeView>
+</AuthorizeView>

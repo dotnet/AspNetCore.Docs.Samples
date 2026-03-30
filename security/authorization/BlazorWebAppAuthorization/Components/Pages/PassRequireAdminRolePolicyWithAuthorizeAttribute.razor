@@ -1,0 +1,7 @@
+@page "/pass-requireadminrole-policy-with-authorize-attribute"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "RequireAdminRole")]
+
+<h1>Pass 'RequireAdminRole' policy with [Authorize] attribute</h1>
+
+<p>You satisfy the 'RequireAdminRole' policy.</p>

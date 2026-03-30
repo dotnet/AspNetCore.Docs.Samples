@@ -1,0 +1,27 @@
+@page "/pass-founder-and-humanresourcesmember-policies-with-authorizeviews"
+
+<h1>Pass 'Founder' and 'HumanResourcesMember' policies with AuthorizeViews</h1>
+
+<AuthorizeView Policy="Founder">
+    <Authorized>
+        <p>User: @context.User.Identity?.Name</p>
+        <AuthorizeView Policy="HumanResourcesMember" Context="innerContext">
+            <Authorized>
+                <p>
+                    You satisfy the 'Founder' and 'HumanResourcesMember' policies.
+                </p>
+            </Authorized>
+            <NotAuthorized>
+                <p>
+                    You satisfy the 'Founder' policy, but you <b>don't</b> satisfy 
+                    the 'HumanResourcesMember' policy.
+                </p>
+            </NotAuthorized>
+        </AuthorizeView>
+    </Authorized>
+    <NotAuthorized>
+        <p>
+            You <b>don't</b> satisfy the 'Founder' policy.
+        </p>
+    </NotAuthorized>
+</AuthorizeView>

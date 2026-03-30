@@ -1,0 +1,13 @@
+@page "/pass-requireadminrole-and-requiresuperuserrole-policies-with-authorizeviews"
+
+<h1>
+    Pass 'RequireAdminRole' and 'RequireSuperUserRole' policies with AuthorizeViews
+</h1>
+
+<AuthorizeView Policy="RequireAdminRole">
+    <AuthorizeView Policy="RequireSuperUserRole" Context="innerContext">
+        <p>
+            You satisfy the 'RequireAdminRole' and 'RequireSuperUserRole' policies.
+        </p>
+    </AuthorizeView>
+</AuthorizeView>

@@ -1,0 +1,7 @@
+h2 {
+  margin-top: 12px;
+}
+
+.nav-item ::deep a {
+  text-decoration: underline;
+}

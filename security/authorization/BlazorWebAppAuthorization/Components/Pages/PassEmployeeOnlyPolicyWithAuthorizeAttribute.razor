@@ -1,0 +1,7 @@
+@page "/pass-employeeonly-policy-with-authorize-attribute"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "EmployeeOnly")]
+
+<h1>Pass 'EmployeeOnly' policy with [Authorize] attribute</h1>
+
+<p>You satisfy the 'EmployeeOnly' policy.</p>
