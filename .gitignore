@@ -458,4 +458,3 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-/security/authorization/BlazorWebAppRolesAndClaimsWithIdentity/Properties/launchSettings.json
