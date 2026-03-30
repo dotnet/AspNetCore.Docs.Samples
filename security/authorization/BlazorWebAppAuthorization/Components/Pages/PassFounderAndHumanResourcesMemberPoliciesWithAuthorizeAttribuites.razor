@@ -1,0 +1,12 @@
+@page "/pass-founder-and-humanresourcesmember-policies-with-authorize-attributes"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Policy = "Founder")]
+@attribute [Authorize(Policy = "HumanResourcesMember")]
+
+<h1>
+    Pass 'Founder' and 'HumanResourcesMember' policies with [Authorize] attributes
+</h1>
+
+<p>
+    You satisfy the 'Founder' and 'HumanResourcesMember' policies.
+</p>

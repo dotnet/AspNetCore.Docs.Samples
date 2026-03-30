@@ -1,0 +1,12 @@
+@page "/pass-employeeonly-policy-with-authorizeview"
+
+<h1>Pass 'EmployeeOnly' policy with AuthorizeView</h1>
+
+<AuthorizeView Policy="EmployeeOnly">
+    <Authorized>
+        <p>You satisfy the 'EmployeeOnly' policy.</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>You <b>don't</b> satisfy the 'EmployeeOnly' policy.</p>
+    </NotAuthorized>
+</AuthorizeView>

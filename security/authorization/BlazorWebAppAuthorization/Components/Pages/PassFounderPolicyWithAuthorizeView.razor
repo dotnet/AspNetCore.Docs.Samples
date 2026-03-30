@@ -1,0 +1,12 @@
+@page "/pass-founder-policy-with-authorizeview"
+
+<h1>Pass 'Founder' policy with AuthorizeView</h1>
+
+<AuthorizeView Policy="Founder">
+    <Authorized>
+        <p>You satisfy the 'Founder' policy.</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>You <b>don't</b> satisfy the 'Founder' policy.</p>
+    </NotAuthorized>
+</AuthorizeView>

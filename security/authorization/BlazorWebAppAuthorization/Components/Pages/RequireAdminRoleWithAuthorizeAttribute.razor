@@ -1,0 +1,7 @@
+@page "/require-admin-role-with-authorize-attribute"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
+
+<h1>Require 'Admin' role with [Authorize] attribute</h1>
+
+<p>You're in the 'Admin' role.</p>
