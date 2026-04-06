@@ -58,13 +58,12 @@ builder.Services.AddAuthorizationBuilder()
     .AddPolicy("Founder", policy =>
         policy.RequireClaim("EmployeeNumber", "1", "2", "3", "4", "5"));
 
-// Add an authorization policy for the Department claim, requiring the user to be in the Customer Service department.
+// Add authorization policies for the Department claim, one requiring the user to be in
+// the Customer Service department and the other requiring the user to be in the
+// Human Resources department.
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("CustomerServiceMember", policy =>
-        policy.RequireClaim("Department", "Customer Service"));
-
-// Add an authorization policy for the Department claim, requiring the user to be in the Human Resources department.
-builder.Services.AddAuthorizationBuilder()
+        policy.RequireClaim("Department", "Customer Service"))
     .AddPolicy("HumanResourcesMember", policy =>
         policy.RequireClaim("Department", "Human Resources"));
 
