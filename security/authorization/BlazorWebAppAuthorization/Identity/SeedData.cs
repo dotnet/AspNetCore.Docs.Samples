@@ -16,11 +16,11 @@ public class SeedData
             NormalizedEmail = "LEELA@CONTOSO.COM",
             NormalizedUserName = "LEELA@CONTOSO.COM",
             RoleList = [ "Admin", "SuperUser" ],
-            Claims = new Dictionary<string, string>()
-            {
-                { "EmployeeNumber", "1" },
-                { "Department", "Human Resources" }
-            },
+            Claims = [
+                new("EmployeeNumber", "1"),
+                new("Department", "Customer Service"),
+                new("Department", "Human Resources")
+            ],
             UserName = "leela@contoso.com"
         },
         new SeedUser()
@@ -29,10 +29,10 @@ public class SeedData
             NormalizedEmail = "HARRY@CONTOSO.COM",
             NormalizedUserName = "HARRY@CONTOSO.COM",
             RoleList = [ "Admin" ],
-            Claims = new Dictionary<string, string>()
-            {
-                { "EmployeeNumber", "10" }
-            },
+            Claims = [
+                new("EmployeeNumber", "10"),
+                new("Department", "Customer Service")
+            ],
             UserName = "harry@contoso.com"
         },
         new SeedUser()
@@ -105,6 +105,6 @@ public class SeedData
     private class SeedUser : ApplicationUser
     {
         public string[]? RoleList { get; set; }
-        public Dictionary<string, string>? Claims { get; set; }
+        public List<KeyValuePair<string, string>>? Claims { get; set; }
     }
 }

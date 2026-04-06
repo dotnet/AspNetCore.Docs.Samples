@@ -28,10 +28,12 @@ For more information, see the following resources:
    * `leela@contoso.com` (Password: `Passw0rd
      * The `Admin` and `SuperUser` roles.
      * An `EmployeeNumber` claim with a value of `1`.
+     * A `Department` claim with a `Customer Service` value.
      * A `Department` claim with a `Human Resources` value.
    * `harry@contoso.com` (Password: `Passw0rd!`)
      * The `Admin` role.
-     * An `EmployeeNumber` claim with a value of `10`. 
+     * An `EmployeeNumber` claim with a value of `10`.
+     * A `Department` claim with a `Customer Service` value.
    * `sarah@contoso.com` (Password: `Passw0rd!`)
      * The `SuperUser` role.
      * Doesn't have claims as an employee (`EmployeeNumber`) or for a department (`Department`).

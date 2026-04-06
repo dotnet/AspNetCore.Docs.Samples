@@ -1,19 +1,19 @@
-@page "/pass-founder-and-humanresourcesmember-policies-with-authorizeviews"
+@page "/pass-customerservicemember-and-humanresourcesmember-policies-with-authorizeviews"
 
-<h1>Pass 'Founder' and 'HumanResourcesMember' policies with AuthorizeViews</h1>
+<h1>Pass 'CustomerServiceMember' and 'HumanResourcesMember' policies with AuthorizeViews</h1>
 
-<AuthorizeView Policy="Founder">
+<AuthorizeView Policy="CustomerServiceMember">
     <Authorized>
         <p>User: @context.User.Identity?.Name</p>
         <AuthorizeView Policy="HumanResourcesMember" Context="innerContext">
             <Authorized>
                 <p>
-                    You satisfy the 'Founder' and 'HumanResourcesMember' policies.
+                    You satisfy the 'CustomerServiceMember' and 'HumanResourcesMember' policies.
                 </p>
             </Authorized>
             <NotAuthorized>
                 <p>
-                    You satisfy the 'Founder' policy, but you <b>don't</b> satisfy 
+                    You satisfy the 'CustomerServiceMember' policy, but you <b>don't</b> satisfy
                     the 'HumanResourcesMember' policy.
                 </p>
             </NotAuthorized>
@@ -21,7 +21,7 @@
     </Authorized>
     <NotAuthorized>
         <p>
-            You <b>don't</b> satisfy the 'Founder' policy.
+            You <b>don't</b> satisfy the 'CustomerServiceMember' policy.
         </p>
     </NotAuthorized>
 </AuthorizeView>
