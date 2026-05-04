@@ -1,0 +1,79 @@
+@page "/access-document-crud/{documentId}"
+@using Microsoft.AspNetCore.Authorization
+@using BlazorWebAppAuthorization.Data
+@using BlazorWebAppAuthorization.Services
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IAuthorizationService AuthorizationService
+@inject IDocumentRepository DocumentRepository
+
+<h1>Access Document</h1>
+
+<AuthorizeView>
+    <Authorized>
+        <p>Hello, @context.User.Identity?.Name!</p>
+        <p>@messageCreate</p>
+        <p>@messageRead</p>
+        <p>@messageDelete</p>
+        <p>@messageUpdate</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>You're not authorized to access this page.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private string? messageCreate;
+    private string? messageRead;
+    private string? messageDelete;
+    private string? messageUpdate;
+
+    [Parameter]
+    public string? DocumentId { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var user = (await AuthStateProvider.GetAuthenticationStateAsync()).User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            var document = DocumentRepository.Find(DocumentId);
+
+            if (document == null)
+            {
+                messageCreate = "Document not found.";
+                messageRead = string.Empty;
+                messageDelete = string.Empty;
+                messageUpdate = string.Empty;
+                return;
+            }
+
+            var authorizationResult = await AuthorizationService
+                .AuthorizeAsync(user, document, Operations.Create);
+
+            messageCreate = authorizationResult.Succeeded
+                ? $"You are authorized to create document {DocumentId}."
+                : $"You are NOT authorized to create document {DocumentId}.";
+
+            authorizationResult = await AuthorizationService
+                .AuthorizeAsync(user, document, Operations.Read);
+
+            messageRead = authorizationResult.Succeeded
+                ? $"You are authorized to read document {DocumentId}."
+                : $"You are NOT authorized to read document {DocumentId}.";
+
+            authorizationResult = await AuthorizationService
+                .AuthorizeAsync(user, document, Operations.Delete);
+
+            messageDelete = authorizationResult.Succeeded
+                ? $"You are authorized to delete document {DocumentId}."
+                : $"You are NOT authorized to delete document {DocumentId}.";
+
+            authorizationResult = await AuthorizationService
+                .AuthorizeAsync(user, document, Operations.Update);
+
+            messageUpdate = authorizationResult.Succeeded
+                ? $"You are authorized to update document {DocumentId}."
+                : $"You are NOT authorized to update document {DocumentId}.";
+        }
+    }
+}

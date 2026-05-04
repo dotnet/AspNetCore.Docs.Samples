@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using BlazorWebAppAuthorization.Data;
+using BlazorWebAppAuthorization.Models;
 
 namespace BlazorWebAppAuthorization.Identity;
 
@@ -43,6 +44,29 @@ public class SeedData
             RoleList = [ "SuperUser" ],
             UserName = "sarah@contoso.com"
         },
+    ];
+
+    private static readonly List<Document> documents =
+    [
+        new Document()
+        {
+            Author = "leela@contoso.com",
+            Content = null,
+            ID = Guid.Parse("aaaabbbb-0000-cccc-1111-dddd2222eeee"),
+            Title = "Test Document 1"
+        },
+        new Document()
+        {
+            Author = "harry@contoso.com",
+            Content = null,
+            ID = Guid.Parse("00001111-aaaa-2222-bbbb-3333cccc4444"),
+            Title = "Test Document 2"
+        },
+        new Document() {
+            Author = "sarah@contoso.com",
+            Content = null,
+            ID = Guid.Parse("11112222-bbbb-3333-cccc-4444dddd5555"),
+            Title = "Test Document 3" },
     ];
 
     public static async Task InitializeAsync(IServiceProvider serviceProvider)
@@ -98,6 +122,8 @@ public class SeedData
                 }
             }
         }
+
+        context.Documents.AddRange(documents);
 
         await context.SaveChangesAsync();
     }
