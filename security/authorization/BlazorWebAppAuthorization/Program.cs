@@ -1,10 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using BlazorWebAppAuthorization.Components;
 using BlazorWebAppAuthorization.Components.Account;
 using BlazorWebAppAuthorization.Data;
 using BlazorWebAppAuthorization.Identity;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using BlazorWebAppAuthorization.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +68,15 @@ builder.Services.AddAuthorizationBuilder()
         policy.RequireClaim("Department", "Customer Service"))
     .AddPolicy("HumanResourcesMember", policy =>
         policy.RequireClaim("Department", "Human Resources"));
+
+// Add services for resource-based authorization.
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("SameAuthorPolicy", policy =>
+        policy.Requirements.Add(new SameAuthorRequirement()));
+
+builder.Services.AddSingleton<IAuthorizationHandler, DocumentAuthorizationHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, DocumentAuthorizationCrudHandler>();
+builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 
 var app = builder.Build();
 

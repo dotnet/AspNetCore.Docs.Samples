@@ -1,0 +1,48 @@
+@page "/access-document/{documentId}"
+@using Microsoft.AspNetCore.Authorization
+@using BlazorWebAppAuthorization.Data
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IAuthorizationService AuthorizationService
+@inject IDocumentRepository DocumentRepository
+
+<h1>Access Document</h1>
+
+<AuthorizeView>
+    <Authorized>
+        <p>Hello, @context.User.Identity?.Name!</p>
+        <p>@message</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>You're not authorized to access this page.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private string? message;
+
+    [Parameter]
+    public string? DocumentId { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var user = (await AuthStateProvider.GetAuthenticationStateAsync()).User;
+
+        if (user.Identity is not null && user.Identity.IsAuthenticated)
+        {
+            var document = DocumentRepository.Find(DocumentId);
+
+            if (document == null)
+            {
+                message = "Document not found.";
+                return;
+            }
+
+            var authorizationResult = await AuthorizationService
+                .AuthorizeAsync(user, document, "SameAuthorPolicy");
+
+            message = authorizationResult.Succeeded
+                ? $"You are authorized for document {DocumentId}."
+                : $"You are NOT authorized for document {DocumentId}.";
+        }
+    }
+}

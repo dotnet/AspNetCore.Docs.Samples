@@ -6,6 +6,7 @@ For more information, see the following resources:
 
 * [Role-based authorization in ASP.NET Core](https://learn.microsoft.com/aspnet/core/security/authorization/roles)
 * [Claim-based authorization in ASP.NET Core](https://learn.microsoft.com/aspnet/core/security/authorization/claims)
+* [Resource-based authorization in ASP.NET Core](https://learn.microsoft.com/aspnet/core/security/authorization/resource-based)
 
 > [!CAUTION]
 > This sample app uses an in-memory database to store user information, which isn't suitable for production scenarios. The sample app is intended for demonstration purposes only and shouldn't be used as a starting point for production apps.
@@ -23,17 +24,23 @@ For more information, see the following resources:
 
 1. Run the app.
 
-1. Sign into the app using any of the following accounts to demonstrate the role-based and policy-based authorization features of the app that match the examples in the article:
+1. Sign into the app using any of the following accounts to demonstrate the role-based, policy-based, and resource-based authorization features of the app that match the examples in the articles:
 
    * `leela@contoso.com` (Password: `Passw0rd
      * The `Admin` and `SuperUser` roles.
      * An `EmployeeNumber` claim with a value of `1`.
      * A `Department` claim with a `Customer Service` value.
      * A `Department` claim with a `Human Resources` value.
+     * The author of a test resource with an `Id` (Guid) of `aaaabbbb-0000-cccc-1111-dddd2222eeee` (Test Document 1).
+     * Can perform full CRUD operations on resources in the `AccessDocumentCrud` page.
    * `harry@contoso.com` (Password: `Passw0rd!`)
      * The `Admin` role.
      * An `EmployeeNumber` claim with a value of `10`.
      * A `Department` claim with a `Customer Service` value.
+     * The author of a test resource with an `Id` (Guid) of `00001111-aaaa-2222-bbbb-3333cccc4444` (Test Document 2).
+     * Can create, read, and update resources in the `AccessDocumentCrud` page.
    * `sarah@contoso.com` (Password: `Passw0rd!`)
      * The `SuperUser` role.
      * Doesn't have claims as an employee (`EmployeeNumber`) or for a department (`Department`).
+     * The author of a test resource with an `Id` (Guid) of `11112222-bbbb-3333-cccc-4444dddd5555` (Test Document 3).
+     * Can delete and read resources in the `AccessDocumentCrud` page.
