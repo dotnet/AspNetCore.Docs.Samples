@@ -25,7 +25,7 @@ builder.Services.ConfigureHttpJsonOptions(options => {
     options.SerializerOptions.WriteIndented = true;
 });
 
-// Add the CatalogContext to the DI container
+// Add the AppDb to the DI container
 builder.Services.AddDbContext<AppDb>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("AppDb")));
 
