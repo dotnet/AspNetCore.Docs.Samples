@@ -1,0 +1,36 @@
+@HostAddress = http://localhost:8080
+
+### Fetch the OpenAPI document (most variants)
+GET {{HostAddress}}/openapi/v1.json
+Accept: application/json
+
+### GET / - Hello world (FIRST, DOCUMENTtransformer1, DOCUMENTtransformer2,
+###   DOCUMENTtransformerUse999, DOCUMENTtransformerInOut, SWAGGERUI,
+###   MAPOPENAPIWITHAUTH, MAPOPENAPIWITHCACHING, OPENAPIWITHSCALAR,
+###   OPERATIONtransformer1)
+GET {{HostAddress}}/
+
+### GET / - Returns JSON body with decimal amount (SCHEMAtransformer1)
+GET {{HostAddress}}/
+Accept: application/json
+
+### GET /weatherforecast (DEFAULT)
+GET {{HostAddress}}/weatherforecast
+Accept: application/json
+
+### GET /old - Deprecated endpoint (OPERATIONtransformer2)
+GET {{HostAddress}}/old
+
+### GET /new - Replacement endpoint (OPERATIONtransformer2)
+GET {{HostAddress}}/new
+
+### Fetch "internal" OpenAPI document (MULTIDOC_OPERATIONtransformer1)
+GET {{HostAddress}}/openapi/internal.json
+Accept: application/json
+
+### Fetch "public" OpenAPI document (MULTIDOC_OPERATIONtransformer1)
+GET {{HostAddress}}/openapi/public.json
+Accept: application/json
+
+### GET /world - Internal endpoint (MULTIDOC_OPERATIONtransformer1)
+GET {{HostAddress}}/world

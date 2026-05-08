@@ -1,0 +1,80 @@
+@HostAddress = http://localhost:5221
+
+GET {{HostAddress}}/openapi/v1.json
+Accept: application/json
+
+###
+
+## Apply a `JsonPatchDocument<T>` to an object
+
+# The following example demonstrates:
+#
+# * The `add`, `replace`, and `remove` operations.
+# * Operations on nested properties.
+# * Adding a new item to an array.
+# * Using a JSON String Enum Converter in a JSON patch document.
+
+# Get the original customer
+
+GET {{HostAddress}}/customers/1
+Accept: application/json
+
+###
+
+# Update the object with PATCH. The response contains the updated object.
+
+PATCH  {{HostAddress}}/customers/1
+Content-Type: application/json-patch+json
+Accept: application/json
+
+[
+  { "op": "replace", "path": "/firstName", "value": "Jane" },
+  { "op": "remove", "path": "/email"},
+  { "op": "add", "path": "/address/zipCode", "value": "90210" },
+  { "op": "add", "path": "/phoneNumbers/-", "value": { "number": "987-654-3210", "type": "Work" } }
+]
+
+###
+
+## Apply a JsonPatchDocument with error handling
+
+# There are various errors that can occur when applying a JSON Patch document.
+# For example, the target object may not have the specified property, or the value
+# specified might be incompatible with the property type.
+
+# JSON Patch supports the test operation, which checks if a specified value equals
+# the target property. If it doesn't, it returns an error.
+
+# The following example demonstrates how to handle these errors gracefully.
+
+# Error response - path not found
+
+PATCH  {{HostAddress}}/customers/1
+Content-Type: application/json-patch+json
+Accept: application/json
+
+[
+  { "op": "add", "path": "/foobar", "value": 42 }
+]
+
+###
+
+# Error response - test operation fails
+
+PATCH  {{HostAddress}}/customers/1
+Content-Type: application/json-patch+json
+Accept: application/json
+
+[
+    { "op": "replace", "path": "/email", "value": "marysmith@gmail.com"},
+    { "op": "test", "path": "/firstName", "value": "Mary" },
+    { "op": "replace", "path": "/lastName", "value": "Smith" }
+]
+
+###
+
+# Note that the application detected the errors in the PATCH operation and
+# did not apply any of the changes.
+
+GET {{HostAddress}}/customers/1
+Accept: application/json
