@@ -10,27 +10,23 @@ public class SecurityPolicy
     public bool CanGetWeather { get; set; }
 }
 
-public class CanGetWeatherAuthorizationHandler : AuthorizationHandler<CanGetWeatherRequirement>
+public class CanGetWeatherAuthorizationHandler(IHttpClientFactory httpClientFactory) 
+    : AuthorizationHandler<CanGetWeatherRequirement>
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-
-    public CanGetWeatherAuthorizationHandler(IHttpClientFactory httpClientFactory)
-    {
-        _httpClientFactory = httpClientFactory;
-    }
-
-    protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, CanGetWeatherRequirement requirement)
+    protected override async Task HandleRequirementAsync(
+        AuthorizationHandlerContext context, CanGetWeatherRequirement requirement)
     {
         var userId = context.User.Identities.First();
 
         if (userId.IsAuthenticated)
         {
             var appid = userId.Claims.SingleOrDefault(x => x.Type == "appid");
-            if (appid != null)
+
+            if (appid is not null)
             {
                 var value = appid.Value;
-
-                var client = _httpClientFactory.CreateClient(AppConstants.SecurityAPIClient);
+                var client = 
+                    httpClientFactory.CreateClient(AppConstants.SecurityAPIClient);
                 var response = await client.GetAsync($"SecurityPolicy/{value}");
 
                 if (response.IsSuccessStatusCode)
@@ -38,7 +34,10 @@ public class CanGetWeatherAuthorizationHandler : AuthorizationHandler<CanGetWeat
                     var content = await response.Content.ReadAsStringAsync();
                     var policy = JsonSerializer.Deserialize<SecurityPolicy>(content);
 
-                    if (policy != null && policy.CanGetWeather) context.Succeed(requirement);
+                    if (policy is not null && policy.CanGetWeather)
+                    {
+                        context.Succeed(requirement);
+                    }
                 }
             }
         }
