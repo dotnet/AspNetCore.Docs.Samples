@@ -1,0 +1,8 @@
+This is a sample text file served from wwwroot using TypedResults.VirtualFile().
+
+The VirtualFile method serves files relative to the WebRootPath (wwwroot folder).
+It's ideal for static assets that are part of your web application.
+
+This file demonstrates how ASP.NET Core minimal APIs can serve files
+using the strongly-typed TypedResults class, which provides better
+OpenAPI documentation and compile-time type safety.
