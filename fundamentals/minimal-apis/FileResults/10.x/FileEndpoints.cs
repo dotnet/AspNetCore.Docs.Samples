@@ -10,8 +10,7 @@ public static class FileEndpoints
 {
     public static void MapFileResults(this WebApplication app)
     {
-        // -------- Examples of different File result types ---------
-
+        // <snippet_file_types>
         app.MapGet("/report", () =>
         {
             // TypedResults.File with a byte[] returns a FileContentHttpResult
@@ -25,9 +24,9 @@ public static class FileEndpoints
             Stream stream = new MemoryStream("Hello, World!"u8.ToArray());
             return TypedResults.File(stream, "application/octet-stream");
         });
+        // </snippet_file_types>
 
-        // -------- Examples with OpenAPI metadata ---------
-
+        // <snippet_openapi>
         app.MapGet("/image", () =>
         {
             // A 1x1 red pixel BMP (bitmap header + single pixel)
@@ -38,6 +37,7 @@ public static class FileEndpoints
         })
         // Use Stream to produce the correct schema in OpenAPI (format: binary)
         .Produces<Stream>(contentType: MediaTypeNames.Image.Bmp);
+        // </snippet_openapi>
 
         app.MapGet("/text", () =>
         {
@@ -47,8 +47,7 @@ public static class FileEndpoints
         // Use string as the TResponse to get a simple type: string schema in OpenAPI (no format)
         .Produces<string>(contentType: MediaTypeNames.Text.Plain);
 
-        // -------- Support for conditional requests --------
-
+        // <snippet_conditional>
         app.MapGet("/config", (
             [FromHeader(Name = "If-None-Match")] string? ifNoneMatch,
             [FromHeader(Name = "If-Modified-Since")] string? ifModifiedSince) =>
@@ -65,9 +64,9 @@ public static class FileEndpoints
         })
         .Produces<object>(StatusCodes.Status200OK)
         .Produces(StatusCodes.Status304NotModified);
+        // </snippet_conditional>
 
-        // -------- Support for range requests --------
-
+        // <snippet_range>
         app.MapGet("/video/{id}", (string id,
             [FromHeader(Name = "Range")] string? range) =>
         {
@@ -82,6 +81,7 @@ public static class FileEndpoints
         .Produces<Stream>(StatusCodes.Status200OK, "video/mp4")
         .Produces<Stream>(StatusCodes.Status206PartialContent, "video/mp4")
         .Produces(StatusCodes.Status416RangeNotSatisfiable);
+        // </snippet_range>
     }
 
     private static byte[] GenerateReport()

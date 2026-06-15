@@ -9,8 +9,7 @@ namespace FileResults.Controllers;
 [Route("[controller]")]
 public class FilesController : ControllerBase
 {
-    // -------- Examples of different File result types ---------
-
+    // <snippet_file_types>
     [HttpGet("report")]
     public FileContentResult Report()
     {
@@ -26,9 +25,9 @@ public class FilesController : ControllerBase
         Stream stream = new MemoryStream("Hello, World!"u8.ToArray());
         return File(stream, "application/octet-stream");
     }
+    // </snippet_file_types>
 
-    // -------- Examples with OpenAPI metadata ---------
-
+    // <snippet_openapi>
     [HttpGet("image")]
     // Use Stream to produce the correct schema in OpenAPI (format: binary)
     [ProducesResponseType<Stream>(StatusCodes.Status200OK, MediaTypeNames.Image.Bmp)]
@@ -40,6 +39,7 @@ public class FilesController : ControllerBase
                        0x01, 0x00, 0x01, 0x00, 0x18, 0x00, 0x00, 0x00, 0xFF, 0x00];
         return File(data, "image/bmp", "pixel.bmp");
     }
+    // </snippet_openapi>
 
     [HttpGet("text")]
     [ProducesResponseType<string>(StatusCodes.Status200OK, MediaTypeNames.Text.Plain)]
@@ -49,8 +49,7 @@ public class FilesController : ControllerBase
         return File(data, "text/plain");
     }
 
-    // -------- Support for conditional requests ---------
-
+    // <snippet_conditional>
     [HttpGet("config")]
     [ProducesResponseType<object>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status304NotModified)]
@@ -68,9 +67,9 @@ public class FilesController : ControllerBase
             lastModified: lastModified,
             entityTag: etag);
     }
+    // </snippet_conditional>
 
-    // -------- Support for range requests ---------
-
+    // <snippet_range>
     [HttpGet("video/{id}")]
     [ProducesResponseType<Stream>(StatusCodes.Status200OK, "video/mp4")]
     [ProducesResponseType<Stream>(StatusCodes.Status206PartialContent, "video/mp4")]
@@ -86,6 +85,7 @@ public class FilesController : ControllerBase
             fileDownloadName: "video.mp4",
             enableRangeProcessing: true);
     }
+    // </snippet_range>
 
     private static byte[] GenerateReport()
     {
