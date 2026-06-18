@@ -59,7 +59,7 @@ public class FilesController : ControllerBase
     {
         byte[] data = System.IO.File.ReadAllBytes("Data/config.json");
         var lastModified = System.IO.File.GetLastWriteTimeUtc("Data/config.json");
-        var etag = new EntityTagHeaderValue($"\"{ Convert.ToHexString(SHA256.HashData(data))}\"");
+        var etag = new EntityTagHeaderValue($"\"{Convert.ToHexString(SHA256.HashData(data))}\"");
 
         return File(
             data,
