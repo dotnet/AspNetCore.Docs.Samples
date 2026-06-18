@@ -1,9 +1,0 @@
-This is a sample document served using TypedResults.PhysicalFile().
-
-The PhysicalFile method serves files using their absolute path on the file system.
-This is useful when files are stored outside the wwwroot folder,
-such as in a data directory or user uploads folder.
-
-Physical file paths provide more flexibility for serving files from
-any location on the server's file system, while still benefiting from
-efficient file streaming and HTTP range request support.

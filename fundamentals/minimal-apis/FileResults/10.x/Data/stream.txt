@@ -1,1 +1,0 @@
-This response was streamed from a file on disk. The server reads the content incrementally and writes it to the response without buffering the entire file in memory.
