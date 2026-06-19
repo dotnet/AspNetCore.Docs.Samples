@@ -1,0 +1,9 @@
+{
+  "name": "FileResults Demo",
+  "version": "1.0.0",
+  "description": "Demonstrates ASP.NET Core TypedResults file serving capabilities",
+  "features": [
+    "TypedResults.File",
+    "OpenAPI binary file support"
+  ]
+}

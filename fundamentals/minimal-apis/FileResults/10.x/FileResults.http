@@ -1,0 +1,116 @@
+@HostAddress = http://localhost:5255
+
+### OpenAPI document
+
+GET {{HostAddress}}/openapi/v1.json
+Accept: application/json
+
+### Examples of different File result types
+
+# --- Minimal APIs ---
+
+GET {{HostAddress}}/report
+
+###
+
+GET {{HostAddress}}/download
+
+### --- Controllers ---
+
+GET {{HostAddress}}/Files/report
+
+###
+
+GET {{HostAddress}}/Files/download
+
+### --- OpenAPI Metadata ---
+
+# --- Minimal APIs ---
+
+GET {{HostAddress}}/image
+
+###
+
+GET {{HostAddress}}/text
+
+
+### --- Controllers ---
+
+GET {{HostAddress}}/Files/image
+
+###
+
+GET {{HostAddress}}/Files/text
+
+### --- Conditional requests ---
+
+# Full request - returns 200 OK with ETag and Last-Modified headers
+
+GET {{HostAddress}}/config
+
+{{
+  $global.configEtag = response.headers.etag;
+  $global.configLastModified = response.headers["last-modified"];
+}}
+
+###
+
+# Cache validation: If-None-Match with matching ETag - returns 304 Not Modified
+
+GET {{HostAddress}}/config
+If-None-Match: {{$global.configEtag}}
+
+###
+
+# Cache validation: If-Modified-Since with date from last GET - returns 304 Not Modified
+
+GET {{HostAddress}}/config
+If-Modified-Since: {{$global.configLastModified}}
+
+
+### --- Range requests ---
+
+# Full request - returns 200 OK
+GET {{HostAddress}}/video/demo
+
+###
+
+# Range request - returns 206 Partial Content with first 10 bytes
+GET {{HostAddress}}/video/demo
+Range: bytes=0-9
+
+###
+
+# Range request - returns 206 Partial Content with bytes 5-14
+GET {{HostAddress}}/video/demo
+Range: bytes=5-14
+
+###
+
+### Invalid range - returns 416 Range Not Satisfiable
+GET {{HostAddress}}/video/demo
+Range: bytes=9999-10000
+
+### --- Controller-based range requests ---
+
+# Full request - returns 200 OK
+
+GET {{HostAddress}}/Files/video/demo
+
+###
+
+# Range request - returns 206 Partial Content with first 10 bytes
+GET {{HostAddress}}/Files/video/demo
+Range: bytes=0-9
+
+###
+
+# Range request - returns 206 Partial Content with bytes 5-14
+GET {{HostAddress}}/Files/video/demo
+Range: bytes=5-14
+
+###
+
+### Invalid range - returns 416 Range Not Satisfiable
+GET {{HostAddress}}/Files/video/demo
+Range: bytes=9999-10000
