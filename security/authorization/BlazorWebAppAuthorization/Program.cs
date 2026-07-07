@@ -7,6 +7,7 @@ using BlazorWebAppAuthorization.Components.Account;
 using BlazorWebAppAuthorization.Data;
 using BlazorWebAppAuthorization.Identity;
 using BlazorWebAppAuthorization.Policies.Handlers;
+using BlazorWebAppAuthorization.Policies.Requirements;
 
 var builder = WebApplication.CreateBuilder(args);
 
