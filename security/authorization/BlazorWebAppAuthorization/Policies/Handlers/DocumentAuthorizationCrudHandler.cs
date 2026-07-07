@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using BlazorWebAppAuthorization.Models;
 
-namespace BlazorWebAppAuthorization.Services;
+namespace BlazorWebAppAuthorization.Policies.Handlers;
 
 public class DocumentAuthorizationCrudHandler :
     AuthorizationHandler<OperationAuthorizationRequirement, Document>

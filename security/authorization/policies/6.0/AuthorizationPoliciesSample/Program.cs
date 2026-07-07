@@ -1,6 +1,4 @@
 using AuthorizationPoliciesSample.Data;
-using AuthorizationPoliciesSample.Policies.Handlers;
-using AuthorizationPoliciesSample.Policies.Requirements;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +23,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("BadgeEntry", policy =>
         policy.RequireAssertion(context => context.User.HasClaim(c =>
             (c.Type == "BadgeId" || c.Type == "TemporaryBadgeId")
-            && c.Issuer == "https://microsoftsecurity")));
+            && c.Issuer == "https://contososecurity")));
 });
 
 // <snippet_minimumAgeHandlerRegistration>

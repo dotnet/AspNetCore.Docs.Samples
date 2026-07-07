@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
 using BlazorWebAppAuthorization.Models;
+using Microsoft.AspNetCore.Authorization;
 
-namespace BlazorWebAppAuthorization.Services;
+namespace BlazorWebAppAuthorization.Policies.Handlers;
 
 #region snippet_HandlerAndRequirement
 public class DocumentAuthorizationHandler :

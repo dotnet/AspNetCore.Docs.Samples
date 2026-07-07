@@ -6,7 +6,7 @@ using BlazorWebAppAuthorization.Components;
 using BlazorWebAppAuthorization.Components.Account;
 using BlazorWebAppAuthorization.Data;
 using BlazorWebAppAuthorization.Identity;
-using BlazorWebAppAuthorization.Services;
+using BlazorWebAppAuthorization.Policies.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,6 +43,11 @@ builder.Services.AddIdentityCore<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 */
 
+// Add the AtLeast21 authorization policy
+builder.Services.AddAuthorizationBuilder()
+    .AddPolicy("AtLeast21", policy =>
+        policy.Requirements.Add(new MinimumAgeRequirement(21)));
+
 // Add authorization policies for the Admin and SuperUser roles.
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("RequireAdminRole",
@@ -76,6 +81,7 @@ builder.Services.AddAuthorizationBuilder()
 
 builder.Services.AddSingleton<IAuthorizationHandler, DocumentAuthorizationHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, DocumentAuthorizationCrudHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, MinimumAgeHandler>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
 
 var app = builder.Build();

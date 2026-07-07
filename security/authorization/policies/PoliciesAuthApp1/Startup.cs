@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,8 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PoliciesAuthApp1.Data;
-using PoliciesAuthApp1.Services.Handlers;
-using PoliciesAuthApp1.Services.Requirements;
 
 namespace PoliciesAuthApp1
 {
@@ -57,7 +55,7 @@ namespace PoliciesAuthApp1
                         context.User.HasClaim(c =>
                             (c.Type == "BadgeId" ||
                              c.Type == "TemporaryBadgeId") &&
-                             c.Issuer == "https://microsoftsecurity")));
+                             c.Issuer == "https://contososecurity")));
             });
 
             services.AddSingleton<IAuthorizationHandler, MinimumAgeHandler>();

@@ -1,0 +1,12 @@
+@page "/pass-atleast21-policy-with-authorizeview"
+
+<h1>Pass 'AtLeast21' policy with AuthorizeView</h1>
+
+<AuthorizeView Policy="AtLeast21">
+    <Authorized>
+        <p>You satisfy the 'AtLeast21' policy.</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>You <b>don't</b> satisfy the 'AtLeast21' policy.</p>
+    </NotAuthorized>
+</AuthorizeView>
