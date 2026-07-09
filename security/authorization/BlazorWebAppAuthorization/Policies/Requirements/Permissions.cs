@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
+
+namespace BlazorWebAppAuthorization.Policies.Requirements;
 
 public class ReadPermission : IAuthorizationRequirement
 {

@@ -1,5 +1,8 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using BlazorWebAppAuthorization.Policies.Requirements;
+
+namespace BlazorWebAppAuthorization.Policies.Handlers;
 
 public class PermissionHandler : IAuthorizationHandler
 {

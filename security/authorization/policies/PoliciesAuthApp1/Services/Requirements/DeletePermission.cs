@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
-namespace PoliciesAuthApp1.Services.Requirements
+public class DeletePermission : IAuthorizationRequirement
 {
-    public class DeletePermission : IAuthorizationRequirement
-    {
-        // Code omitted for brevity
-    }
+    // Code omitted for brevity
 }

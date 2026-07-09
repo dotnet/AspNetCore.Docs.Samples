@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-
-namespace AuthorizationPoliciesSample.Policies.Requirements;
+using Microsoft.AspNetCore.Authorization;
 
 public class MinimumAgeRequirement : IAuthorizationRequirement
 {

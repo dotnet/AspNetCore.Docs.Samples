@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using BlazorWebAppAuthorization.Models;
 
-namespace BlazorWebAppAuthorization.Services;
+namespace BlazorWebAppAuthorization.Policies.Handlers;
 
-#region snippet_HandlerAndRequirement
 public class DocumentAuthorizationHandler :
     AuthorizationHandler<SameAuthorRequirement, Document>
 {
@@ -20,4 +19,3 @@ public class DocumentAuthorizationHandler :
 }
 
 public class SameAuthorRequirement : IAuthorizationRequirement { }
-#endregion

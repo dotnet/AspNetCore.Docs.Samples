@@ -20,7 +20,8 @@ public class SeedData
             Claims = [
                 new("EmployeeNumber", "1"),
                 new("Department", "Customer Service"),
-                new("Department", "Human Resources")
+                new("Department", "Human Resources"),
+                new(ClaimTypes.DateOfBirth, "2000-01-01")
             ],
             UserName = "leela@contoso.com"
         },
@@ -32,7 +33,8 @@ public class SeedData
             RoleList = [ "Admin" ],
             Claims = [
                 new("EmployeeNumber", "10"),
-                new("Department", "Customer Service")
+                new("Department", "Customer Service"),
+                new(ClaimTypes.DateOfBirth, "2008-01-01")
             ],
             UserName = "harry@contoso.com"
         },
@@ -42,6 +44,9 @@ public class SeedData
             NormalizedEmail = "SARAH@CONTOSO.COM",
             NormalizedUserName = "SARAH@CONTOSO.COM",
             RoleList = [ "SuperUser" ],
+            Claims = [
+                new(ClaimTypes.DateOfBirth, "2008-01-01")
+            ],
             UserName = "sarah@contoso.com"
         },
     ];

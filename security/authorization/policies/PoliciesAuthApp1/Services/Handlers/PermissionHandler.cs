@@ -1,57 +1,51 @@
-﻿namespace PoliciesAuthApp1.Services.Handlers
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+
+public class PermissionHandler : IAuthorizationHandler
 {
-    // <snippet_PermissionHandlerClass>
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Authorization;
-    using PoliciesAuthApp1.Services.Requirements;
-
-    public class PermissionHandler : IAuthorizationHandler
+    public Task HandleAsync(AuthorizationHandlerContext context)
     {
-        public Task HandleAsync(AuthorizationHandlerContext context)
-        {
-            var pendingRequirements = context.PendingRequirements.ToList();
+        var pendingRequirements = context.PendingRequirements.ToList();
 
-            foreach (var requirement in pendingRequirements)
+        foreach (var requirement in pendingRequirements)
+        {
+            if (requirement is ReadPermission)
             {
-                if (requirement is ReadPermission)
+                if (IsOwner(context.User, context.Resource) ||
+                    IsSponsor(context.User, context.Resource))
                 {
-                    if (IsOwner(context.User, context.Resource) ||
-                        IsSponsor(context.User, context.Resource))
-                    {
-                        context.Succeed(requirement);
-                    }
-                }
-                else if (requirement is EditPermission ||
-                         requirement is DeletePermission)
-                {
-                    if (IsOwner(context.User, context.Resource))
-                    {
-                        context.Succeed(requirement);
-                    }
+                    context.Succeed(requirement);
                 }
             }
-
-            //TODO: Use the following if targeting a version of
-            //.NET Framework older than 4.6:
-            //      return Task.FromResult(0);
-            return Task.CompletedTask;
+            else if (requirement is EditPermission ||
+                        requirement is DeletePermission)
+            {
+                if (IsOwner(context.User, context.Resource))
+                {
+                    context.Succeed(requirement);
+                }
+            }
         }
 
-        private bool IsOwner(ClaimsPrincipal user, object resource)
-        {
-            // Code omitted for brevity
-
-            return true;
-        }
-
-        private bool IsSponsor(ClaimsPrincipal user, object resource)
-        {
-            // Code omitted for brevity
-
-            return true;
-        }
+        // Use the following if targeting a version of
+        // .NET Framework older than 4.6:
+        // return Task.FromResult(0);
+        return Task.CompletedTask;
     }
-    // </snippet_PermissionHandlerClass>
+
+    private bool IsOwner(ClaimsPrincipal user, object resource)
+    {
+        // Code omitted for brevity
+
+        return true;
+    }
+
+    private bool IsSponsor(ClaimsPrincipal user, object resource)
+    {
+        // Code omitted for brevity
+
+        return true;
+    }
 }
