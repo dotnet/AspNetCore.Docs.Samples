@@ -1,6 +1,14 @@
+using System.Text.RegularExpressions;
 
-public static class MyUtils
+public static partial class MyUtils
 {
+    [GeneratedRegex(@"^[^\\/:*?""<>|]+\.(jpg|jpeg|png)$",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant)]
+    private static partial Regex FileNameRegex();
+
+    public static bool IsValidFileName(string? fileName) =>
+        !string.IsNullOrWhiteSpace(fileName) && FileNameRegex().IsMatch(fileName);
+
     static string GetOrCreateFilePath(string fileName, string contentRootPath,
          string filesDirectory = "uploadFiles")
     {
