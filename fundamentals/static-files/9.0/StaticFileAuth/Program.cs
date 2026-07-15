@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -127,6 +128,13 @@ async Task SaveFileWithCustomFileName(IFormFile file, string fileSaveName)
 // <snippet_1>
 app.MapGet("/files/{fileName}",  IResult (string fileName) => 
     {
+        // Validate the requested name against the server-generated format
+        // (a 32-character hex GUID with an optional extension).
+        if (!FileNameValidator.StoredFileName().IsMatch(fileName))
+        {
+            return TypedResults.BadRequest("Invalid file name.");
+        }
+
         var filePath = GetOrCreateFilePath(fileName);
 
         if (File.Exists(filePath))
@@ -159,4 +167,12 @@ app.MapPost("/files",
     .RequireAuthorization("AdminsOnly");
 
 app.Run();
+
+// Matches names produced by the upload endpoint: a 32-character hex GUID
+// (Guid.ToString("N")) followed by an optional file extension.
+internal static partial class FileNameValidator
+{
+    [GeneratedRegex(@"^[0-9a-fA-F]{32}(\.[A-Za-z0-9]+)?$")]
+    public static partial Regex StoredFileName();
+}
 // </snippet_1>
