@@ -128,8 +128,8 @@ async Task SaveFileWithCustomFileName(IFormFile file, string fileSaveName)
 // <snippet_1>
 app.MapGet("/files/{fileName}",  IResult (string fileName) => 
     {
-        // Validate the requested name against the server-generated format
-        // (a 32-character hex GUID with an optional extension).
+        // Validate the requested name against the stored-name format
+        // (a 32-character hex GUID plus an optional safe extension).
         if (!FileNameValidator.StoredFileName().IsMatch(fileName))
         {
             return TypedResults.BadRequest("Invalid file name.");
