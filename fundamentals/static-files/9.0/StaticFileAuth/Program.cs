@@ -148,15 +148,22 @@ app.MapGet("/files/{fileName}",  IResult (string fileName) =>
     .RequireAuthorization("AuthenticatedUsers");
 
 app.MapPost("/files", 
-       async (IFormFile file, LinkGenerator linker, HttpContext context) =>
+       async Task<IResult> (IFormFile file, LinkGenerator linker, HttpContext context) =>
     {
-        // Don't rely on the file.FileName as it is only metadata that can be
-        // manipulated by the end-user. See the `Utilities.IsFileValid` method that
-        // takes an IFormFile and validates its signature within the
-        // AllowedFileSignatures
-        
+        // Don't rely on file.FileName: it's client-controlled metadata. Generate
+        // the stored name on the server, then validate it with the same
+        // FileNameValidator.StoredFileName pattern used by the download endpoint.
+        // Because the extension is derived from the untrusted file.FileName, this
+        // rejects uploads whose extension would produce a name the download
+        // endpoint can't serve.
         var fileSaveName = Guid.NewGuid().ToString("N") 
                            + Path.GetExtension(file.FileName);
+
+        if (!FileNameValidator.StoredFileName().IsMatch(fileSaveName))
+        {
+            return TypedResults.BadRequest("Invalid file name.");
+        }
+
         await SaveFileWithCustomFileName(file, fileSaveName);
         
         context.Response.Headers.Append("Location",
