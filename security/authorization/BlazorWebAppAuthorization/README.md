@@ -26,7 +26,7 @@ For more information, see the following resources:
 
 1. Sign into the app using any of the following accounts to demonstrate the role-based, policy-based, and resource-based authorization features of the app that match the examples in the articles:
 
-   * `leela@contoso.com` (Password: `Passw0rd
+   * `leela@contoso.com` (Password: `Passw0rd!`)
      * The `Admin` and `SuperUser` roles.
      * An `EmployeeNumber` claim with a value of `1`.
      * A `Department` claim with a `Customer Service` value.
