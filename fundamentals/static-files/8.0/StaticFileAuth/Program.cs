@@ -1,5 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -127,6 +128,13 @@ async Task SaveFileWithCustomFileName(IFormFile file, string fileSaveName)
 // <snippet_1>
 app.MapGet("/files/{fileName}",  IResult (string fileName) => 
     {
+        // Validate the requested name against the stored-name format
+        // (a 32-character hex GUID plus an optional safe extension).
+        if (!FileNameValidator.StoredFileName().IsMatch(fileName))
+        {
+            return TypedResults.BadRequest("Invalid file name.");
+        }
+
         var filePath = GetOrCreateFilePath(fileName);
 
         if (File.Exists(filePath))
@@ -141,12 +149,21 @@ app.MapGet("/files/{fileName}",  IResult (string fileName) =>
 
 // IFormFile uses memory buffer for uploading. For handling large file use streaming instead.
 // https://learn.microsoft.com/aspnet/core/mvc/models/file-uploads#upload-large-files-with-streaming
-app.MapPost("/files", async (IFormFile file, LinkGenerator linker, HttpContext context) =>
+app.MapPost("/files", async Task<IResult> (IFormFile file, LinkGenerator linker, HttpContext context) =>
     {
-        // Don't rely on the file.FileName as it is only metadata that can be manipulated by the end-user
-        // Take a look at the `Utilities.IsFileValid` method that takes an IFormFile and validates its signature within the AllowedFileSignatures
-        
+        // Don't rely on file.FileName: it's client-controlled metadata. Generate
+        // the stored name on the server, then validate it with the same
+        // FileNameValidator.StoredFileName pattern used by the download endpoint.
+        // Because the extension is derived from the untrusted file.FileName, this
+        // rejects uploads whose extension would produce a name the download
+        // endpoint can't serve.
         var fileSaveName = Guid.NewGuid().ToString("N") + Path.GetExtension(file.FileName);
+
+        if (!FileNameValidator.StoredFileName().IsMatch(fileSaveName))
+        {
+            return TypedResults.BadRequest("Invalid file name.");
+        }
+
         await SaveFileWithCustomFileName(file, fileSaveName);
         
         context.Response.Headers.Append("Location", linker.GetPathByName(context, "GetFileByName", new { fileName = fileSaveName}));
@@ -155,4 +172,12 @@ app.MapPost("/files", async (IFormFile file, LinkGenerator linker, HttpContext c
     .RequireAuthorization("AdminsOnly");
 
 app.Run();
+
+// Matches names produced by the upload endpoint: a 32-character hex GUID
+// (Guid.ToString("N")) followed by an optional file extension.
+internal static partial class FileNameValidator
+{
+    [GeneratedRegex(@"^[0-9a-fA-F]{32}(\.[A-Za-z0-9]+)?$")]
+    public static partial Regex StoredFileName();
+}
 // </snippet_1>

@@ -25,6 +25,13 @@ app.MapPost("/upload", async Task<Results<Ok<string>, BadRequest<string>>>
     ([FromForm] FileUploadForm fileUploadForm, HttpContext context,
                                                 IAntiforgery antiforgery) =>
 {
+    // Server-side validation. The client-side pattern can be bypassed, so the
+    // name must be validated here too.
+    if (!MyUtils.IsValidFileName(fileUploadForm.Name))
+    {
+        return TypedResults.BadRequest("Invalid file name.");
+    }
+
     await MyUtils.SaveFileWithName(fileUploadForm.FileDocument!,
               fileUploadForm.Name!, app.Environment.ContentRootPath);
     return TypedResults.Ok($"Your file with the description:" +
@@ -64,6 +71,14 @@ app.MapPost("/upload", async Task<Results<Ok<string>,BadRequest<string>>>
     try
     {
         await antiforgery.ValidateRequestAsync(context);
+
+        // Server-side validation. The client-side pattern can be bypassed, so
+        // the name must be validated here too.
+        if (!MyUtils.IsValidFileName(fileUploadForm.Name))
+        {
+            return TypedResults.BadRequest("Invalid file name.");
+        }
+
         await MyUtils.SaveFileWithName(fileUploadForm.FileDocument!,
                   fileUploadForm.Name!, app.Environment.ContentRootPath);
         return TypedResults.Ok($"Your file with the description:" +
