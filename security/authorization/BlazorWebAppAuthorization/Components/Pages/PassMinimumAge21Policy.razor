@@ -1,0 +1,12 @@
+@page "/pass-minimumage21-policy"
+
+<h1>Pass 'MinimumAge21' policy with AuthorizeView</h1>
+
+<AuthorizeView Policy="MinimumAge21">
+    <Authorized>
+        <p>You satisfy the 'MinimumAge21' policy.</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>You <b>don't</b> satisfy the 'MinimumAge21' policy.</p>
+    </NotAuthorized>
+</AuthorizeView>
