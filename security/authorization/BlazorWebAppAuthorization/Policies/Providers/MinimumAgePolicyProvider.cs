@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 using BlazorWebAppAuthorization.Policies.Requirements;
 
 namespace BlazorWebAppAuthorization.Policies.Providers;
@@ -9,7 +10,7 @@ internal class MinimumAgePolicyProvider : IAuthorizationPolicyProvider
     private readonly DefaultAuthorizationPolicyProvider _fallbackPolicyProvider;
     const string POLICY_PREFIX = "MinimumAge";
 
-    public MinimumAgePolicyProvider(Microsoft.Extensions.Options.IOptions<AuthorizationOptions> options) =>
+    public MinimumAgePolicyProvider(IOptions<AuthorizationOptions> options) =>
         _fallbackPolicyProvider = new DefaultAuthorizationPolicyProvider(options);
 
     public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
