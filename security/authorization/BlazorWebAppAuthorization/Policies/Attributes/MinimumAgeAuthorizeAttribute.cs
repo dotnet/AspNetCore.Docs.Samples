@@ -12,7 +12,9 @@ internal class MinimumAgeAuthorizeAttribute : AuthorizeAttribute
     {
         get
         {
-            if (int.TryParse(Policy.AsSpan(POLICY_PREFIX.Length), out var age))
+            if (!string.IsNullOrEmpty(Policy) &&
+                Policy.StartsWith(POLICY_PREFIX, System.StringComparison.OrdinalIgnoreCase) &&
+                int.TryParse(Policy.AsSpan(POLICY_PREFIX.Length), out var age))
             {
                 return age;
             }
