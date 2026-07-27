@@ -5,10 +5,10 @@ using BlazorWebAppAuthorization.Policies.Requirements;
 
 namespace BlazorWebAppAuthorization.Policies.Providers;
 
-internal class MinimumAgePolicyProvider(IOptions<AuthorizationOptions> options)
+internal class MinimumAgePolicyProvider(IOptions<AuthorizationOptions> options) 
     : IAuthorizationPolicyProvider
 {
-    private readonly DefaultAuthorizationPolicyProvider fallbackPolicyProvider =
+    private readonly DefaultAuthorizationPolicyProvider fallbackPolicyProvider = 
         new(options);
     const string POLICY_PREFIX = "MinimumAge";
 
