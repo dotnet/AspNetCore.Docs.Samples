@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace BlazorWebAppAuthorization.Policies.Providers;
 
-internal class MinimumAgePolicyProvider(IOptions<AuthorizationOptions> options) 
+public class MinimumAgePolicyProvider(IOptions<AuthorizationOptions> options) 
     : IAuthorizationPolicyProvider
 {
     private const string PolicyPrefix = "MinimumAge";

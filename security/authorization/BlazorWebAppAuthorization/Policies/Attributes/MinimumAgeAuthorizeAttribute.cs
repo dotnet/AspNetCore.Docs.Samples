@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BlazorWebAppAuthorization.Policies.Attributes;
 
-internal class MinimumAgeAuthorizeAttribute : AuthorizeAttribute
+public class MinimumAgeAuthorizeAttribute : AuthorizeAttribute
 {
     private const string PolicyPrefix = "MinimumAge";
 
