@@ -4,7 +4,7 @@ namespace BlazorWebAppAuthorization.Policies.Attributes;
 
 internal class MinimumAgeAuthorizeAttribute : AuthorizeAttribute
 {
-    const string POLICY_PREFIX = "MinimumAge";
+    private const string PolicyPrefix = "MinimumAge";
 
     public MinimumAgeAuthorizeAttribute(int age) => Age = age;
 
@@ -13,9 +13,9 @@ internal class MinimumAgeAuthorizeAttribute : AuthorizeAttribute
         get
         {
             if (!string.IsNullOrEmpty(Policy) &&
-                Policy.StartsWith(POLICY_PREFIX, 
-                    System.StringComparison.OrdinalIgnoreCase) &&
-                int.TryParse(Policy.AsSpan(POLICY_PREFIX.Length), out var age))
+                Policy.StartsWith(PolicyPrefix, 
+                    StringComparison.OrdinalIgnoreCase) &&
+                int.TryParse(Policy.AsSpan(PolicyPrefix.Length), out var age))
             {
                 return age;
             }
@@ -24,7 +24,8 @@ internal class MinimumAgeAuthorizeAttribute : AuthorizeAttribute
         }
         set
         {
-            Policy = $"{POLICY_PREFIX}{value}";
+            ArgumentOutOfRangeException.ThrowIfNegative(value);
+            Policy = $"{PolicyPrefix}{value}";
         }
     }
 }

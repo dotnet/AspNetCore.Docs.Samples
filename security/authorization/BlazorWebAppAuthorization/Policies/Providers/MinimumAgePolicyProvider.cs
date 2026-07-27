@@ -8,15 +8,16 @@ namespace BlazorWebAppAuthorization.Policies.Providers;
 internal class MinimumAgePolicyProvider(IOptions<AuthorizationOptions> options) 
     : IAuthorizationPolicyProvider
 {
-    const string POLICY_PREFIX = "MinimumAge";
-    public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; } = 
+    private const string PolicyPrefix = "MinimumAge";
+
+    private DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; } = 
         new(options);
 
     public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
     {
         if (policyName.StartsWith(
-                POLICY_PREFIX, StringComparison.OrdinalIgnoreCase) &&
-            int.TryParse(policyName.AsSpan(POLICY_PREFIX.Length), out var age) &&
+                PolicyPrefix, StringComparison.OrdinalIgnoreCase) &&
+            int.TryParse(policyName.AsSpan(PolicyPrefix.Length), out var age) &&
             age >= 0)
         {
             var policy = new AuthorizationPolicyBuilder(
