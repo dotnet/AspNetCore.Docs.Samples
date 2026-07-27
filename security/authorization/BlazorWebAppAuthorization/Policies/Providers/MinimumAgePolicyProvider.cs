@@ -1,16 +1,16 @@
+using BlazorWebAppAuthorization.Policies.Requirements;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using BlazorWebAppAuthorization.Policies.Requirements;
 
 namespace BlazorWebAppAuthorization.Policies.Providers;
 
 internal class MinimumAgePolicyProvider(IOptions<AuthorizationOptions> options) 
     : IAuthorizationPolicyProvider
 {
-    private readonly DefaultAuthorizationPolicyProvider fallbackPolicyProvider = 
-        new(options);
     const string POLICY_PREFIX = "MinimumAge";
+    public DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; } = 
+        new(options);
 
     public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
     {
@@ -26,15 +26,12 @@ internal class MinimumAgePolicyProvider(IOptions<AuthorizationOptions> options)
             return Task.FromResult<AuthorizationPolicy?>(policy.Build());
         }
 
-        return Task.FromResult<AuthorizationPolicy?>(null);
+        return FallbackPolicyProvider.GetPolicyAsync(policyName);
     }
 
-    public Task<AuthorizationPolicy> GetDefaultPolicyAsync() =>
-        Task.FromResult(
-            new AuthorizationPolicyBuilder(
-                IdentityConstants.ApplicationScheme)
-            .RequireAuthenticatedUser().Build());
+    public Task<AuthorizationPolicy> GetDefaultPolicyAsync() => 
+        FallbackPolicyProvider.GetDefaultPolicyAsync();
 
-    public Task<AuthorizationPolicy?> GetFallbackPolicyAsync() =>
-        Task.FromResult<AuthorizationPolicy?>(null);
+    public Task<AuthorizationPolicy?> GetFallbackPolicyAsync() => 
+        FallbackPolicyProvider.GetFallbackPolicyAsync();
 }
