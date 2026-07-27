@@ -2,6 +2,12 @@
 @using BlazorWebAppAuthorization.Policies.Attributes
 @attribute [MinimumAgeAuthorize(21)]
 
-<h1>Pass 'MinimumAge21' policy</h1>
+<h1>Pass 'MinimumAge21' policy (strongly-typed approach)</h1>
+
+<p>
+    Applies the policy to the Razor component with an [Authorize] attribute.
+    This approach is preferred for production code, as it's strongly-typed
+    and avoids the use of a string to set the policy and minimum age.
+</p>
 
 <p>You satisfy the 'MinimumAge21' policy.</p>

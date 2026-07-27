@@ -5,17 +5,17 @@ using BlazorWebAppAuthorization.Policies.Requirements;
 
 namespace BlazorWebAppAuthorization.Policies.Providers;
 
-internal class MinimumAgePolicyProvider : IAuthorizationPolicyProvider
+internal class MinimumAgePolicyProvider(IOptions<AuthorizationOptions> options)
+    : IAuthorizationPolicyProvider
 {
-    private readonly DefaultAuthorizationPolicyProvider _fallbackPolicyProvider;
+    private readonly DefaultAuthorizationPolicyProvider fallbackPolicyProvider =
+        new(options);
     const string POLICY_PREFIX = "MinimumAge";
-
-    public MinimumAgePolicyProvider(IOptions<AuthorizationOptions> options) =>
-        _fallbackPolicyProvider = new DefaultAuthorizationPolicyProvider(options);
 
     public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
     {
-        if (policyName.StartsWith(POLICY_PREFIX, StringComparison.OrdinalIgnoreCase) &&
+        if (policyName.StartsWith(
+                POLICY_PREFIX, StringComparison.OrdinalIgnoreCase) &&
             int.TryParse(policyName.AsSpan(POLICY_PREFIX.Length), out var age) &&
             age >= 0)
         {
@@ -30,7 +30,7 @@ internal class MinimumAgePolicyProvider : IAuthorizationPolicyProvider
     }
 
     public Task<AuthorizationPolicy> GetDefaultPolicyAsync() =>
-        Task.FromResult<AuthorizationPolicy>(
+        Task.FromResult(
             new AuthorizationPolicyBuilder(
                 IdentityConstants.ApplicationScheme)
             .RequireAuthenticatedUser().Build());
