@@ -33,17 +33,17 @@ For more information, see the following resources:
      * A `Department` claim with a `Human Resources` value.
      * The author of a test resource with an `Id` (Guid) of `aaaabbbb-0000-cccc-1111-dddd2222eeee` (Test Document 1).
      * Can perform full CRUD operations on resources in the `AccessDocumentCrud` page.
-     * Satisfies the 'AtLeast21' and 'MinimumAge21' policies, having a `DateOfBirth` claim with a value of `2000-01-01`.
+     * Has a `DateOfBirth` claim with a value of `2000-01-01`, which satisfies the 'AtLeast21' and 'MinimumAge21' policies.
    * `harry@contoso.com` (Password: `Passw0rd!`)
      * The `Admin` role.
      * An `EmployeeNumber` claim with a value of `10`.
      * A `Department` claim with a `Customer Service` value.
      * The author of a test resource with an `Id` (Guid) of `00001111-aaaa-2222-bbbb-3333cccc4444` (Test Document 2).
      * Can create, read, and update resources in the `AccessDocumentCrud` page.
-     * Doesn't satisfy the 'AtLeast21' and 'MinimumAge21' policies, having a `DateOfBirth` claim with a value of `2008-01-01`.
+     * Has a `DateOfBirth` claim with a value of `2008-01-01`, which doesn't satisfy the 'AtLeast21' and 'MinimumAge21' policies.
    * `sarah@contoso.com` (Password: `Passw0rd!`)
      * The `SuperUser` role.
      * Doesn't have claims as an employee (`EmployeeNumber`) or for a department (`Department`).
      * The author of a test resource with an `Id` (Guid) of `11112222-bbbb-3333-cccc-4444dddd5555` (Test Document 3).
      * Can delete and read resources in the `AccessDocumentCrud` page.
-     * Doesn't satisfy the 'AtLeast21' and 'MinimumAge21' policies, having a `DateOfBirth` claim with a value of `2008-01-01`.
+     * Has a `DateOfBirth` claim with a value of `2008-01-01`, which doesn't satisfy the 'AtLeast21' and 'MinimumAge21' policies.
