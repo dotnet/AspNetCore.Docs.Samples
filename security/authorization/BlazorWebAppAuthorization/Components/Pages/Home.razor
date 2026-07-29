@@ -2,20 +2,20 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Roles Sample App</h1>
+<h1>Authorization Sample App</h1>
 
 <AuthorizeView>
     <Authorized>
         <h2>Policy-based authorization example</h2>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="pass-atleast21-policy-with-authorizeview">
-                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Pass 'AtLeast21' Policy
+                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Pass 'AtLeast21' policy
             </NavLink>
         </div>
         <h2>Role-based authorization examples</h2>
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="role-checks-with-authorizeview">
-                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Role Checks with AuthorizeView
+                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Role checks with AuthorizeView
             </NavLink>
         </div>
         <div class="nav-item px-3">
@@ -74,6 +74,28 @@
                 <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Pass 'CustomerServiceMember' and 'HumanResourcesMember' policies with [Authorize] attributes
             </NavLink>
         </div>
+        <h2>Policy provider authorization example</h2>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="pass-minimumage21-policy">
+                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Pass 'MinimumAge21' policy
+            </NavLink>
+        </div>
+        <AuthorizeView Policy="MinimumAge21" Context="minimumAge21Context">
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="pass-minimumage21-policy-with-attribute">
+                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Pass 'MinimumAge21' policy (attribute-based)
+                    </NavLink>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <p>
+                    You can't see this link to the 'PassMinimumAge21PolicyWithAttribute' component because you don't satisfy 
+                    the 'MinimumAge21' policy. If you navigate to the page at '/pass-minimumage21-policy-with-attribute' in 
+                    the browser's address bar, the Access Denied page is loaded.
+                </p>
+            </NotAuthorized>
+        </AuthorizeView>
     </Authorized>
     <NotAuthorized>
         <p>Sign into the app with one of the seeded accounts. See the README file for accounts and credentials.</p>

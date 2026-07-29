@@ -7,6 +7,7 @@ using BlazorWebAppAuthorization.Components.Account;
 using BlazorWebAppAuthorization.Data;
 using BlazorWebAppAuthorization.Identity;
 using BlazorWebAppAuthorization.Policies.Handlers;
+using BlazorWebAppAuthorization.Policies.Providers;
 using BlazorWebAppAuthorization.Policies.Requirements;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -84,6 +85,7 @@ builder.Services.AddSingleton<IAuthorizationHandler, DocumentAuthorizationHandle
 builder.Services.AddSingleton<IAuthorizationHandler, DocumentAuthorizationCrudHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, MinimumAgeHandler>();
 builder.Services.AddScoped<IDocumentRepository, DocumentRepository>();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, MinimumAgePolicyProvider>();
 
 var app = builder.Build();
 

@@ -1,0 +1,18 @@
+@page "/pass-minimumage21-policy"
+
+<h1>Pass 'MinimumAge21' policy (weakly-typed approach)</h1>
+
+<p>
+    Uses an AuthorizeView component to apply the policy using the policy's name. 
+    This approach is shown for demonstration purposes and isn't recommended for 
+    production code.
+</p>
+
+<AuthorizeView Policy="MinimumAge21">
+    <Authorized>
+        <p>You satisfy the 'MinimumAge21' policy.</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>You <b>don't</b> satisfy the 'MinimumAge21' policy.</p>
+    </NotAuthorized>
+</AuthorizeView>
