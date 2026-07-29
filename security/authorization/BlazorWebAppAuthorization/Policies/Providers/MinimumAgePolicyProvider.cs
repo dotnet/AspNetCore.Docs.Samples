@@ -10,7 +10,7 @@ public class MinimumAgePolicyProvider(IOptions<AuthorizationOptions> options)
 {
     private const string PolicyPrefix = "MinimumAge";
 
-    private DefaultAuthorizationPolicyProvider FallbackPolicyProvider { get; } = 
+    private DefaultAuthorizationPolicyProvider DefaultPolicyProvider { get; } = 
         new(options);
 
     public Task<AuthorizationPolicy?> GetPolicyAsync(string policyName)
@@ -27,12 +27,12 @@ public class MinimumAgePolicyProvider(IOptions<AuthorizationOptions> options)
             return Task.FromResult<AuthorizationPolicy?>(policy.Build());
         }
 
-        return FallbackPolicyProvider.GetPolicyAsync(policyName);
+        return DefaultPolicyProvider.GetPolicyAsync(policyName);
     }
 
     public Task<AuthorizationPolicy> GetDefaultPolicyAsync() => 
-        FallbackPolicyProvider.GetDefaultPolicyAsync();
+        DefaultPolicyProvider.GetDefaultPolicyAsync();
 
     public Task<AuthorizationPolicy?> GetFallbackPolicyAsync() => 
-        FallbackPolicyProvider.GetFallbackPolicyAsync();
+        DefaultPolicyProvider.GetFallbackPolicyAsync();
 }
