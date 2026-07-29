@@ -80,11 +80,19 @@
                 <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Pass 'MinimumAge21' Policy
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="pass-minimumage21-policy-with-attribute">
-                <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Pass 'MinimumAge21' Policy (attribute-based)
-            </NavLink>
-        </div>
+        <AuthorizeView Policy="MinimumAge21" Context="minimumAge21Context">
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="pass-minimumage21-policy-with-attribute">
+                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Pass 'MinimumAge21' Policy (attribute-based)
+                    </NavLink>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <p>You can't see this link to the 'PassMinimumAge21PolicyWithAttribute' component because you don't satisfy the 'MinimumAge21' policy.</p>
+                <p>If you navigate to the page at '/pass-minimumage21-policy-with-attribute' in the browser's address bar, the redirect for unauthorized access loads the app's sign-in page, where you can sign into the app with Leela's credentials to reach the page.</p>
+            </NotAuthorized>
+        </AuthorizeView>
     </Authorized>
     <NotAuthorized>
         <p>Sign into the app with one of the seeded accounts. See the README file for accounts and credentials.</p>
