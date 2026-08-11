@@ -18,7 +18,7 @@ For more information, see the following resources:
 1. If you plan to run the app using the .NET CLI with `dotnet run`, note that the first launch profile in the launch settings file is used to run an app, which is the secure `https` profile (HTTPS protocol). To run the app insecurely (HTTP protocol), take ***either*** of the following approaches:
 
    * Pass the launch profile option to the command when running the app: `dotnet run -lp http`.
-   * In the launch settings file (`Properties/launchSettings.json`), rotate the `http` profile to the top, placing it above the `https` profile.
+   * In the launch settings file (`Properties/launchSettings.json`), rotate the `http` profile to the top, placing it above the `https` profile. Then, the app runs insecurely by default with the `dotnet run` command.
   
    If you use Visual Studio to run the app, Visual Studio automatically uses the `https` launch profile. No action is required to run the app securely when using Visual Studio.
 
