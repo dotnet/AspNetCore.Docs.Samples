@@ -1,1 +1,3 @@
-!/Properties/launchSettings.json
+*.json
+!Properties/
+!Properties/launchSettings.json
