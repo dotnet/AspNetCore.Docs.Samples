@@ -45,6 +45,19 @@ builder.Services.AddIdentityCore<ApplicationUser>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 */
 
+// Application cookie redirect mapping
+//
+// Anonymous Users: When an unauthenticated user hits a protected endpoint, the cookie handler
+// issues a challenge and redirects to 'LoginPath' with a 'ReturnUrl' parameter.
+//
+// Underage Users: When an authenticated user fails the custom minimum age policy, the handler
+// issues a forbid response and redirects to 'AccessDeniedPath' instead of the login page.
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+});
+
 // Add the AtLeast21 authorization policy
 builder.Services.AddAuthorizationBuilder()
     .AddPolicy("AtLeast21", policy =>
