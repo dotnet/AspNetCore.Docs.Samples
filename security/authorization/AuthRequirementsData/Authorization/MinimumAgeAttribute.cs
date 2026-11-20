@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace AuthRequirementsData.Authorization;
 
-class MinimumAgeAuthorizeAttribute(int age) : AuthorizeAttribute, 
+class MinimumAgeAttribute(int age) : Attribute,
     IAuthorizationRequirement, IAuthorizationRequirementData
 {
     public int Age { get; set; } = age;

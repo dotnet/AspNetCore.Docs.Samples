@@ -5,12 +5,12 @@ using Microsoft.AspNetCore.Authorization;
 namespace AuthRequirementsDataBWA.Authorization;
 
 class MinimumAgeAuthorizationHandler(ILogger<MinimumAgeAuthorizationHandler> logger) 
-    : AuthorizationHandler<MinimumAgeAuthorizeAttribute>
+    : AuthorizationHandler<MinimumAgeAttribute>
 {
     // Check whether a given minimum age requirement is satisfied.
     protected override Task HandleRequirementAsync(
         AuthorizationHandlerContext context, 
-        MinimumAgeAuthorizeAttribute requirement)
+        MinimumAgeAttribute requirement)
     {
         logger.LogInformation(
             "Evaluating authorization requirement for age >= {age}", 
