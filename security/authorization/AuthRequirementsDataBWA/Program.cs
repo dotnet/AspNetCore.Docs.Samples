@@ -35,6 +35,6 @@ app.MapRazorComponents<App>()
 app.MapGet("/api/greetings/hello", (HttpContext context) =>
 {
     return $"Hello {context.User.Identity?.Name}!";
-}).RequireAuthorization(new MinimumAgeAuthorizeAttribute(21));
+}).RequireAuthorization().WithMetadata(new MinimumAgeAttribute(21));
 
 app.Run();
